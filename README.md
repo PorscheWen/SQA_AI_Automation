@@ -1,6 +1,6 @@
-# TestComplete Python 網頁測試案例
+# SQA_AI_Testcase
 
-使用 TestComplete Python script 建立一般網頁 UI 自動化測試的指南與範例。
+TestComplete Python 網頁測試案例 — 使用 TestComplete Python script 建立一般網頁 UI 自動化測試的指南與範例。
 
 ## 目錄結構
 
@@ -8,16 +8,19 @@
 SQA_Transfer_Testcase/
 ├── README.md
 ├── demo/
-│   └── shopping_cart/           # 購物車示範網頁（供 TestComplete 測試）
+│   └── shopping_cart/              # 購物車示範網頁（供 TestComplete 測試）
 │       ├── index.html
 │       ├── styles.css
 │       ├── app.js
 │       └── serve.py
+├── shopping_website/               # TestComplete 測試腳本與測試計劃
+│   ├── TEST_PLAN.md
+│   ├── web_shopping_cart_test_suite.py
+│   ├── web_shopping_cart_flow.py
+│   ├── web_shopping_cart_aliases.py
+│   └── web_login_flow.py
 └── examples/
-    ├── example_static_page.py        # 最小可跑範例（靜態頁驗證）
-    ├── web_login_flow.py             # 登入流程範例（Name Mapping + 函式拆分）
-    ├── web_shopping_cart_flow.py     # 購物車完整測試（6 個 TC，XPath / data-testid）
-    └── web_shopping_cart_aliases.py  # 購物車測試（Name Mapping / Aliases 版）
+    └── example_static_page.py      # 最小可跑範例（靜態頁驗證）
 ```
 
 ## 前置準備
@@ -149,7 +152,7 @@ def TestMain():
 ## 如何使用本目錄範例
 
 1. 在 TestComplete 建立 Web Testing 專案（Python）
-2. 將 `examples/` 內腳本複製到專案的 Script 單元，或貼入新 Unit
+2. 將 `shopping_website/` 內腳本複製到專案的 Script 單元
 3. 依實際網站調整 URL、Name Mapping 與驗證條件
 4. 在 Test Items 新增項目，指向 `TestMain()` 執行
 
@@ -159,13 +162,7 @@ def TestMain():
 - 目標：`https://example.com`
 - 驗證：頁面 `<h1>` 文字為 `Example Domain`
 
-### 執行登入流程範例
-
-- 腳本：`examples/web_login_flow.py`
-- 需先在 Name Mapping 建立 `pageLogin`、`textboxUsername` 等元素
-- 修改 `BASE_URL`、帳密與預期標題後執行
-
-### 執行購物車示範（推薦）
+### 執行購物車完整測試套件（推薦）
 
 1. 啟動示範頁：
 
@@ -176,18 +173,9 @@ python serve.py
 
 2. 瀏覽器開啟 `http://localhost:8888/` 確認頁面正常。
 
-3. 在 TestComplete 複製 `examples/web_shopping_cart_flow.py` 到 Script 單元，執行 `TestMain()`。
+3. 在 TestComplete 匯入 `shopping_website/web_shopping_cart_test_suite.py`，執行 `TestMain()`。
 
-| 測試案例 | 函式 | 驗證重點 |
-|----------|------|----------|
-| TC01 | `test_add_single_item` | 加入蘋果 → 1 件、NT$ 30 |
-| TC02 | `test_add_multiple_items` | 三種商品 → 3 件、NT$ 105 |
-| TC03 | `test_increase_quantity` | 香蕉 +1 → 2 件、NT$ 40 |
-| TC04 | `test_remove_item` | 移除商品 → 空購物車訊息 |
-| TC05 | `test_clear_cart` | 清空 → 0 件 |
-| TC06 | `test_checkout` | 結帳 Modal、總金額 NT$ 50 |
-
-若偏好 Name Mapping，改用 `examples/web_shopping_cart_aliases.py`，並依腳本註解建立 `Aliases.browser.pageShop` 對應元素。
+詳細測試計劃見 `shopping_website/TEST_PLAN.md`（11 案例：功能 6 + 負面 3 + 相容 2）。
 
 ## 後續：轉換為 BDD
 
