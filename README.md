@@ -1,4 +1,4 @@
-# SQA_AI_Testcase
+# SQA_AI_Automation
 
 TestComplete Python 網頁測試案例 — 使用 TestComplete Python script 建立一般網頁 UI 自動化測試的指南與範例。
 
