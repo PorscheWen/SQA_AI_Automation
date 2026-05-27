@@ -35,7 +35,7 @@ namespace Testcase_shopping_cart_FlaUI_BDD.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "購物車功能測試", "  作為一個使用者\n  我想要測試購物車功能\n  以確保商品管理運作正常", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "購物車功能測試", "  作為一個使用者\r\n  我想要測試購物車功能\r\n  以確保商品管理運作正常", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,16 +74,16 @@ namespace Testcase_shopping_cart_FlaUI_BDD.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("加入單一商品")]
+        [NUnit.Framework.DescriptionAttribute("TC01 - 加入單一商品")]
         [NUnit.Framework.CategoryAttribute("ShoppingCart")]
         [NUnit.Framework.CategoryAttribute("AddItem")]
-        public void 加入單一商品()
+        public void TC01_加入單一商品()
         {
             string[] tagsOfScenario = new string[] {
                     "ShoppingCart",
                     "AddItem"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("加入單一商品", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC01 - 加入單一商品", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -105,6 +105,276 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 11
   testRunner.And("購物車總計應該是 \"NT$ 30\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 12
+  testRunner.And("蘋果數量應該是 \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("TC02 - 加入多種商品")]
+        [NUnit.Framework.CategoryAttribute("ShoppingCart")]
+        [NUnit.Framework.CategoryAttribute("AddItem")]
+        public void TC02_加入多種商品()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "ShoppingCart",
+                    "AddItem"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC02 - 加入多種商品", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 15
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 16
+  testRunner.Given("購物車已清空", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 17
+  testRunner.When("我點擊加入蘋果按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 18
+  testRunner.And("我點擊加入香蕉按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 19
+  testRunner.And("我點擊加入牛奶按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 20
+  testRunner.Then("購物車件數應該是 \"3 件\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 21
+  testRunner.And("購物車總計應該是 \"NT$ 105\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("TC03 - 增加購物車商品數量")]
+        [NUnit.Framework.CategoryAttribute("ShoppingCart")]
+        [NUnit.Framework.CategoryAttribute("Quantity")]
+        public void TC03_增加購物車商品數量()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "ShoppingCart",
+                    "Quantity"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC03 - 增加購物車商品數量", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 24
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 25
+  testRunner.Given("購物車已清空", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 26
+  testRunner.When("我點擊加入香蕉按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 27
+  testRunner.And("我點擊香蕉的增加數量按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 28
+  testRunner.Then("香蕉數量應該是 \"2\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 29
+  testRunner.And("購物車件數應該是 \"2 件\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 30
+  testRunner.And("購物車總計應該是 \"NT$ 40\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("TC04 - 從購物車移除商品")]
+        [NUnit.Framework.CategoryAttribute("ShoppingCart")]
+        [NUnit.Framework.CategoryAttribute("RemoveItem")]
+        public void TC04_從購物車移除商品()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "ShoppingCart",
+                    "RemoveItem"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC04 - 從購物車移除商品", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 33
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 34
+  testRunner.Given("購物車已清空", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 35
+  testRunner.When("我點擊加入牛奶按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 36
+  testRunner.And("我點擊移除牛奶按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 37
+  testRunner.Then("購物車件數應該是 \"0 件\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 38
+  testRunner.And("購物車應該顯示空購物車訊息 \"購物車是空的，請從左側加入商品。\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("TC05 - 清空購物車")]
+        [NUnit.Framework.CategoryAttribute("ShoppingCart")]
+        [NUnit.Framework.CategoryAttribute("ClearCart")]
+        public void TC05_清空購物車()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "ShoppingCart",
+                    "ClearCart"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC05 - 清空購物車", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 41
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 42
+  testRunner.Given("購物車已清空", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 43
+  testRunner.When("我點擊加入蘋果按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 44
+  testRunner.And("我點擊加入牛奶按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 45
+  testRunner.And("我點擊清空購物車按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 46
+  testRunner.Then("購物車件數應該是 \"0 件\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 47
+  testRunner.And("購物車總計應該是 \"NT$ 0\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("TC06 - 測試結帳流程")]
+        [NUnit.Framework.CategoryAttribute("ShoppingCart")]
+        [NUnit.Framework.CategoryAttribute("Checkout")]
+        public void TC06_測試結帳流程()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "ShoppingCart",
+                    "Checkout"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC06 - 測試結帳流程", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 50
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 51
+  testRunner.Given("購物車已清空", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 52
+  testRunner.When("我點擊加入蘋果按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 53
+  testRunner.And("我點擊加入香蕉按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 54
+  testRunner.And("我點擊結帳按鈕", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 55
+  testRunner.Then("結帳訊息應該是 \"感謝您的購買！訂單已成立。\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 56
+  testRunner.And("結帳總金額應該是 \"總金額：NT$ 50\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 57
+  testRunner.When("我關閉結帳視窗", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 58
+  testRunner.Then("購物車件數應該是 \"0 件\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("TC07 - 驗證不同商品的加入功能")]
+        [NUnit.Framework.CategoryAttribute("ShoppingCart")]
+        [NUnit.Framework.CategoryAttribute("AddItem")]
+        [NUnit.Framework.CategoryAttribute("Parameterized")]
+        [NUnit.Framework.TestCaseAttribute("蘋果", "NT$ 30", null)]
+        [NUnit.Framework.TestCaseAttribute("香蕉", "NT$ 20", null)]
+        [NUnit.Framework.TestCaseAttribute("牛奶", "NT$ 55", null)]
+        public void TC07_驗證不同商品的加入功能(string 商品, string 總計, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "ShoppingCart",
+                    "AddItem",
+                    "Parameterized"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("商品", 商品);
+            argumentsOfScenario.Add("總計", 總計);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC07 - 驗證不同商品的加入功能", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 61
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 62
+  testRunner.Given("購物車已清空", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 63
+  testRunner.When(string.Format("我點擊加入{0}按鈕", 商品), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 64
+  testRunner.Then("購物車件數應該是 \"1 件\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 65
+  testRunner.And(string.Format("購物車總計應該是 \"{0}\"", 總計), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

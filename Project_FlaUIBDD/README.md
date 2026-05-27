@@ -14,10 +14,13 @@ Project_FlaUIBDD/
 │   ├── PageObjects/                      # Page Object Model
 │   ├── Hooks/                            # 測試生命週期 Hooks
 │   ├── Helpers/                          # 輔助工具類別
+│   ├── reports/                          # JUnit + Summary Report 輸出
 │   ├── App.config                        # 應用程式配置
 │   ├── *.csproj                          # 專案檔案
 │   └── README.md                         # 專案說明
-├── INSTALLATION_REPORT.md               # 安裝報告
+├── run-tests-and-report.ps1             # 執行測試並產生報告（Windows）
+├── generate_report.ps1                  # 僅從 JUnit 產生報告
+├── HOW_TO_RUN_ON_WINDOWS.md             # Windows 執行指南
 └── README.md                            # 本文件
 ```
 
@@ -98,6 +101,29 @@ dotnet test --filter "TestCategory=ShoppingCart"
 dotnet test --filter "TestCategory=AddItem"
 ```
 
+### 執行測試並產生 Summary Report（推薦）
+
+報告格式依 **[../Project_Testcomplete/report_prompt.md](../Project_Testcomplete/report_prompt.md)**（TestComplete Summary Report 結構）。
+
+```powershell
+# 在 Project_FlaUIBDD 目錄（需 Windows）
+.\run-tests-and-report.ps1
+```
+
+僅從既有 JUnit 重新產生報告：
+
+```powershell
+.\generate_report.ps1
+```
+
+輸出檔案：
+
+| 檔案 | 說明 |
+|------|------|
+| `Testcase_shopping_cart_FlaUI_BDD/reports/junit-results.xml` | NUnit JUnit 匯出 |
+| `Testcase_shopping_cart_FlaUI_BDD/reports/summary_report.md` | Markdown 摘要 |
+| `Testcase_shopping_cart_FlaUI_BDD/reports/summary_report.html` | HTML 摘要 |
+
 ---
 
 ## 📝 開發指南
@@ -133,8 +159,10 @@ dotnet test --filter "TestCategory=AddItem"
 ## 📚 相關文件
 
 - [Testcase_shopping_cart_FlaUI_BDD/README.md](Testcase_shopping_cart_FlaUI_BDD/README.md) - 購物車測試專案詳細說明
+- [HOW_TO_RUN_ON_WINDOWS.md](HOW_TO_RUN_ON_WINDOWS.md) - Windows 執行指南
 - [Testcase_shopping_cart_FlaUI_BDD/CONVERSION_REPORT.md](Testcase_shopping_cart_FlaUI_BDD/CONVERSION_REPORT.md) - TestComplete 轉換報告
-- [INSTALLATION_REPORT.md](INSTALLATION_REPORT.md) - 套件安裝報告
+- [../Project_Testcomplete/report_prompt.md](../Project_Testcomplete/report_prompt.md) - Summary Report 格式規格
+- [../Project_Testcomplete/README.md](../Project_Testcomplete/README.md) - TestComplete 專案與報告流程
 
 ---
 

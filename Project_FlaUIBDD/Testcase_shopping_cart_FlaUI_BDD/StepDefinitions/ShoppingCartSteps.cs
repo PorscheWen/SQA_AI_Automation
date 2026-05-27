@@ -40,28 +40,7 @@ namespace ShoppingCartTests.StepDefinitions
 
         #region When Steps - 加入商品
 
-        [When(@"我點擊加入蘋果按鈕")]
-        public void When我點擊加入蘋果按鈕()
-        {
-            _productListPage.ClickAddApple();
-            TestContext.WriteLine("已點擊加入蘋果按鈕");
-        }
-
-        [When(@"我點擊加入香蕉按鈕")]
-        public void When我點擊加入香蕉按鈕()
-        {
-            _productListPage.ClickAddBanana();
-            TestContext.WriteLine("已點擊加入香蕉按鈕");
-        }
-
-        [When(@"我點擊加入牛奶按鈕")]
-        public void When我點擊加入牛奶按鈕()
-        {
-            _productListPage.ClickAddMilk();
-            TestContext.WriteLine("已點擊加入牛奶按鈕");
-        }
-
-        [When(@"我點擊加入(.*)按鈕")]
+        [When(@"我點擊加入(蘋果|香蕉|牛奶)按鈕")]
         public void When我點擊加入按鈕(string itemName)
         {
             _productListPage.AddItem(itemName);
@@ -72,7 +51,7 @@ namespace ShoppingCartTests.StepDefinitions
 
         #region When Steps - 數量調整
 
-        [When(@"我點擊(.*)的增加數量按鈕")]
+        [When(@"我點擊(蘋果|香蕉|牛奶)的增加數量按鈕")]
         public void When我點擊增加數量按鈕(string itemName)
         {
             _shoppingCartPage.ClickIncreaseQuantity(itemName);
@@ -86,7 +65,7 @@ namespace ShoppingCartTests.StepDefinitions
             TestContext.WriteLine($"已點擊{itemName}的減少數量按鈕");
         }
 
-        [When(@"我點擊移除(.*)按鈕")]
+        [When(@"我點擊移除(蘋果|香蕉|牛奶)按鈕")]
         public void When我點擊移除按鈕(string itemName)
         {
             _shoppingCartPage.ClickRemoveItem(itemName);
@@ -153,25 +132,7 @@ namespace ShoppingCartTests.StepDefinitions
 
         #region Then Steps - 商品數量驗證
 
-        [Then(@"蘋果數量應該是 ""(.*)""")]
-        public void Then蘋果數量應該是(string expectedQuantity)
-        {
-            Then商品數量應該是("蘋果", expectedQuantity);
-        }
-
-        [Then(@"香蕉數量應該是 ""(.*)""")]
-        public void Then香蕉數量應該是(string expectedQuantity)
-        {
-            Then商品數量應該是("香蕉", expectedQuantity);
-        }
-
-        [Then(@"牛奶數量應該是 ""(.*)""")]
-        public void Then牛奶數量應該是(string expectedQuantity)
-        {
-            Then商品數量應該是("牛奶", expectedQuantity);
-        }
-
-        [Then(@"(.*)數量應該是 ""(.*)""")]
+        [Then(@"(蘋果|香蕉|牛奶)數量應該是 ""(.*)""")]
         public void Then商品數量應該是(string itemName, string expectedQuantity)
         {
             var actualQuantity = _shoppingCartPage.GetItemQuantity(itemName);

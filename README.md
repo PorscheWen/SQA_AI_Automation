@@ -20,11 +20,17 @@
 SQA_AI_Automation/
 ├── demo/
 │   └── shopping_cart/              # 測試用購物車網頁
+├── tools/
+│   └── generate_summary_report.py  # 共用 Summary Report 產生器
 ├── Project_Testcomplete/           # TestComplete 測試專案
+│   ├── report_prompt.md            # Summary Report 格式規格（共用）
+│   ├── generate_report.ps1
 │   └── Testcomplete_testcase/
 │       ├── Testcase_shopping_cart  # Python 測試腳本
 │       └── Transfer_Prompt.md      # 轉換指南
 ├── Project_FlaUIBDD/               # FlaUI BDD 測試專案 (Windows)
+│   ├── run-tests-and-report.ps1
+│   ├── generate_report.ps1
 │   └── Testcase_shopping_cart_FlaUI_BDD/
 ├── Project_PytestBDD/              # Pytest BDD 測試專案 (跨平台) ⭐ 新增
 │   ├── features/                   # Gherkin 測試場景
@@ -281,7 +287,6 @@ Project_FlaUIBDD/
 ### 📖 相關文件
 - [完整專案說明](Project_FlaUIBDD/README.md)
 - [Windows 執行指南](Project_FlaUIBDD/HOW_TO_RUN_ON_WINDOWS.md)
-- [快速啟動指令](Project_FlaUIBDD/QUICK_START_WINDOWS.md)
 - [轉換提示指南](Project_Testcomplete/Testcomplete_testcase/Transfer_Prompt.md)
 
 ### 🚀 快速執行（Windows）

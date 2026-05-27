@@ -1,5 +1,7 @@
 # TestComplete to FlaUI BDD 轉換指南
 
+> **測試報告**：兩專案皆依 [report_prompt.md](../report_prompt.md) 產生 Summary Report。TestComplete 執行後執行 `..\generate_report.ps1`；FlaUI 執行 `..\..\Project_FlaUIBDD\run-tests-and-report.ps1`。
+
 ## 📖 目錄
 - [概述](#概述)
 - [轉換目標](#轉換目標)

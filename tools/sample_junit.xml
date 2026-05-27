@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites tests="3" failures="1" errors="0" time="12.5" timestamp="2026-05-28T10:00:00">
+  <testsuite name="Testcase_shopping_cart_FlaUI_BDD" tests="3" failures="1" time="12.5" timestamp="2026-05-28T10:00:00">
+    <testcase classname="Project_FlaUIBDD" name="TC01 - 加入單一商品" time="4.2" />
+    <testcase classname="Project_FlaUIBDD" name="TC02 - 加入多種商品" time="3.8" />
+    <testcase classname="Project_FlaUIBDD" name="TC03 - 增加購物車商品數量" time="4.5">
+      <failure message="Expected 2 件">Assertion failed</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

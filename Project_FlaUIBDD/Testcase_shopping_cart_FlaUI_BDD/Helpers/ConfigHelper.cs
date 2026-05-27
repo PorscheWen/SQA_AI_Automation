@@ -1,5 +1,7 @@
 using System;
 using System.Configuration;
+using System.IO;
+using System.Reflection;
 
 namespace ShoppingCartTests.Helpers
 {
@@ -21,7 +23,7 @@ namespace ShoppingCartTests.Helpers
         /// </summary>
         public static string GetApplicationUrl()
         {
-            return GetConfigValue("ApplicationUrl", "http://localhost:8080");
+            return GetConfigValue("ApplicationUrl", "http://localhost:8888");
         }
 
         /// <summary>
@@ -39,6 +41,23 @@ namespace ShoppingCartTests.Helpers
         public static string GetScreenshotDirectory()
         {
             return GetConfigValue("ScreenshotDirectory", "Screenshots");
+        }
+
+        /// <summary>
+        /// 取得失敗 log 目錄
+        /// </summary>
+        public static string GetFailureLogDirectory()
+        {
+            return GetConfigValue("FailureLogDirectory", "FailureLogs");
+        }
+
+        /// <summary>
+        /// 是否在測試失敗時寫入診斷 log
+        /// </summary>
+        public static bool WriteFailureLogOnFailure()
+        {
+            var value = GetConfigValue("WriteFailureLogOnFailure", "true");
+            return bool.TryParse(value, out var result) && result;
         }
 
         /// <summary>
@@ -65,21 +84,40 @@ namespace ShoppingCartTests.Helpers
         {
             try
             {
-                // 優先從環境變數讀取
                 var envValue = Environment.GetEnvironmentVariable(key);
                 if (!string.IsNullOrEmpty(envValue))
                 {
                     return envValue;
                 }
 
-                // 從 App.config 讀取
-                var configValue = ConfigurationManager.AppSettings[key];
+                var configValue = GetAppSettings()[key]?.Value;
                 return !string.IsNullOrEmpty(configValue) ? configValue : defaultValue;
             }
             catch
             {
                 return defaultValue;
             }
+        }
+
+        private static KeyValueConfigurationCollection GetAppSettings()
+        {
+            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+            var configFile = Path.Combine(AppContext.BaseDirectory, $"{assemblyName}.dll.config");
+
+            if (!File.Exists(configFile))
+            {
+                configFile = Path.Combine(AppContext.BaseDirectory, "App.config");
+            }
+
+            var configMap = new ExeConfigurationFileMap
+            {
+                ExeConfigFilename = configFile
+            };
+
+            return ConfigurationManager
+                .OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None)
+                .AppSettings
+                .Settings;
         }
     }
 }
