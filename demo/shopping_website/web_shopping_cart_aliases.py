@@ -29,58 +29,58 @@ from TestComplete import *
 BASE_URL = "http://localhost:8888/"
 
 
-def open_browser(url, timeout_ms=30000):
+def control_open_browser(url, timeout_ms=30000):
     Browsers.Item[btChrome].Run(url)
     Sys.Browser("*").WaitPage("*", timeout_ms)
 
 
-def get_shop_page():
+def control_get_shop_page():
     return Aliases.browser.pageShop
 
 
-def reset_cart():
-    page = get_shop_page()
+def control_control_reset_cart():
+    page = control_get_shop_page()
     if page.labelCartCount.contentText != "0 件":
         page.btnClearCart.Click()
         page.Wait()
 
 
-def verify_alias_text(alias_obj, expected, label):
+def control_verify_alias_text(alias_obj, expected, label):
     actual = alias_obj.contentText
     Log.Message("%s: expected=%s, actual=%s" % (label, expected, actual))
     aqObject.CheckProperty(alias_obj, "contentText", cmpEqual, expected)
 
 
-def test_add_single_item_aliases():
+def testcase_add_single_item_aliases():
     """TC01（Aliases）：加入蘋果。"""
-    page = get_shop_page()
-    reset_cart()
+    page = control_get_shop_page()
+    control_reset_cart()
     page.btnAddApple.Click()
     page.Wait()
 
-    verify_alias_text(page.labelCartCount, "1 件", "Cart count")
-    verify_alias_text(page.labelCartTotal, "NT$ 30", "Cart total")
+    control_verify_alias_text(page.labelCartCount, "1 件", "Cart count")
+    control_verify_alias_text(page.labelCartTotal, "NT$ 30", "Cart total")
 
 
-def test_checkout_aliases():
+def testcasecase_checkout_aliases():
     """TC06（Aliases）：結帳流程。"""
-    page = get_shop_page()
-    reset_cart()
+    page = control_get_shop_page()
+    control_reset_cart()
     page.btnAddApple.Click()
     page.btnAddBanana.Click()
     page.btnCheckout.Click()
 
-    verify_alias_text(page.labelCheckoutMessage, "感謝您的購買！訂單已成立。", "Checkout message")
-    verify_alias_text(page.labelCheckoutTotal, "總金額：NT$ 50", "Checkout total")
+    control_verify_alias_text(page.labelCheckoutMessage, "感謝您的購買！訂單已成立。", "Checkout message")
+    control_verify_alias_text(page.labelCheckoutTotal, "總金額：NT$ 50", "Checkout total")
     page.btnCloseModal.Click()
 
 
 def TestMain():
     """TestComplete 入口函式（Name Mapping 版）。"""
     try:
-        open_browser(BASE_URL)
-        test_add_single_item_aliases()
-        test_checkout_aliases()
+        control_open_browser(BASE_URL)
+        testcase_add_single_item_aliases()
+        testcase_checkout_aliases()
         Log.Message("Alias-based shopping cart tests passed")
     except Exception as e:
         Log.Error("Test failed: " + str(e))

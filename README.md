@@ -1,27 +1,92 @@
 # SQA_AI_Automation
 
-TestComplete Python 網頁測試案例 — 使用 TestComplete Python script 建立一般網頁 UI 自動化測試的指南與範例。
+自動化測試專案集合 — 包含 TestComplete Python、FlaUI BDD 和 Pytest BDD 三種測試框架的完整實作範例。
 
-## 目錄結構
+## 🎯 專案總覽
+
+本專案包含三個完整的測試自動化專案：
+
+| 專案 | 框架 | 平台 | 狀態 | 說明 |
+|------|------|------|------|------|
+| **TestComplete** | Python | Windows/Linux | ✅ 完成 | Web 測試（原始專案） |
+| **FlaUI BDD** | C# + SpecFlow | Windows 限定 | ✅ 完成 | Windows 桌面應用測試 |
+| **Pytest BDD** | Python + Selenium | 跨平台 | ✅ 完成 | Web 測試（BDD 風格） |
+
+---
+
+## 📁 完整目錄結構
 
 ```
-SQA_Transfer_Testcase/
-├── README.md
+SQA_AI_Automation/
 ├── demo/
-│   └── shopping_cart/              # 購物車示範網頁（供 TestComplete 測試）
-│       ├── index.html
-│       ├── styles.css
-│       ├── app.js
-│       └── serve.py
-├── shopping_website/               # TestComplete 測試腳本與測試計劃
-│   ├── TEST_PLAN.md
-│   ├── web_shopping_cart_test_suite.py
-│   ├── web_shopping_cart_flow.py
-│   ├── web_shopping_cart_aliases.py
-│   └── web_login_flow.py
-└── examples/
-    └── example_static_page.py      # 最小可跑範例（靜態頁驗證）
+│   └── shopping_cart/              # 測試用購物車網頁
+├── Project_Testcomplete/           # TestComplete 測試專案
+│   └── Testcomplete_testcase/
+│       ├── Testcase_shopping_cart  # Python 測試腳本
+│       └── Transfer_Prompt.md      # 轉換指南
+├── Project_FlaUIBDD/               # FlaUI BDD 測試專案 (Windows)
+│   └── Testcase_shopping_cart_FlaUI_BDD/
+├── Project_PytestBDD/              # Pytest BDD 測試專案 (跨平台) ⭐ 新增
+│   ├── features/                   # Gherkin 測試場景
+│   ├── step_definitions/           # 步驟定義
+│   ├── page_objects/               # Page Object Model
+│   └── README.md
+└── README.md                       # 本文件
 ```
+
+---
+
+## 🐍 Pytest BDD 專案（新增）⭐
+
+### 專案位置
+[Project_PytestBDD/](Project_PytestBDD/)
+
+### 特色
+- ✅ **跨平台** - Linux/Windows/macOS 皆可執行
+- ✅ **BDD 風格** - Gherkin 中文測試場景
+- ✅ **Selenium** - 支援多種瀏覽器
+- ✅ **Page Object Model** - 清晰的程式碼架構
+- ✅ **自動報告** - HTML 報告和失敗截圖
+- ✅ **9 個測試場景** - 涵蓋購物車所有功能
+
+### 快速執行
+```bash
+cd Project_PytestBDD
+pip install -r requirements.txt
+
+# 啟動測試網頁（另開終端）
+cd ../demo/shopping_cart
+python serve.py
+
+# 執行測試
+cd ../../Project_PytestBDD
+pytest --headless
+```
+
+### 詳細文件
+- [完整 README](Project_PytestBDD/README.md)
+- [快速啟動](Project_PytestBDD/QUICK_START.md)
+- [執行狀況](Project_PytestBDD/STATUS_REPORT.md)
+
+---
+
+## 📊 三種框架比較
+
+| 特性 | TestComplete | FlaUI BDD | Pytest BDD |
+|------|-------------|-----------|------------|
+| 語言 | Python | C# | Python |
+| 測試對象 | Web 應用 | Windows 應用 | Web 應用 |
+| 平台 | 跨平台 | Windows 限定 | 跨平台 |
+| BDD 支援 | ❌ | ✅ SpecFlow | ✅ Pytest-BDD |
+| 學習曲線 | 中 | 高 | 低 |
+| 成本 | 商業軟體 | 免費 | 免費 |
+| 適用場景 | 商業自動化 | Windows 桌面測試 | 開源 Web 測試 |
+
+---
+
+## 🚀 TestComplete Python 專案（原始）
+
+TestComplete Python 網頁測試案例 — 使用 TestComplete Python script 建立一般網頁 UI 自動化測試的指南與範例。
 
 ## 前置準備
 
@@ -186,7 +251,55 @@ python serve.py
 3. 建立 step definitions 呼叫原有 Python 函式
 4. 保留 Name Mapping，僅改測試描述層
 
+---
+
+## 🎯 FlaUI BDD 專案（已實現）
+
+本專案已將 TestComplete 購物車測試轉換為 **FlaUI + SpecFlow BDD** 測試：
+
+### 📂 位置
+```
+Project_FlaUIBDD/
+└── Testcase_shopping_cart_FlaUI_BDD/   # 購物車 BDD 測試專案
+```
+
+### ✨ 特色
+- ✅ 使用 **SpecFlow 3.9** (BDD 框架)
+- ✅ 使用 **FlaUI 4.0** (Windows UI Automation)
+- ✅ 使用 **NUnit 4.3** (測試執行器)
+- ✅ 7 個 Gherkin 測試場景
+- ✅ 完整 Page Object Model 架構
+- ✅ 中文測試場景描述
+
+### ⚠️ 環境需求
+**必須在 Windows 環境執行**（需要 Windows UI Automation API）
+
+- Windows 10/11
+- .NET 8.0 SDK
+- Python 3.x（測試網頁伺服器）
+
+### 📖 相關文件
+- [完整專案說明](Project_FlaUIBDD/README.md)
+- [Windows 執行指南](Project_FlaUIBDD/HOW_TO_RUN_ON_WINDOWS.md)
+- [快速啟動指令](Project_FlaUIBDD/QUICK_START_WINDOWS.md)
+- [轉換提示指南](Project_Testcomplete/Testcomplete_testcase/Transfer_Prompt.md)
+
+### 🚀 快速執行（Windows）
+```powershell
+# 啟動測試網頁
+cd demo\shopping_cart
+python serve.py
+
+# 執行 BDD 測試（另開視窗）
+cd Project_FlaUIBDD\Testcase_shopping_cart_FlaUI_BDD
+dotnet test
+```
+
+---
+
 ## 參考
 
 - [TestComplete Documentation](https://support.smartbear.com/testcomplete/docs/)
 - [Web Testing in TestComplete](https://support.smartbear.com/testcomplete/docs/testing-with/testcomplete/web-testing/)
+- [FlaUI GitHub](https://github.com/FlaUI/FlaUI)
+- [SpecFlow Documentation](https://docs.specflow.org/)
