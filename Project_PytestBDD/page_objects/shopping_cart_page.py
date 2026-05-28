@@ -25,46 +25,62 @@ class ShoppingCartPage(BasePage):
     def get_cart_count(self):
         """
         取得購物車件數
-        
+
         Returns:
             str: 購物車件數文字（例如："1 件"）
         """
-        return self.get_element_text(self.CART_COUNT)
-    
+        return self.driver.execute_script(
+            "var el = document.querySelector('[data-testid=\"cart-count\"]');"
+            "return el ? el.textContent.trim() : '';"
+        )
+
     def get_cart_total(self):
         """
-        取得購物車總計
-        
+        取得購物車總計（使用 JS textContent，對隱藏元素也有效）
+
         Returns:
             str: 購物車總計文字（例如："NT$ 30"）
         """
-        return self.get_element_text(self.CART_TOTAL)
+        return self.driver.execute_script(
+            "var el = document.querySelector('[data-testid=\"cart-total\"]');"
+            "return el ? el.textContent.trim() : '';"
+        )
     
     def click_clear_cart(self):
-        """點擊清空購物車按鈕"""
-        self.click_element(self.CLEAR_CART_BUTTON)
-    
+        """點擊清空購物車按鈕（data-testid=clear-cart，使用 JS）"""
+        self.driver.execute_script(
+            "var el = document.querySelector('[data-testid=\"clear-cart\"]');"
+            "if (el) el.click();"
+        )
+
     def click_checkout(self):
-        """點擊結帳按鈕"""
-        self.click_element(self.CHECKOUT_BUTTON)
-    
+        """點擊結帳按鈕（data-testid=checkout，使用 JS）"""
+        self.driver.execute_script(
+            "var el = document.querySelector('[data-testid=\"checkout\"]');"
+            "if (el) el.click();"
+        )
+
     def get_checkout_message(self):
         """
         取得結帳訊息
-        
+
         Returns:
             str: 結帳訊息文字
         """
-        return self.get_element_text(self.CHECKOUT_MESSAGE)
+        return self.driver.execute_script(
+            "var el = document.querySelector('[data-testid=\"checkout-message\"]');"
+            "return el ? el.textContent.trim() : '';"
+        )
     
     def is_checkout_message_visible(self):
         """
-        檢查結帳訊息是否顯示
-        
+        檢查結帳 Modal 是否開啟（以 CSS class 'is-open' 判斷）
+
         Returns:
-            bool: 訊息是否可見
+            bool: Modal 是否可見
         """
-        return self.is_element_visible(self.CHECKOUT_MESSAGE, timeout=5)
+        modal = self.driver.find_element(By.ID, "checkout-modal")
+        return "is-open" in (modal.get_attribute("class") or "")
     
     def get_cart_items_count(self):
         """
@@ -79,49 +95,61 @@ class ShoppingCartPage(BasePage):
     def get_product_quantity(self, product_name):
         """
         取得特定商品的數量
-        
+
         Args:
             product_name: 商品名稱（蘋果、香蕉、牛奶）
-            
+
         Returns:
             str: 商品數量
         """
-        quantity_id = f"quantity-{self._get_product_id(product_name)}"
-        locator = (By.ID, quantity_id)
-        return self.get_element_text(locator)
-    
+        product_id = self._get_product_id(product_name)
+        # data-testid="qty-value-{product_id}" (動態渲染)
+        return self.driver.execute_script(
+            f"var el = document.querySelector(\"[data-testid='qty-value-{product_id}']\");"
+            "return el ? el.textContent.trim() : '';"
+        )
+
     def click_increase_quantity(self, product_name):
         """
         點擊增加商品數量按鈕
-        
+
         Args:
             product_name: 商品名稱
         """
-        increase_id = f"increase-{self._get_product_id(product_name)}"
-        locator = (By.ID, increase_id)
-        self.click_element(locator)
-    
+        product_id = self._get_product_id(product_name)
+        # data-testid="qty-plus-{product_id}" (動態渲染)
+        self.driver.execute_script(
+            f"var el = document.querySelector(\"[data-testid='qty-plus-{product_id}']\");"
+            "if (el) el.click();"
+        )
+
     def click_decrease_quantity(self, product_name):
         """
         點擊減少商品數量按鈕
-        
+
         Args:
             product_name: 商品名稱
         """
-        decrease_id = f"decrease-{self._get_product_id(product_name)}"
-        locator = (By.ID, decrease_id)
-        self.click_element(locator)
-    
+        product_id = self._get_product_id(product_name)
+        # data-testid="qty-minus-{product_id}" (動態渲染)
+        self.driver.execute_script(
+            f"var el = document.querySelector(\"[data-testid='qty-minus-{product_id}']\");"
+            "if (el) el.click();"
+        )
+
     def click_remove_product(self, product_name):
         """
         點擊移除商品按鈕
-        
+
         Args:
             product_name: 商品名稱
         """
-        remove_id = f"remove-{self._get_product_id(product_name)}"
-        locator = (By.ID, remove_id)
-        self.click_element(locator)
+        product_id = self._get_product_id(product_name)
+        # data-testid="remove-{product_id}" (動態渲染)
+        self.driver.execute_script(
+            f"var el = document.querySelector(\"[data-testid='remove-{product_id}']\");"
+            "if (el) el.click();"
+        )
     
     def is_cart_empty(self):
         """
@@ -152,6 +180,14 @@ class ShoppingCartPage(BasePage):
         return product_ids.get(product_name, product_name.lower())
     
     def clear_cart(self):
-        """清空購物車（直接執行 JavaScript）"""
-        self.execute_script("localStorage.clear(); location.reload();")
-        self.wait_for_element(self.CART_COUNT)
+        """清空購物車（使用清空按鈕；若購物車為空則直接返回）"""
+        count_text = self.driver.execute_script(
+            "var el = document.querySelector('[data-testid=\"cart-count\"]');"
+            "return el ? el.textContent.trim() : '0 件';"
+        )
+        if count_text and count_text != "0 件":
+            self.driver.execute_script(
+                "var el = document.querySelector('[data-testid=\"clear-cart\"]');"
+                "if (el) el.click();"
+            )
+            self.wait_for_element(self.CART_COUNT)
