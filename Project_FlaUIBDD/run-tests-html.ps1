@@ -27,6 +27,11 @@ if (-not (Test-Path $TestProject)) {
 # 建立報告目錄
 New-Item -ItemType Directory -Path $ReportsDir -Force | Out-Null
 
+# 步驟 0: 啟動 shopping_cart demo 網頁 (localhost:8888)
+Write-Host "步驟 0: 啟動 Demo 購物車網頁..." -ForegroundColor Green
+& (Join-Path $ProjectRoot "ensure-demo-server.ps1")
+Write-Host ""
+
 # 步驟 1: 還原 NuGet 套件
 Write-Host "步驟 1/4: 還原 NuGet 套件..." -ForegroundColor Green
 Push-Location $TestProject

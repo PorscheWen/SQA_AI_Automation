@@ -78,6 +78,23 @@ namespace ShoppingCartTests.Helpers
         }
 
         /// <summary>
+        /// 測試前是否自動啟動 demo/shopping_cart/serve.py
+        /// </summary>
+        public static bool AutoStartDemoServer()
+        {
+            var value = GetConfigValue("AutoStartDemoServer", "true");
+            return !bool.TryParse(value, out var result) || result;
+        }
+
+        /// <summary>
+        /// demo 伺服器腳本路徑（可選，空白則自動搜尋）
+        /// </summary>
+        public static string GetDemoServerScriptPath()
+        {
+            return GetConfigValue("DemoServerScript", "");
+        }
+
+        /// <summary>
         /// 取得配置值，若不存在則返回預設值
         /// </summary>
         private static string GetConfigValue(string key, string defaultValue)

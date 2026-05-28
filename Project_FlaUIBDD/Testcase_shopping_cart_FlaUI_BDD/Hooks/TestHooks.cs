@@ -33,6 +33,10 @@ namespace ShoppingCartTests.Hooks
         public static void BeforeTestRun()
         {
             Console.WriteLine("=== 測試開始 ===");
+
+            var appUrl = ConfigHelper.GetApplicationUrl();
+            DemoServerHelper.EnsureRunning(appUrl);
+
             _automation = new UIA3Automation();
 
             // 初始化 HTML 報告
@@ -117,6 +121,18 @@ namespace ShoppingCartTests.Hooks
                 System.Threading.Thread.Sleep(2000);
 
                 _mainWindow = WaitForBrowserWindow();
+                if (_mainWindow != null)
+                {
+                    try
+                    {
+                        _mainWindow.Focus();
+                        _mainWindow.SetForeground();
+                    }
+                    catch
+                    {
+                        // 部分環境無法強制置前，不影響測試
+                    }
+                }
                 if (_mainWindow == null)
                 {
                     throw new Exception("無法取得瀏覽器主視窗");
@@ -212,6 +228,7 @@ namespace ShoppingCartTests.Hooks
             }
 
             _automation?.Dispose();
+            DemoServerHelper.StopIfStarted();
             Console.WriteLine("=== 測試結束 ===");
         }
 

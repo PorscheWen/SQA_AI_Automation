@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
-using AventStack.ExtentReports.Reporter.Configuration;
+using AventStack.ExtentReports.Reporter.Config;
 
 namespace ShoppingCartTests.Helpers
 {
@@ -42,7 +42,6 @@ namespace ShoppingCartTests.Helpers
                 htmlReporter.Config.DocumentTitle = "FlaUI BDD 測試報告";
                 htmlReporter.Config.ReportName = "Shopping Cart 自動化測試報告";
                 htmlReporter.Config.Encoding = "UTF-8";
-                htmlReporter.Config.TimeStampFormat = "yyyy-MM-dd HH:mm:ss";
 
                 // 初始化 ExtentReports
                 _extent = new ExtentReports();

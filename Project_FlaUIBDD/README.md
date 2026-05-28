@@ -18,6 +18,11 @@ Project_FlaUIBDD/
 │   ├── App.config                        # 應用程式配置
 │   ├── *.csproj                          # 專案檔案
 │   └── README.md                         # 專案說明
+├── web_dashboard/                       # 三 Tab 測試控制台網頁
+│   ├── index.html                       # 三頁籤：勾選 / 進度 / 結果
+│   ├── server.py                        # API 與 dotnet test 執行
+│   └── static/                          # 前端資源
+├── start-dashboard.ps1                  # 啟動控制台並開啟瀏覽器
 ├── run-tests-and-report.ps1             # 執行測試並產生報告（Windows）
 ├── generate_report.ps1                  # 僅從 JUnit 產生報告
 ├── HOW_TO_RUN_ON_WINDOWS.md             # Windows 執行指南
@@ -271,6 +276,27 @@ FlaUI (UI 自動化引擎)
 **需要環境**: Windows 10/11 ✅
 
 👉 **完整執行指南**: [HOW_TO_RUN_ON_WINDOWS.md](HOW_TO_RUN_ON_WINDOWS.md)
+
+---
+
+## 🌐 測試控制台網頁（三 Tab）
+
+在 Windows 上可啟動網頁控制台，勾選 Feature / Scenario 後執行測試並即時查看進度與結果。
+
+| 頁籤 | 功能 |
+|------|------|
+| 勾選 Features（藍） | 勾選要執行的 Feature 與 Scenario |
+| 執行進度（琥珀） | 查看各 Scenario 狀態與整體執行進度 |
+| 測試結果（綠） | 查看 JUnit 結果、通過率，並開啟 HTML 報告 |
+
+```powershell
+# 在 Project_FlaUIBDD 目錄
+.\start-dashboard.ps1
+```
+
+預設網址：`http://localhost:6688/`（**勿用 6666**：Chrome/Edge 會阻擋並顯示 `ERR_UNSAFE_PORT`）
+
+**注意**：執行測試前請確認 Demo Shop 已啟動（`demo/shopping_cart` 的 `python serve.py` 或 WebView 宿主設定正確）。
 
 ---
 
