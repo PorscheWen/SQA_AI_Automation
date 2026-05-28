@@ -26,6 +26,216 @@ Project_FlaUIBDD/
 
 ---
 
+## 🏗️ FlaUI 專案架構詳解
+
+### 核心目錄結構
+
+#### 📂 Features/ - 測試場景定義
+存放 Gherkin 格式的 BDD 測試場景檔案。
+
+| 檔案 | 說明 |
+|------|------|
+| `ShoppingCart.feature` | 購物車功能的 BDD 測試場景（Gherkin 語法） |
+| `ShoppingCart.feature.cs` | SpecFlow 自動產生的程式碼檔案（不應手動編輯） |
+
+**用途**: 
+- 以 Given-When-Then 格式定義測試案例
+- 支援參數化測試（Scenario Outline）
+- 提供非技術人員可讀的測試文件
+
+---
+
+#### 📂 StepDefinitions/ - 步驟定義實作
+實作 Feature 檔案中定義的測試步驟。
+
+| 檔案 | 說明 |
+|------|------|
+| `ShoppingCartSteps.cs` | 購物車測試場景的步驟定義實作 |
+
+**包含內容**:
+- `[Given]` 步驟: 測試前置條件設定
+- `[When]` 步驟: 執行使用者操作
+- `[Then]` 步驟: 驗證測試結果
+- ScenarioContext: 場景間資料共享
+
+**範例方法**:
+```csharp
+[Given(@"使用者在產品列表頁面")]
+[When(@"使用者將 ""(.*)"" 加入購物車")]
+[Then(@"購物車中應該有 (.*) 項商品")]
+```
+
+---
+
+#### 📂 PageObjects/ - 頁面物件模型
+遵循 Page Object Model (POM) 設計模式，封裝頁面元素和操作。
+
+| 檔案 | 說明 |
+|------|------|
+| `BasePage.cs` | 基礎頁面類別，提供所有頁面共用的方法 |
+| `ProductListPage.cs` | 產品列表頁面的元素定位和操作方法 |
+| `ShoppingCartPage.cs` | 購物車頁面的元素定位和驗證方法 |
+
+**BasePage.cs 功能**:
+- FlaUI Application 初始化
+- 通用元素等待方法
+- 視窗管理（最大化、關閉等）
+- 錯誤處理和日誌記錄
+
+**ProductListPage.cs 功能**:
+- 定位產品元素（使用 AutomationId）
+- 加入購物車按鈕點擊
+- 購物車圖示互動
+- 驗證產品可用性
+
+**ShoppingCartPage.cs 功能**:
+- 購物車項目計數驗證
+- 產品名稱和價格驗證
+- 數量調整（+/-按鈕）
+- 移除商品功能
+- 清空購物車操作
+- 結帳流程驗證
+
+---
+
+#### 📂 Hooks/ - 測試生命週期鉤子
+管理測試執行前後的設定和清理工作。
+
+| 檔案 | 說明 |
+|------|------|
+| `TestHooks.cs` | SpecFlow 測試鉤子（Before/After Scenario/Step） |
+
+**包含鉤子**:
+- `[BeforeScenario]`: 場景執行前的初始化（啟動應用程式）
+- `[AfterScenario]`: 場景執行後的清理（關閉應用程式、截圖）
+- `[BeforeStep]` / `[AfterStep]`: 步驟級別的處理
+- 失敗處理: 自動截圖和日誌記錄
+
+---
+
+#### 📂 Helpers/ - 輔助工具類別
+提供跨專案使用的共用工具方法。
+
+| 檔案 | 說明 |
+|------|------|
+| `ConfigHelper.cs` | 讀取 App.config 配置檔案（應用程式路徑等） |
+| `ScreenshotHelper.cs` | 截圖功能（失敗時自動截圖） |
+| `FailureLogHelper.cs` | 測試失敗日誌記錄和錯誤資訊收集 |
+
+**ConfigHelper 功能**:
+```csharp
+GetAppPath()        // 取得待測應用程式路徑
+GetTimeout()        // 取得元素等待逾時設定
+GetScreenshotPath() // 取得截圖存放路徑
+```
+
+---
+
+#### 📂 reports/ - 測試報告輸出
+測試執行後產生的報告檔案存放目錄。
+
+| 檔案 | 說明 |
+|------|------|
+| `junit-results.xml` | NUnit 產生的 JUnit 格式測試結果 |
+| `summary_report.md` | Markdown 格式的測試摘要報告 |
+| `summary_report.html` | HTML 格式的測試摘要報告（可瀏覽器開啟） |
+| `screenshots/` | 測試失敗時的截圖檔案（如有） |
+
+---
+
+#### 📂 bin/ 和 obj/ - 建置輸出
+.NET 建置過程產生的二進位檔案和中間檔案。
+
+- `bin/Debug/net8.0-windows/`: 編譯後的執行檔和相依套件
+- `obj/`: 編譯過程的中間檔案和快取
+
+**注意**: 這些目錄通常不納入版本控制（.gitignore）
+
+---
+
+### 核心配置檔案
+
+#### App.config
+應用程式配置檔，包含測試執行所需的設定。
+
+```xml
+<appSettings>
+  <add key="AppPath" value="待測應用程式路徑" />
+  <add key="WaitTimeout" value="10" />
+  <add key="ScreenshotPath" value="./reports/screenshots" />
+</appSettings>
+```
+
+**重要設定**:
+- `AppPath`: WebView2 應用程式的完整路徑
+- `WaitTimeout`: 元素等待逾時秒數
+- `ScreenshotPath`: 失敗截圖存放位置
+
+---
+
+#### Testcase_shopping_cart_FlaUI_BDD.csproj
+.NET 專案檔案，定義專案相依套件和建置設定。
+
+**主要 NuGet 套件**:
+```xml
+<PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
+<PackageReference Include="SpecFlow" Version="3.9.74" />
+<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
+<PackageReference Include="NUnit" Version="4.3.2" />
+<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+```
+
+**目標框架**: `net8.0-windows`（Windows 專用）
+
+---
+
+### 測試執行流程
+
+```
+1. [BeforeScenario] Hook 初始化
+   ├── 讀取 App.config 設定
+   ├── 啟動待測應用程式（FlaUI Application）
+   └── 初始化 Page Objects
+
+2. 執行測試場景 (Feature → Steps)
+   ├── Given: 設定前置條件
+   ├── When: 執行操作 (透過 Page Objects)
+   └── Then: 驗證結果 (Assert)
+
+3. [AfterScenario] Hook 清理
+   ├── 如果失敗: 截圖 + 記錄日誌
+   ├── 關閉應用程式
+   └── 釋放資源
+
+4. 產生測試報告
+   ├── junit-results.xml (NUnit 輸出)
+   ├── summary_report.md (自訂摘要)
+   └── summary_report.html (HTML 檢視)
+```
+
+---
+
+### 檔案相依關係
+
+```
+ShoppingCart.feature (Gherkin 場景)
+       ↓
+ShoppingCartSteps.cs (步驟定義)
+       ↓
+PageObjects/*.cs (頁面操作)
+       ↓
+FlaUI (UI 自動化引擎)
+       ↓
+待測應用程式 (WebView2)
+
+支援模組:
+- Helpers/ → 提供配置、截圖、日誌
+- Hooks/ → 管理測試生命週期
+- App.config → 提供執行時設定
+```
+
+---
+
 ## ✅ 已包含的測試專案
 
 ### 1. Testcase_shopping_cart_FlaUI_BDD

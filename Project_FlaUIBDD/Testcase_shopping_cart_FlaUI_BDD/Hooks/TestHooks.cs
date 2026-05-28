@@ -15,9 +15,9 @@ namespace ShoppingCartTests.Hooks
     [Binding]
     public class TestHooks
     {
-        private static UIA3Automation _automation;
-        private static FlaUI.Core.Application _application;
-        private static Window _mainWindow;
+        private static UIA3Automation? _automation;
+        private static FlaUI.Core.Application? _application;
+        private static Window? _mainWindow;
         private static bool _launchedWebViewHost;
         private readonly ScenarioContext _scenarioContext;
 
@@ -34,6 +34,23 @@ namespace ShoppingCartTests.Hooks
         {
             Console.WriteLine("=== 測試開始 ===");
             _automation = new UIA3Automation();
+
+            // 初始化 HTML 報告
+            var reportsDir = Path.Combine(TestContext.CurrentContext.WorkDirectory, "reports");
+            HtmlReportHelper.InitializeReport(reportsDir, "TestReport.html");
+        }
+
+        /// <summary>
+        /// Feature 執行前的設定
+        /// </summary>
+        [BeforeFeature]
+        public static void BeforeFeature(FeatureContext featureContext)
+        {
+            var featureName = featureContext.FeatureInfo.Title;
+            var description = featureContext.FeatureInfo.Description;
+            HtmlReportHelper.CreateFeature(featureName, description ?? "");
+
+            Console.WriteLine($"=== 開始 Feature: {featureName} ===");
         }
 
         [BeforeStep]
@@ -47,12 +64,52 @@ namespace ShoppingCartTests.Hooks
         }
 
         /// <summary>
+        /// 每個步驟執行後記錄到報告
+        /// </summary>
+        [AfterStep]
+        public void AfterStep()
+        {
+            var stepInfo = _scenarioContext.StepContext?.StepInfo;
+            if (stepInfo == null)
+            {
+                return;
+            }
+
+            var stepText = $"{stepInfo.StepDefinitionType} {stepInfo.Text}";
+
+            if (_scenarioContext.TestError != null)
+            {
+                HtmlReportHelper.LogFail(stepText, _scenarioContext.TestError.Message, _scenarioContext.TestError.StackTrace ?? "");
+            }
+            else if (_scenarioContext.ScenarioExecutionStatus == ScenarioExecutionStatus.StepDefinitionPending)
+            {
+                HtmlReportHelper.LogSkip(stepText, "步驟定義尚未實作");
+            }
+            else
+            {
+                HtmlReportHelper.LogPass(stepText);
+            }
+        }
+
+        /// <summary>
         /// 每個 Scenario 執行前的設定
         /// </summary>
         [BeforeScenario]
         public void BeforeScenario()
         {
-            Console.WriteLine($"=== 開始執行場景: {_scenarioContext.ScenarioInfo.Title} ===");
+            var scenarioTitle = _scenarioContext.ScenarioInfo.Title;
+            var scenarioDesc = string.Join(", ", _scenarioContext.ScenarioInfo.Tags);
+
+            Console.WriteLine($"=== 開始執行場景: {scenarioTitle} ===");
+
+            // 在 HTML 報告中建立 Scenario
+            HtmlReportHelper.CreateScenario(scenarioTitle, scenarioDesc);
+
+            // 為 Scenario 添加標籤/分類
+            if (_scenarioContext.ScenarioInfo.Tags.Length > 0)
+            {
+                HtmlReportHelper.AssignCategory(_scenarioContext.ScenarioInfo.Tags);
+            }
 
             try
             {
@@ -81,6 +138,7 @@ namespace ShoppingCartTests.Hooks
             catch (Exception ex)
             {
                 Console.WriteLine($"測試初始化失敗: {ex.Message}");
+                HtmlReportHelper.LogFail("初始化測試環境", ex.Message, ex.StackTrace ?? "");
                 throw;
             }
         }
@@ -98,6 +156,12 @@ namespace ShoppingCartTests.Hooks
                 {
                     Console.WriteLine($"測試失敗: {_scenarioContext.TestError.Message}");
                     var screenshotPath = TakeScreenshot();
+
+                    // 添加截圖到 HTML 報告
+                    if (!string.IsNullOrEmpty(screenshotPath))
+                    {
+                        HtmlReportHelper.AttachScreenshot(screenshotPath, "失敗截圖");
+                    }
 
                     if (ConfigHelper.WriteFailureLogOnFailure())
                     {
@@ -137,6 +201,16 @@ namespace ShoppingCartTests.Hooks
         [AfterTestRun]
         public static void AfterTestRun()
         {
+            // 完成並保存 HTML 報告
+            HtmlReportHelper.FlushReport();
+            var reportPath = HtmlReportHelper.GetReportPath();
+
+            if (!string.IsNullOrEmpty(reportPath) && File.Exists(reportPath))
+            {
+                Console.WriteLine($"\n=== HTML 測試報告已生成 ===");
+                Console.WriteLine($"報告位置: {reportPath}");
+            }
+
             _automation?.Dispose();
             Console.WriteLine("=== 測試結束 ===");
         }

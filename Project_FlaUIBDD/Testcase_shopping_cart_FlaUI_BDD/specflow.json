@@ -1,0 +1,19 @@
+{
+    "language": {
+        "feature": "zh-TW"
+    },
+    "bindingCulture": {
+        "name": "zh-TW"
+    },
+    "trace": {
+        "traceSuccessfulSteps": true,
+        "traceTimings": true,
+        "minTracedDuration": "0:0:0.1",
+        "stepDefinitionSkeletonStyle": "RegexAttribute"
+    },
+    "stepAssemblies": [
+        {
+            "assembly": "Testcase_shopping_cart_FlaUI_BDD"
+        }
+    ]
+}
