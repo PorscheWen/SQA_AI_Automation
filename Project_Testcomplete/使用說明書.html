@@ -348,6 +348,7 @@
                 <li><a href="#run-test">▶️ 執行測試</a></li>
                 <li><a href="#generate-report">📊 產生報告</a></li>
                 <li><a href="#convert">🔄 轉換 FlaUI</a></li>
+                <li><a href="#ai-tools">🤖 AI 工具</a></li>
                 <li><a href="#testcases">📝 測試案例</a></li>
                 <li><a href="#troubleshooting">🔧 疑難排解</a></li>
             </ul>
@@ -360,7 +361,8 @@
 
                 <div class="card info">
                     <h4>什麼是 TestComplete 測試專案？</h4>
-                    <p>本專案是基於 <strong>TestComplete</strong> 的 Python 測試腳本，提供購物車功能的自動化測試，並包含完整的轉換指南，協助您將測試遷移到 <strong>FlaUI BDD</strong> 架構。</p>
+                    <p>本專案是基於 <strong>TestComplete</strong> 的 Python 測試腳本，提供購物車功能的自動化測試，並包含完整的轉換指南，協助您將測試遷移到
+                        <strong>FlaUI BDD</strong> 架構。</p>
                 </div>
 
                 <h3><span class="icon">🏗️</span> 專案架構</h3>
@@ -647,6 +649,152 @@ Log.SaveResultsAs(
 [貼上 control_ 函數]</code>
                 </div>
 
+                <h4>轉換範例</h4>
+
+                <p><strong>範例 1：Given 步驟 - 清空購物車</strong></p>
+
+                <p>輸入 (TestComplete Python)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">def</span> control_reset_cart():
+    <span class="string">"""清空購物車"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    reset_btn = page.FindChildByXPath(<span class="string">"//*[@data-testid='reset-cart']"</span>)
+    reset_btn.Click()</code>
+                </div>
+
+                <p>輸出 (C# Step Definition)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">using</span> TechTalk.SpecFlow;
+<span class="keyword">using</span> ShoppingCartTests.PageObjects;
+
+[Given(<span class="string">@"購物車已清空"</span>)]
+<span class="keyword">public void</span> Given購物車已清空()
+{
+    <span class="keyword">try</span>
+    {
+        _shoppingCartPage.ResetCart();
+        TestContext.WriteLine(<span class="string">"購物車已清空"</span>);
+    }
+    <span class="keyword">catch</span> (Exception ex)
+    {
+        ScreenshotHelper.TakeScreenshot(_scenarioContext, <span class="string">"ResetCart_Failed"</span>);
+        <span class="keyword">throw new</span> Exception(<span class="string">"清空購物車失敗"</span>, ex);
+    }
+}</code>
+                </div>
+
+                <p><strong>範例 2：When 步驟 - 加入商品</strong></p>
+
+                <p>輸入 (TestComplete Python)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">def</span> control_click_testid(testid):
+    <span class="string">"""點擊指定 data-testid 的元素"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    element = page.FindChildByXPath(<span class="string">f"//*[@data-testid='{testid}']"</span>)
+    element.Click()</code>
+                </div>
+
+                <p>輸出 (C# Step Definition)：</p>
+                <div class="code-block">
+                    <code>[When(<span class="string">@"我點擊加入(蘋果|香蕉|牛奶)按鈕"</span>)]
+<span class="keyword">public void</span> When我點擊加入按鈕(<span class="keyword">string</span> itemName)
+{
+    <span class="keyword">try</span>
+    {
+        _productListPage.AddItem(itemName);
+        TestContext.WriteLine(<span class="string">$"已點擊加入{itemName}按鈕"</span>);
+    }
+    <span class="keyword">catch</span> (Exception ex)
+    {
+        ScreenshotHelper.TakeScreenshot(_scenarioContext, <span class="string">$"AddItem_{itemName}_Failed"</span>);
+        <span class="keyword">throw new</span> Exception(<span class="string">$"加入{itemName}失敗"</span>, ex);
+    }
+}</code>
+                </div>
+
+                <p><strong>範例 3：Then 步驟 - 驗證文字</strong></p>
+
+                <p>輸入 (TestComplete Python)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">def</span> control_verify_text(testid, expected, field_name):
+    <span class="string">"""驗證元素文字內容"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    element = page.FindChildByXPath(<span class="string">f"//*[@data-testid='{testid}']"</span>)
+    actual = element.contentText
+    <span class="keyword">if</span> actual != expected:
+        Log.Error(<span class="string">f"{field_name} mismatch: expected '{expected}', got '{actual}'"</span>)
+    <span class="keyword">else</span>:
+        Log.Checkpoint(<span class="string">f"{field_name} verified: {actual}"</span>)</code>
+                </div>
+
+                <p>輸出 (C# Step Definition)：</p>
+                <div class="code-block">
+                    <code>[Then(<span class="string">@"購物車件數應該是 ""(.*)"""</span>)]
+<span class="keyword">public void</span> Then購物車件數應該是(<span class="keyword">string</span> expectedCount)
+{
+    <span class="keyword">try</span>
+    {
+        <span class="keyword">var</span> actualCount = _shoppingCartPage.GetCartCount();
+        NUnit.Framework.Assert.That(actualCount, Is.EqualTo(expectedCount),
+            <span class="string">$"購物車件數不符: 預期 '{expectedCount}', 實際 '{actualCount}'"</span>);
+        TestContext.WriteLine(<span class="string">$"購物車件數驗證成功: {actualCount}"</span>);
+    }
+    <span class="keyword">catch</span> (Exception ex)
+    {
+        ScreenshotHelper.TakeScreenshot(_scenarioContext, <span class="string">"VerifyCartCount_Failed"</span>);
+        <span class="keyword">throw</span>;
+    }
+}
+
+[Then(<span class="string">@"購物車總計應該是 ""(.*)"""</span>)]
+<span class="keyword">public void</span> Then購物車總計應該是(<span class="keyword">string</span> expectedTotal)
+{
+    <span class="keyword">try</span>
+    {
+        <span class="keyword">var</span> actualTotal = _shoppingCartPage.GetCartTotal();
+        NUnit.Framework.Assert.That(actualTotal, Is.EqualTo(expectedTotal),
+            <span class="string">$"購物車總計不符: 預期 '{expectedTotal}', 實際 '{actualTotal}'"</span>);
+        TestContext.WriteLine(<span class="string">$"購物車總計驗證成功: {actualTotal}"</span>);
+    }
+    <span class="keyword">catch</span> (Exception ex)
+    {
+        ScreenshotHelper.TakeScreenshot(_scenarioContext, <span class="string">"VerifyCartTotal_Failed"</span>);
+        <span class="keyword">throw</span>;
+    }
+}</code>
+                </div>
+
+                <p><strong>範例 4：完整的 Step Definition 類別結構</strong></p>
+                <div class="code-block">
+                    <code><span class="keyword">using</span> NUnit.Framework;
+<span class="keyword">using</span> TechTalk.SpecFlow;
+<span class="keyword">using</span> ShoppingCartTests.PageObjects;
+<span class="keyword">using</span> ShoppingCartTests.Helpers;
+
+<span class="keyword">namespace</span> ShoppingCartTests.StepDefinitions
+{
+    [Binding]
+    <span class="keyword">public class</span> ShoppingCartSteps
+    {
+        <span class="keyword">private readonly</span> ScenarioContext _scenarioContext;
+        <span class="keyword">private</span> ProductListPage _productListPage;
+        <span class="keyword">private</span> ShoppingCartPage _shoppingCartPage;
+
+        <span class="comment">// 建構函數 - 注入 ScenarioContext</span>
+        <span class="keyword">public</span> ShoppingCartSteps(ScenarioContext scenarioContext)
+        {
+            _scenarioContext = scenarioContext;
+            _productListPage = _scenarioContext.Get&lt;ProductListPage&gt;(<span class="string">"ProductListPage"</span>);
+            _shoppingCartPage = _scenarioContext.Get&lt;ShoppingCartPage&gt;(<span class="string">"ShoppingCartPage"</span>);
+        }
+
+        <span class="comment">// Given 步驟...</span>
+        <span class="comment">// When 步驟...</span>
+        <span class="comment">// Then 步驟...</span>
+    }
+}</code>
+                </div>
+
                 <h3><span class="step-number">3</span> 建立 Page Object Model</h3>
 
                 <p>將相關的 control_ 函數群組轉換為 Page Object 類別：</p>
@@ -665,7 +813,445 @@ Log.SaveResultsAs(
 [貼上 control_ 函數群組]</code>
                 </div>
 
-                <h3><span class="step-number">4</span> API 對照表</h3>
+                <h4>Page Object 架構設計</h4>
+
+                <div class="card info">
+                    <p>建議的 Page Object 結構：</p>
+                    <ul>
+                        <li><strong>BasePage.cs</strong> - 基礎類別，提供共用的元素查找和操作方法</li>
+                        <li><strong>ProductListPage.cs</strong> - 產品列表頁面物件</li>
+                        <li><strong>ShoppingCartPage.cs</strong> - 購物車頁面物件</li>
+                    </ul>
+                </div>
+
+                <h4>範例 1：BasePage 基礎類別</h4>
+
+                <p><strong>目的：</strong>提供所有 Page Object 共用的基礎功能</p>
+
+                <div class="code-block">
+                    <code><span class="keyword">using</span> FlaUI.Core;
+<span class="keyword">using</span> FlaUI.Core.AutomationElements;
+<span class="keyword">using</span> FlaUI.Core.Tools;
+<span class="keyword">using</span> FlaUI.UIA3;
+
+<span class="keyword">namespace</span> ShoppingCartTests.PageObjects
+{
+    <span class="comment">/// &lt;summary&gt;</span>
+    <span class="comment">/// 基礎頁面類別，提供所有頁面共用的功能</span>
+    <span class="comment">/// &lt;/summary&gt;</span>
+    <span class="keyword">public abstract class</span> BasePage : IDisposable
+    {
+        <span class="keyword">protected readonly</span> Window Window;
+        <span class="keyword">protected readonly</span> UIA3Automation Automation;
+        <span class="keyword">private readonly int</span> DefaultTimeout = 10000; <span class="comment">// 毫秒</span>
+
+        <span class="keyword">protected</span> BasePage(Window window, UIA3Automation automation)
+        {
+            Window = window ?? <span class="keyword">throw new</span> ArgumentNullException(<span class="keyword">nameof</span>(window));
+            Automation = automation ?? <span class="keyword">throw new</span> ArgumentNullException(<span class="keyword">nameof</span>(automation));
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 根據 AutomationId 尋找元素</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">protected</span> AutomationElement FindElement(<span class="keyword">string</span> automationId, <span class="keyword">int</span> timeout = 0)
+        {
+            <span class="keyword">if</span> (timeout == 0) timeout = DefaultTimeout;
+
+            <span class="keyword">var</span> element = Retry.WhileNull(
+                () =&gt; Window.FindFirstDescendant(cf =&gt; cf.ByAutomationId(automationId)),
+                TimeSpan.FromMilliseconds(timeout)
+            ).Result;
+
+            <span class="keyword">if</span> (element == <span class="keyword">null</span>)
+                <span class="keyword">throw new</span> Exception(<span class="string">$"找不到元素: {automationId}"</span>);
+
+            <span class="keyword">return</span> element;
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊元素</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">protected void</span> ClickElement(<span class="keyword">string</span> automationId)
+        {
+            <span class="keyword">var</span> element = FindElement(automationId);
+            element.AsButton()?.Click();
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 取得元素文字</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">protected string</span> GetElementText(<span class="keyword">string</span> automationId)
+        {
+            <span class="keyword">var</span> element = FindElement(automationId);
+            <span class="keyword">return</span> element.Name ?? element.Properties.Name.ValueOrDefault ?? <span class="keyword">string</span>.Empty;
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 等待元素出現</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">protected bool</span> WaitForElement(<span class="keyword">string</span> automationId, <span class="keyword">int</span> timeout = 5000)
+        {
+            <span class="keyword">try</span>
+            {
+                FindElement(automationId, timeout);
+                <span class="keyword">return true</span>;
+            }
+            <span class="keyword">catch</span>
+            {
+                <span class="keyword">return false</span>;
+            }
+        }
+
+        <span class="keyword">public void</span> Dispose()
+        {
+            <span class="comment">// 清理資源</span>
+        }
+    }
+}</code>
+                </div>
+
+                <h4>範例 2：ProductListPage - 產品列表頁面</h4>
+
+                <p>輸入 (TestComplete Python control_ 函數)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">def</span> control_click_add_apple():
+    <span class="string">"""點擊加入蘋果按鈕"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    btn = page.FindChildByXPath(<span class="string">"//*[@data-testid='btn-add-apple']"</span>)
+    btn.Click()
+
+<span class="keyword">def</span> control_click_add_banana():
+    <span class="string">"""點擊加入香蕉按鈕"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    btn = page.FindChildByXPath(<span class="string">"//*[@data-testid='btn-add-banana']"</span>)
+    btn.Click()
+
+<span class="keyword">def</span> control_click_add_milk():
+    <span class="string">"""點擊加入牛奶按鈕"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    btn = page.FindChildByXPath(<span class="string">"//*[@data-testid='btn-add-milk']"</span>)
+    btn.Click()</code>
+                </div>
+
+                <p>輸出 (C# Page Object)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">using</span> FlaUI.Core.AutomationElements;
+<span class="keyword">using</span> FlaUI.UIA3;
+
+<span class="keyword">namespace</span> ShoppingCartTests.PageObjects
+{
+    <span class="comment">/// &lt;summary&gt;</span>
+    <span class="comment">/// 產品列表頁面物件</span>
+    <span class="comment">/// &lt;/summary&gt;</span>
+    <span class="keyword">public class</span> ProductListPage : BasePage
+    {
+        <span class="comment">// 元素定位器 (對應 HTML data-testid)</span>
+        <span class="keyword">private const string</span> AddAppleButtonId = <span class="string">"btn-add-apple"</span>;
+        <span class="keyword">private const string</span> AddBananaButtonId = <span class="string">"btn-add-banana"</span>;
+        <span class="keyword">private const string</span> AddMilkButtonId = <span class="string">"btn-add-milk"</span>;
+
+        <span class="keyword">public</span> ProductListPage(Window window, UIA3Automation automation)
+            : <span class="keyword">base</span>(window, automation)
+        {
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊加入蘋果按鈕</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ClickAddApple()
+        {
+            ClickElement(AddAppleButtonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊加入香蕉按鈕</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ClickAddBanana()
+        {
+            ClickElement(AddBananaButtonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊加入牛奶按鈕</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ClickAddMilk()
+        {
+            ClickElement(AddMilkButtonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 根據商品名稱加入商品 (通用方法)</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> AddItem(<span class="keyword">string</span> itemName)
+        {
+            <span class="keyword">var</span> automationId = itemName <span class="keyword">switch</span>
+            {
+                <span class="string">"蘋果"</span> =&gt; AddAppleButtonId,
+                <span class="string">"香蕉"</span> =&gt; AddBananaButtonId,
+                <span class="string">"牛奶"</span> =&gt; AddMilkButtonId,
+                _ =&gt; <span class="string">$"btn-add-{itemName.ToLower()}"</span>
+            };
+            ClickElement(automationId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 批次加入多個商品</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> AddMultipleItems(<span class="keyword">params string</span>[] items)
+        {
+            <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> items)
+            {
+                AddItem(item);
+            }
+        }
+    }
+}</code>
+                </div>
+
+                <h4>範例 3：ShoppingCartPage - 購物車頁面</h4>
+
+                <p>輸入 (TestComplete Python control_ 函數)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">def</span> control_get_cart_count():
+    <span class="string">"""取得購物車件數"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    element = page.FindChildByXPath(<span class="string">"//*[@data-testid='cart-count']"</span>)
+    <span class="keyword">return</span> element.contentText
+
+<span class="keyword">def</span> control_get_cart_total():
+    <span class="string">"""取得購物車總計"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    element = page.FindChildByXPath(<span class="string">"//*[@data-testid='cart-total']"</span>)
+    <span class="keyword">return</span> element.contentText
+
+<span class="keyword">def</span> control_click_increase_quantity(item_name):
+    <span class="string">"""點擊增加數量按鈕"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    btn = page.FindChildByXPath(<span class="string">f"//*[@data-testid='increase-{item_name}']"</span>)
+    btn.Click()
+
+<span class="keyword">def</span> control_click_remove_item(item_name):
+    <span class="string">"""點擊移除商品按鈕"""</span>
+    page = Sys.Browser(<span class="string">"*"</span>).Page(<span class="string">"*"</span>)
+    btn = page.FindChildByXPath(<span class="string">f"//*[@data-testid='remove-{item_name}']"</span>)
+    btn.Click()</code>
+                </div>
+
+                <p>輸出 (C# Page Object)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">using</span> FlaUI.Core.AutomationElements;
+<span class="keyword">using</span> FlaUI.UIA3;
+
+<span class="keyword">namespace</span> ShoppingCartTests.PageObjects
+{
+    <span class="comment">/// &lt;summary&gt;</span>
+    <span class="comment">/// 購物車頁面物件</span>
+    <span class="comment">/// &lt;/summary&gt;</span>
+    <span class="keyword">public class</span> ShoppingCartPage : BasePage
+    {
+        <span class="comment">// 元素定位器</span>
+        <span class="keyword">private const string</span> CartCountId = <span class="string">"cart-count"</span>;
+        <span class="keyword">private const string</span> CartTotalId = <span class="string">"cart-total"</span>;
+        <span class="keyword">private const string</span> ResetCartButtonId = <span class="string">"reset-cart"</span>;
+        <span class="keyword">private const string</span> CheckoutButtonId = <span class="string">"checkout"</span>;
+
+        <span class="keyword">public</span> ShoppingCartPage(Window window, UIA3Automation automation)
+            : <span class="keyword">base</span>(window, automation)
+        {
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 取得購物車件數</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public string</span> GetCartCount()
+        {
+            <span class="keyword">return</span> GetElementText(CartCountId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 取得購物車總計</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public string</span> GetCartTotal()
+        {
+            <span class="keyword">return</span> GetElementText(CartTotalId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊增加數量按鈕</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ClickIncreaseQuantity(<span class="keyword">string</span> itemName)
+        {
+            <span class="keyword">var</span> buttonId = <span class="string">$"increase-{GetItemKey(itemName)}"</span>;
+            ClickElement(buttonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊移除商品按鈕</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ClickRemoveItem(<span class="keyword">string</span> itemName)
+        {
+            <span class="keyword">var</span> buttonId = <span class="string">$"remove-{GetItemKey(itemName)}"</span>;
+            ClickElement(buttonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 清空購物車</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ResetCart()
+        {
+            ClickElement(ResetCartButtonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 點擊結帳按鈕</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">public void</span> ClickCheckout()
+        {
+            ClickElement(CheckoutButtonId);
+        }
+
+        <span class="comment">/// &lt;summary&gt;</span>
+        <span class="comment">/// 將中文商品名轉為 ID key</span>
+        <span class="comment">/// &lt;/summary&gt;</span>
+        <span class="keyword">private string</span> GetItemKey(<span class="keyword">string</span> itemName)
+        {
+            <span class="keyword">return</span> itemName <span class="keyword">switch</span>
+            {
+                <span class="string">"蘋果"</span> =&gt; <span class="string">"apple"</span>,
+                <span class="string">"香蕉"</span> =&gt; <span class="string">"banana"</span>,
+                <span class="string">"牛奶"</span> =&gt; <span class="string">"milk"</span>,
+                _ =&gt; itemName.ToLower()
+            };
+        }
+    }
+}</code>
+                </div>
+
+                <h4>範例 4：在 TestHooks 中初始化 Page Objects</h4>
+
+                <div class="code-block">
+                    <code><span class="keyword">using</span> TechTalk.SpecFlow;
+<span class="keyword">using</span> FlaUI.UIA3;
+<span class="keyword">using</span> ShoppingCartTests.PageObjects;
+
+[Binding]
+<span class="keyword">public class</span> TestHooks
+{
+    <span class="keyword">private readonly</span> ScenarioContext _scenarioContext;
+    <span class="keyword">private</span> UIA3Automation _automation;
+    <span class="keyword">private</span> Application _application;
+    <span class="keyword">private</span> Window _window;
+
+    <span class="keyword">public</span> TestHooks(ScenarioContext scenarioContext)
+    {
+        _scenarioContext = scenarioContext;
+    }
+
+    [BeforeScenario]
+    <span class="keyword">public void</span> BeforeScenario()
+    {
+        <span class="comment">// 初始化 FlaUI</span>
+        _automation = <span class="keyword">new</span> UIA3Automation();
+        
+        <span class="comment">// 啟動應用程式</span>
+        _application = Application.Launch(<span class="string">"path/to/app.exe"</span>);
+        _window = _application.GetMainWindow(_automation);
+
+        <span class="comment">// 建立並儲存 Page Objects 到 ScenarioContext</span>
+        <span class="keyword">var</span> productListPage = <span class="keyword">new</span> ProductListPage(_window, _automation);
+        <span class="keyword">var</span> shoppingCartPage = <span class="keyword">new</span> ShoppingCartPage(_window, _automation);
+
+        _scenarioContext.Set(productListPage, <span class="string">"ProductListPage"</span>);
+        _scenarioContext.Set(shoppingCartPage, <span class="string">"ShoppingCartPage"</span>);
+    }
+
+    [AfterScenario]
+    <span class="keyword">public void</span> AfterScenario()
+    {
+        <span class="comment">// 清理資源</span>
+        _application?.Close();
+        _automation?.Dispose();
+    }
+}</code>
+                </div>
+
+                <h3><span class="step-number">4</span> 完整轉換流程總結</h3>
+
+                <div class="card success">
+                    <h4>🔄 轉換步驟清單</h4>
+                    <ol>
+                        <li><strong>分析測試案例</strong>：識別 testcase_ 函數及其測試流程</li>
+                        <li><strong>轉換 Feature File</strong>：將每個測試案例轉為 Scenario</li>
+                        <li><strong>群組 control_ 函數</strong>：依頁面/功能分類相關函數</li>
+                        <li><strong>建立 Page Objects</strong>：為每個頁面建立對應的類別</li>
+                        <li><strong>實作 Step Definitions</strong>：連接 Feature 和 Page Objects</li>
+                        <li><strong>建立 Hooks</strong>：初始化和清理測試環境</li>
+                        <li><strong>測試與調整</strong>：逐個驗證轉換後的測試</li>
+                    </ol>
+                </div>
+
+                <h4>轉換對照範例：完整測試案例</h4>
+
+                <p><strong>原始 TestComplete Python 測試：</strong></p>
+                <div class="code-block">
+                    <code><span class="keyword">def</span> testcase_add_single_item():
+    <span class="string">"""TC01：加入單一商品，驗證件數與總計。"""</span>
+    control_reset_cart()
+    control_click_testid(<span class="string">"add-apple"</span>)
+    control_verify_text(<span class="string">"cart-count"</span>, <span class="string">"1 件"</span>, <span class="string">"Cart count"</span>)
+    control_verify_text(<span class="string">"cart-total"</span>, <span class="string">"NT$ 30"</span>, <span class="string">"Cart total"</span>)
+    control_verify_text(<span class="string">"quantity-apple"</span>, <span class="string">"1"</span>, <span class="string">"Apple quantity"</span>)</code>
+                </div>
+
+                <p><strong>轉換後的 FlaUI BDD 結構：</strong></p>
+
+                <p>1️⃣ Feature File (ShoppingCart.feature)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">@ShoppingCart</span> <span class="keyword">@AddItem</span>
+<span class="keyword">Scenario:</span> TC01 - 加入單一商品
+    <span class="keyword">Given</span> 購物車已清空
+    <span class="keyword">When</span> 我點擊加入蘋果按鈕
+    <span class="keyword">Then</span> 購物車件數應該是 <span class="string">"1 件"</span>
+    <span class="keyword">And</span> 購物車總計應該是 <span class="string">"NT$ 30"</span>
+    <span class="keyword">And</span> 蘋果的數量應該是 <span class="string">"1"</span></code>
+                </div>
+
+                <p>2️⃣ Step Definitions (ShoppingCartSteps.cs)：</p>
+                <div class="code-block">
+                    <code>[Given(<span class="string">@"購物車已清空"</span>)]
+<span class="keyword">public void</span> Given購物車已清空()
+{
+    _shoppingCartPage.ResetCart();
+}
+
+[When(<span class="string">@"我點擊加入蘋果按鈕"</span>)]
+<span class="keyword">public void</span> When我點擊加入蘋果按鈕()
+{
+    _productListPage.ClickAddApple();
+}
+
+[Then(<span class="string">@"購物車件數應該是 ""(.*)"""</span>)]
+<span class="keyword">public void</span> Then購物車件數應該是(<span class="keyword">string</span> expected)
+{
+    Assert.That(_shoppingCartPage.GetCartCount(), Is.EqualTo(expected));
+}</code>
+                </div>
+
+                <p>3️⃣ Page Objects (ShoppingCartPage.cs)：</p>
+                <div class="code-block">
+                    <code><span class="keyword">public void</span> ResetCart()
+{
+    ClickElement(<span class="string">"reset-cart"</span>);
+}
+
+<span class="keyword">public string</span> GetCartCount()
+{
+    <span class="keyword">return</span> GetElementText(<span class="string">"cart-count"</span>);
+}</code>
+                </div>
+
+                <h3><span class="step-number">5</span> API 對照表</h3>
 
                 <table>
                     <tr>
@@ -706,8 +1292,409 @@ Log.SaveResultsAs(
                 </table>
 
                 <div class="card success">
-                    <strong>📖 完整轉換指南：</strong> 請參考 <code>Testcomplete_testcase/Transfer_Prompt_Readme.md</code> 獲取更詳細的轉換說明和範例。
+                    <strong>📖 完整轉換指南：</strong> 請參考 <code>Testcomplete_testcase/Transfer_Prompt_Readme.md</code>
+                    獲取更詳細的轉換說明和範例。
                 </div>
+
+                <h3><span class="icon">💡</span> 轉換最佳實踐</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <div class="emoji">🎯</div>
+                        <h4>保持一致性</h4>
+                        <p>統一命名規範、元素定位策略和錯誤處理方式</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="emoji">🧩</div>
+                        <h4>模組化設計</h4>
+                        <p>合理拆分 Page Object，每個類別職責單一</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="emoji">🔍</div>
+                        <h4>明確的定位器</h4>
+                        <p>優先使用 AutomationId，避免依賴脆弱的 XPath</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="emoji">📸</div>
+                        <h4>失敗時截圖</h4>
+                        <p>在 catch 區塊中自動截圖，便於問題診斷</p>
+                    </div>
+                </div>
+
+                <h3><span class="icon">⚠️</span> 常見轉換陷阱</h3>
+
+                <div class="card warning">
+                    <h4>❌ 陷阱 1：直接複製 XPath</h4>
+                    <p><strong>問題：</strong>TestComplete 的 XPath 在 FlaUI 中不適用</p>
+                    <p><strong>解決：</strong>改用 AutomationId、Name 或 ClassName 定位</p>
+                    <div class="code-block">
+                        <code><span class="comment">// ❌ 錯誤</span>
+element.FindByXPath(<span class="string">"//*[@data-testid='cart-count']"</span>)
+
+<span class="comment">// ✅ 正確</span>
+element.FindFirstDescendant(cf =&gt; cf.ByAutomationId(<span class="string">"cart-count"</span>))</code>
+                    </div>
+                </div>
+
+                <div class="card warning">
+                    <h4>❌ 陷阱 2：忽略等待時間</h4>
+                    <p><strong>問題：</strong>元素尚未載入就嘗試操作</p>
+                    <p><strong>解決：</strong>使用 Retry.WhileNull 或明確等待</p>
+                    <div class="code-block">
+                        <code><span class="comment">// ✅ 使用重試機制</span>
+<span class="keyword">var</span> element = Retry.WhileNull(
+    () =&gt; Window.FindFirstDescendant(cf =&gt; cf.ByAutomationId(id)),
+    TimeSpan.FromSeconds(10)
+).Result;</code>
+                    </div>
+                </div>
+
+                <div class="card warning">
+                    <h4>❌ 陷阱 3：過度耦合的 Step Definitions</h4>
+                    <p><strong>問題：</strong>Step Definition 中包含太多 UI 邏輯</p>
+                    <p><strong>解決：</strong>將 UI 操作封裝到 Page Object</p>
+                    <div class="code-block">
+                        <code><span class="comment">// ❌ 錯誤 - Step 中有太多細節</span>
+[When(<span class="string">@"我點擊加入蘋果"</span>)]
+<span class="keyword">public void</span> When我點擊加入蘋果()
+{
+    <span class="keyword">var</span> btn = Window.FindFirstDescendant(cf =&gt; cf.ByAutomationId(<span class="string">"btn-add-apple"</span>));
+    btn.AsButton().Click();
+}
+
+<span class="comment">// ✅ 正確 - 使用 Page Object</span>
+[When(<span class="string">@"我點擊加入蘋果"</span>)]
+<span class="keyword">public void</span> When我點擊加入蘋果()
+{
+    _productListPage.ClickAddApple();
+}</code>
+                    </div>
+                </div>
+
+                <div class="card warning">
+                    <h4>❌ 陷阱 4：未處理異常</h4>
+                    <p><strong>問題：</strong>測試失敗時缺乏診斷資訊</p>
+                    <p><strong>解決：</strong>加入 try-catch 和截圖機制</p>
+                    <div class="code-block">
+                        <code>[Then(<span class="string">@"購物車件數應該是 ""(.*)"""</span>)]
+<span class="keyword">public void</span> Then購物車件數應該是(<span class="keyword">string</span> expected)
+{
+    <span class="keyword">try</span>
+    {
+        <span class="keyword">var</span> actual = _shoppingCartPage.GetCartCount();
+        Assert.That(actual, Is.EqualTo(expected));
+        TestContext.WriteLine(<span class="string">$"✅ 驗證成功: {actual}"</span>);
+    }
+    <span class="keyword">catch</span> (Exception ex)
+    {
+        ScreenshotHelper.TakeScreenshot(_scenarioContext, <span class="string">"CartCount_Failed"</span>);
+        TestContext.WriteLine(<span class="string">$"❌ 驗證失敗: {ex.Message}"</span>);
+        <span class="keyword">throw</span>;
+    }
+}</code>
+                    </div>
+                </div>
+
+                <h3><span class="icon">✅</span> 轉換檢查清單</h3>
+
+                <div class="card success">
+                    <h4>📥 下載完整檢查清單</h4>
+                    <p>我們提供了一份完整的 Markdown 格式檢查清單，包含所有轉換步驟的詳細說明。</p>
+                    <p style="margin-top: 10px;">
+                        <a href="CONVERSION_CHECKLIST.md" class="btn" download>
+                            📄 下載 CONVERSION_CHECKLIST.md
+                        </a>
+                    </p>
+                    <p style="margin-top: 10px; font-size: 0.9em;">
+                        <strong>建議：</strong>列印此清單或在另一個視窗中開啟，在轉換過程中逐項勾選完成狀態。
+                    </p>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>檢查項目</th>
+                        <th>說明</th>
+                        <th>狀態</th>
+                    </tr>
+                    <tr>
+                        <td>✅ Feature File</td>
+                        <td>所有 Scenario 都已定義</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ Page Objects</td>
+                        <td>繼承自 BasePage，封裝完整</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ Step Definitions</td>
+                        <td>所有步驟都已實作</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ 元素定位</td>
+                        <td>使用穩定的 AutomationId</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ 錯誤處理</td>
+                        <td>加入 try-catch 和截圖</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ 等待機制</td>
+                        <td>使用 Retry 或明確等待</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ Hooks</td>
+                        <td>BeforeScenario/AfterScenario 設定</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>✅ 測試執行</td>
+                        <td>每個測試都能獨立運行</td>
+                        <td>□</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- AI 輔助工具 -->
+            <section id="ai-tools">
+                <h2><span class="icon">🤖</span> AI 輔助工具加速轉換</h2>
+
+                <div class="card info">
+                    <h4>為什麼使用 AI 工具？</h4>
+                    <p>AI 輔助工具可以大幅縮短轉換時間，從數天縮短到數小時，同時確保轉換品質和一致性。</p>
+                </div>
+
+                <h4>🔧 推薦的 AI 輔助工具</h4>
+
+                <table>
+                    <tr>
+                        <th>工具名稱</th>
+                        <th>用途</th>
+                        <th>優勢</th>
+                    </tr>
+                    <tr>
+                        <td><strong>GitHub Copilot</strong></td>
+                        <td>程式碼轉換與補全</td>
+                        <td>即時建議、上下文感知、支援多語言</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ChatGPT / Claude</strong></td>
+                        <td>批次轉換、架構規劃</td>
+                        <td>處理大量程式碼、提供詳細解釋</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Copilot Chat</strong></td>
+                        <td>專案內程式碼分析</td>
+                        <td>理解專案結構、提供客製化建議</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tabnine</strong></td>
+                        <td>程式碼自動補全</td>
+                        <td>本地運行、保護隱私、高速回應</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cursor Editor</strong></td>
+                        <td>智慧程式碼編輯</td>
+                        <td>整合 AI、專注開發體驗</td>
+                    </tr>
+                </table>
+
+                <h4>📋 使用 AI 工具的轉換工作流程</h4>
+
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <div class="emoji">1️⃣</div>
+                        <h4>準備階段</h4>
+                        <p>收集所有 TestComplete Python 測試案例和 control_ 函數</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="emoji">2️⃣</div>
+                        <h4>使用 Prompt</h4>
+                        <p>套用 Transfer_Prompt.md 中的轉換模板</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="emoji">3️⃣</div>
+                        <h4>AI 轉換</h4>
+                        <p>將程式碼貼給 AI，獲得轉換結果</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="emoji">4️⃣</div>
+                        <h4>驗證調整</h4>
+                        <p>測試轉換結果，必要時微調</p>
+                    </div>
+                </div>
+
+                <h4>💡 實戰範例：使用 ChatGPT 進行轉換</h4>
+
+                <p><strong>步驟 1：準備 Prompt</strong></p>
+                <div class="code-block">
+                    <code>我有一個 TestComplete Python 測試專案，需要轉換為 FlaUI BDD (C# + SpecFlow)。
+
+<span class="keyword">專案背景：</span>
+- 測試購物車功能
+- 使用 data-testid 定位元素
+- 包含 6 個測試案例
+
+<span class="keyword">請幫我完成以下轉換：</span>
+1. 將 testcase_ 函數轉為 Gherkin Scenario
+2. 將 control_ 函數轉為 C# Page Object 類別
+3. 建立對應的 Step Definitions
+
+<span class="keyword">以下是要轉換的程式碼：</span>
+[貼上 Python 程式碼]</code>
+                </div>
+
+                <p><strong>步驟 2：分批轉換</strong></p>
+                <div class="card warning">
+                    <p><strong>💡 提示：</strong>不要一次轉換所有程式碼。建議分批進行：</p>
+                    <ul>
+                        <li>第一批：1-2 個測試案例 + 相關的 control_ 函數</li>
+                        <li>驗證結果後，再轉換下一批</li>
+                        <li>逐步建立轉換模式，提高效率</li>
+                    </ul>
+                </div>
+
+                <p><strong>步驟 3：使用 GitHub Copilot 快速補全</strong></p>
+                <div class="code-block">
+                    <code><span class="comment">// 輸入註解，讓 Copilot 生成程式碼</span>
+
+<span class="comment">/// 點擊加入蘋果按鈕</span>
+<span class="keyword">public void</span> ClickAddApple()
+{
+    <span class="comment">// Copilot 會自動建議：</span>
+    ClickElement(AddAppleButtonId);
+}
+
+<span class="comment">// 或是開始輸入，Copilot 會自動補全</span>
+[When(<span class="string">@"我點擊加入"</span>
+    <span class="comment">// Copilot 建議完整的正則表達式和方法實作</span></code>
+                </div>
+
+                <h4>🎯 AI 轉換最佳實踐</h4>
+
+                <div class="card success">
+                    <h4>✅ 提高 AI 轉換品質的技巧</h4>
+                    <ol>
+                        <li><strong>提供完整上下文</strong>：包含專案背景、技術堆疊、命名規範</li>
+                        <li><strong>使用範例驅動</strong>：先給一個手動轉換的範例，讓 AI 學習模式</li>
+                        <li><strong>明確要求</strong>：指定要使用的 API（如 FlaUI）、設計模式（如 Page Object）</li>
+                        <li><strong>迭代改進</strong>：第一次轉換後，根據結果調整 Prompt</li>
+                        <li><strong>保持一致性</strong>：使用相同的 Prompt 模板處理類似的程式碼</li>
+                    </ol>
+                </div>
+
+                <h4>⚡ 加速技巧</h4>
+
+                <table>
+                    <tr>
+                        <th>技巧</th>
+                        <th>說明</th>
+                        <th>節省時間</th>
+                    </tr>
+                    <tr>
+                        <td>📝 建立 Prompt 範本庫</td>
+                        <td>將常用的轉換 Prompt 儲存為範本</td>
+                        <td>50%</td>
+                    </tr>
+                    <tr>
+                        <td>🔄 使用批次處理腳本</td>
+                        <td>自動化重複性的轉換任務</td>
+                        <td>60%</td>
+                    </tr>
+                    <tr>
+                        <td>🎨 善用程式碼片段</td>
+                        <td>建立 VS Code Snippets 快速插入常用程式碼</td>
+                        <td>40%</td>
+                    </tr>
+                    <tr>
+                        <td>🤝 AI + 人工審查</td>
+                        <td>AI 負責初步轉換，人工負責品質把關</td>
+                        <td>70%</td>
+                    </tr>
+                    <tr>
+                        <td>📚 建立轉換知識庫</td>
+                        <td>記錄常見問題和解決方案</td>
+                        <td>30%</td>
+                    </tr>
+                </table>
+
+                <h4>🚀 進階技巧：客製化 AI 助手</h4>
+
+                <div class="code-block">
+                    <code><span class="comment"># 建立專屬的轉換助手 Prompt</span>
+
+你是一個專業的測試自動化轉換專家，專精於將 TestComplete Python 測試轉換為 FlaUI BDD。
+
+<span class="keyword">你的專長：</span>
+- 熟悉 TestComplete Python API 和 FlaUI C# API
+- 精通 SpecFlow 和 Gherkin 語法
+- 了解 Page Object Model 設計模式
+- 能夠識別並處理常見的轉換陷阱
+
+<span class="keyword">轉換規則：</span>
+1. data-testid → AutomationId
+2. FindChildByXPath → FindFirstDescendant
+3. element.Click() → element.AsButton().Click()
+4. element.contentText → element.Name
+5. 保持一致的命名規範（中文步驟、英文程式碼）
+
+<span class="keyword">品質要求：</span>
+- 加入詳細的 XML 註解
+- 實作完整的錯誤處理
+- 使用 Retry 機制處理元素等待
+- 在失敗時自動截圖
+
+現在請幫我轉換以下程式碼...</code>
+                </div>
+
+                <div class="card info">
+                    <h4>💼 團隊協作建議</h4>
+                    <p>在團隊中使用 AI 工具時：</p>
+                    <ul>
+                        <li>📋 建立統一的 Prompt 範本，確保轉換一致性</li>
+                        <li>👥 定期分享 AI 轉換的最佳實踐和心得</li>
+                        <li>✅ 建立程式碼審查機制，驗證 AI 生成的程式碼品質</li>
+                        <li>📊 追蹤轉換效率，持續優化工作流程</li>
+                        <li>🎓 培訓團隊成員有效使用 AI 工具</li>
+                    </ul>
+                </div>
+
+                <h4>🔗 延伸資源</h4>
+
+                <table>
+                    <tr>
+                        <th>資源</th>
+                        <th>說明</th>
+                    </tr>
+                    <tr>
+                        <td><a href="CONVERSION_CHECKLIST.md" style="color: #ff8c00;">CONVERSION_CHECKLIST.md</a></td>
+                        <td>完整的轉換檢查清單（可列印）</td>
+                    </tr>
+                    <tr>
+                        <td>Transfer_Prompt.md</td>
+                        <td>專案內建的轉換 Prompt 範本</td>
+                    </tr>
+                    <tr>
+                        <td>Transfer_Prompt_Readme.md</td>
+                        <td>詳細的轉換指南和 API 對照表</td>
+                    </tr>
+                    <tr>
+                        <td>GitHub Copilot 文檔</td>
+                        <td>官方使用指南和最佳實踐</td>
+                    </tr>
+                    <tr>
+                        <td>SpecFlow 文檔</td>
+                        <td>BDD 框架的完整參考</td>
+                    </tr>
+                    <tr>
+                        <td>FlaUI GitHub</td>
+                        <td>API 文檔和範例程式碼</td>
+                    </tr>
+                </table>
             </section>
 
             <!-- 測試案例詳細說明 -->
@@ -871,7 +1858,8 @@ Log.SaveResultsAs(
                         <li>💡 優先轉換核心測試案例</li>
                         <li>💡 逐步轉換，確保每個部分都正確運作</li>
                         <li>💡 保留原始 TestComplete 測試作為參考</li>
-                        <li>💡 使用 AI 輔助工具加速轉換過程</li>
+                        <li>💡 <a href="#ai-tools" style="color: #87ceeb; text-decoration: underline;">使用 AI
+                                輔助工具加速轉換過程</a></li>
                         <li>💡 建立轉換檢查清單確保不遺漏重要步驟</li>
                     </ul>
                 </div>
