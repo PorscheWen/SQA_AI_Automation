@@ -15,23 +15,23 @@
         body {
             font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif;
             line-height: 1.8;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #d0d0d0;
+            background: #000000;
             padding: 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: #1a1a1a;
             border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(255, 140, 0, 0.3);
             overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #90ee90 0%, #98fb98 100%);
+            color: #1a1a1a;
             padding: 40px;
             text-align: center;
         }
@@ -48,9 +48,9 @@
         }
 
         nav {
-            background: #f8f9fa;
+            background: #2a2a2a;
             padding: 20px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #ff8c00;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -66,20 +66,20 @@
 
         nav a {
             text-decoration: none;
-            color: #667eea;
+            color: #ff8c00;
             padding: 10px 20px;
             border-radius: 25px;
-            background: white;
+            background: #1a1a1a;
             transition: all 0.3s;
             font-weight: 600;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(255, 140, 0, 0.2);
         }
 
         nav a:hover {
-            background: #667eea;
+            background: #ff8c00;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 10px rgba(255, 140, 0, 0.5);
         }
 
         .content {
@@ -92,18 +92,18 @@
         }
 
         h2 {
-            color: #667eea;
+            color: #ff8c00;
             font-size: 2em;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #ff8c00;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         h3 {
-            color: #764ba2;
+            color: #87ceeb;
             font-size: 1.5em;
             margin: 25px 0 15px 0;
             display: flex;
@@ -112,7 +112,7 @@
         }
 
         h4 {
-            color: #555;
+            color: #b0b0b0;
             font-size: 1.2em;
             margin: 20px 0 10px 0;
         }
@@ -122,30 +122,30 @@
         }
 
         .card {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
+            background: #2a2a2a;
+            border-left: 4px solid #ff8c00;
             padding: 20px;
             margin: 20px 0;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
         }
 
         .warning {
-            background: #fff3cd;
+            background: #3a2a00;
             border-left-color: #ffc107;
-            color: #856404;
+            color: #ffeb3b;
         }
 
         .success {
-            background: #d4edda;
+            background: #1a3a1a;
             border-left-color: #28a745;
-            color: #155724;
+            color: #90ee90;
         }
 
         .info {
-            background: #d1ecf1;
+            background: #1a2a3a;
             border-left-color: #17a2b8;
-            color: #0c5460;
+            color: #87ceeb;
         }
 
         .code-block {
@@ -166,11 +166,11 @@
         }
 
         .command {
-            color: #50fa7b;
+            color: #98fb98;
         }
 
         .comment {
-            color: #6272a4;
+            color: #f0e68c;
         }
 
         .string {
@@ -191,7 +191,7 @@
         }
 
         th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
             color: white;
             padding: 15px;
             text-align: left;
@@ -200,18 +200,19 @@
 
         td {
             padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #444;
+            color: #c0c0c0;
         }
 
         tr:hover {
-            background: #f8f9fa;
+            background: #2a2a2a;
         }
 
         .step-number {
             display: inline-block;
             width: 35px;
             height: 35px;
-            background: #667eea;
+            background: #ff8c00;
             color: white;
             border-radius: 50%;
             text-align: center;
@@ -221,10 +222,11 @@
         }
 
         .highlight {
-            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            background: linear-gradient(120deg, #ff8c00 0%, #ff6600 100%);
             padding: 2px 8px;
             border-radius: 4px;
             font-weight: 600;
+            color: white;
         }
 
         ul,
@@ -235,6 +237,15 @@
 
         li {
             margin-bottom: 10px;
+            color: #c0c0c0;
+        }
+
+        p {
+            color: #c0c0c0;
+        }
+
+        strong {
+            color: #e0e0e0;
         }
 
         .feature-grid {
@@ -245,8 +256,8 @@
         }
 
         .feature-box {
-            background: white;
-            border: 2px solid #667eea;
+            background: #2a2a2a;
+            border: 2px solid #ff8c00;
             border-radius: 8px;
             padding: 20px;
             text-align: center;
@@ -255,7 +266,7 @@
 
         .feature-box:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.5);
         }
 
         .feature-box .emoji {
@@ -274,18 +285,18 @@
         .btn {
             display: inline-block;
             padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
             color: white;
             text-decoration: none;
             border-radius: 25px;
             margin: 10px 5px;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 10px rgba(255, 140, 0, 0.4);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 15px rgba(255, 140, 0, 0.7);
         }
 
         @media print {
@@ -323,8 +334,8 @@
     <div class="container">
         <header>
             <h1>🚀 FlaUI BDD 測試框架</h1>
-            <p>完整使用說明書 v1.0</p>
-            <p style="font-size: 0.9em; margin-top: 10px;">SpecFlow + NUnit + FlaUI 自動化測試框架</p>
+            <p style="color: #000000;">完整使用說明書 v1.0</p>
+            <p style="font-size: 0.9em; margin-top: 10px; color: #000000;">SpecFlow + NUnit + FlaUI 自動化測試框架</p>
         </header>
 
         <nav>
