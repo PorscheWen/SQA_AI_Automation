@@ -20,7 +20,7 @@ $url = "http://localhost:$Port/"
 Write-Host ""
 Write-Host "FlaUI BDD 測試控制台" -ForegroundColor Cyan
 Write-Host "  $url" -ForegroundColor White
-Write-Host "  勾選 Features | 執行進度 | 測試結果" -ForegroundColor Gray
+Write-Host '  勾選 Features | 執行進度 | 測試結果' -ForegroundColor Gray
 Write-Host ""
 Write-Host "按 Ctrl+C 停止伺服器。" -ForegroundColor Yellow
 Write-Host ""
