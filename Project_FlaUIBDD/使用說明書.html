@@ -159,10 +159,13 @@
             font-size: 0.95em;
             line-height: 1.6;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            white-space: pre;
         }
 
         .code-block code {
             color: #f8f8f2;
+            white-space: pre;
+            display: block;
         }
 
         .command {
@@ -424,11 +427,11 @@
                 <div class="code-block">
                     <code><span class="keyword">@ShoppingCart</span> <span class="keyword">@YourTag</span>
 <span class="keyword">Scenario:</span> TC08 - 您的測試案例名稱
-  <span class="keyword">Given</span> 購物車已清空
-  <span class="keyword">When</span> 我點擊加入蘋果按鈕
-  <span class="keyword">And</span> 我點擊蘋果的增加數量按鈕
-  <span class="keyword">Then</span> 蘋果數量應該是 <span class="string">"2"</span>
-  <span class="keyword">And</span> 購物車總計應該是 <span class="string">"NT$ 60"</span></code>
+<span class="keyword">Given</span> 購物車已清空
+<span class="keyword">When</span> 我點擊加入蘋果按鈕
+<span class="keyword">And</span> 我點擊蘋果的增加數量按鈕
+<span class="keyword">Then</span> 蘋果數量應該是 <span class="string">"2"</span>
+<span class="keyword">And</span> 購物車總計應該是 <span class="string">"NT$ 60"</span></code>
                 </div>
 
                 <h4>🔤 Gherkin 語法說明</h4>
@@ -475,15 +478,15 @@
 
                 <div class="code-block">
                     <code><span class="keyword">Scenario Outline:</span> TC09 - 驗證商品價格
-  <span class="keyword">Given</span> 購物車已清空
-  <span class="keyword">When</span> 我點擊加入&lt;商品&gt;按鈕
-  <span class="keyword">Then</span> 購物車總計應該是 <span class="string">"&lt;總計&gt;"</span>
+<span class="keyword">Given</span> 購物車已清空
+<span class="keyword">When</span> 我點擊加入&lt;商品&gt;按鈕
+<span class="keyword">Then</span> 購物車總計應該是 <span class="string">"&lt;總計&gt;"</span>
 
-  <span class="keyword">Examples:</span>
-    | 商品 | 總計     |
-    | 蘋果 | NT$ 30  |
-    | 香蕉 | NT$ 20  |
-    | 牛奶 | NT$ 55  |</code>
+<span class="keyword">Examples:</span>
+  | 商品 | 總計     |
+  | 蘋果 | NT$ 30  |
+  | 香蕉 | NT$ 20  |
+  | 牛奶 | NT$ 55  |</code>
                 </div>
 
                 <h3><span class="step-number">2</span> 實作步驟定義 (Step Definitions)</h3>
@@ -506,8 +509,12 @@
 <span class="keyword">public void</span> Then蘋果數量應該是(string expectedQuantity)
 {
     var actualQuantity = _shoppingCartPage.GetItemQuantity(<span class="string">"蘋果"</span>);
-    ClassicAssert.AreEqual(expectedQuantity, actualQuantity, 
-        <span class="string">$"蘋果數量不符: 預期 {expectedQuantity}, 實際 {actualQuantity}"</span>);
+    
+    ClassicAssert.AreEqual(
+        expectedQuantity, 
+        actualQuantity, 
+        <span class="string">$"蘋果數量不符: 預期 {expectedQuantity}, 實際 {actualQuantity}"</span>
+    );
 }</code>
                 </div>
 
@@ -822,7 +829,11 @@
 <span class="keyword">public void</span> Then蘋果應該顯示在購物車中()
 {
     var isDisplayed = _shoppingCartPage.IsItemInCart(<span class="string">"蘋果"</span>);
-    ClassicAssert.IsTrue(isDisplayed, <span class="string">"蘋果未顯示在購物車中"</span>);
+    
+    ClassicAssert.IsTrue(
+        isDisplayed, 
+        <span class="string">"蘋果未顯示在購物車中"</span>
+    );
 }</code>
                 </div>
 
@@ -876,6 +887,7 @@
 {
     var testId = <span class="string">$"add-{itemName.ToLower()}"</span>;
     var button = FindElement(testId);
+    
     <span class="keyword">if</span> (button != <span class="keyword">null</span>)
     {
         button.AsButton().Click();
@@ -883,7 +895,9 @@
     }
     <span class="keyword">else</span>
     {
-        <span class="keyword">throw new</span> ElementNotFoundException(<span class="string">$"找不到 {itemName} 的加入按鈕"</span>);
+        <span class="keyword">throw new</span> ElementNotFoundException(
+            <span class="string">$"找不到 {itemName} 的加入按鈕"</span>
+        );
     }
 }</code>
                 </div>
