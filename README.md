@@ -12,6 +12,8 @@
 | **FlaUI BDD** | C# + SpecFlow | Windows 限定 | ✅ 完成 | Windows 桌面應用測試 |
 | **Pytest BDD** | Python + Selenium | 跨平台 | ✅ 完成 | Web 測試（BDD 風格） |
 
+> 📖 **桌面應用程式轉換指南**：若要將 Desktop App TestComplete 專案遷移至 FlaUI BDD，請參閱 [桌面應用程式轉換工作流程](Project_FlaUIBDD/桌面應用程式轉換工作流程.md)，涵蓋環境建構、程式碼轉換、報告整合及 Bamboo CI/CD 完整流程。
+
 ---
 
 ## 📁 完整目錄結構
