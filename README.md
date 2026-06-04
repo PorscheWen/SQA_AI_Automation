@@ -12,7 +12,7 @@
 | **FlaUI BDD** | C# + SpecFlow | Windows 限定 | ✅ 完成 | Windows 桌面應用測試 |
 | **Pytest BDD** | Python + Selenium | 跨平台 | ✅ 完成 | Web 測試（BDD 風格） |
 
-> 📖 **桌面應用程式轉換指南**：若要將 Desktop App TestComplete 專案遷移至 FlaUI BDD，請參閱 [桌面應用程式轉換工作流程](Project_FlaUIBDD/桌面應用程式轉換工作流程.md)，涵蓋環境建構、程式碼轉換、報告整合及 Bamboo CI/CD 完整流程。
+> 📖 **桌面應用程式轉換指南**：若要將 Desktop App TestComplete 專案遷移至 FlaUI BDD，請參閱 [桌面應用程式轉換工作流程](demo1_shoppingcart_website/Automation_testcase/Project_FlaUIBDD/桌面應用程式轉換工作流程.md)，涵蓋環境建構、程式碼轉換、報告整合及 Bamboo CI/CD 完整流程。
 
 ---
 
@@ -20,25 +20,14 @@
 
 ```
 SQA_AI_Automation/
-├── demo/
-│   └── shopping_cart/              # 測試用購物車網頁
+├── demo1_shoppingcart_website/
+│   ├── shopping_cart/              # 測試用購物車網頁
+│   └── Automation_testcase/        # 自動化測試專案集合
+│       ├── Project_Testcomplete/   # TestComplete 測試專案
+│       ├── Project_FlaUIBDD/       # FlaUI BDD 測試專案 (Windows)
+│       └── Project_PytestBDD/      # Pytest BDD 測試專案 (跨平台)
 ├── tools/
 │   └── generate_summary_report.py  # 共用 Summary Report 產生器
-├── Project_Testcomplete/           # TestComplete 測試專案
-│   ├── report_prompt.md            # Summary Report 格式規格（共用）
-│   ├── generate_report.ps1
-│   └── Testcomplete_testcase/
-│       ├── Testcase_shopping_cart  # Python 測試腳本
-│       └── Transfer_Prompt.md      # 轉換指南
-├── Project_FlaUIBDD/               # FlaUI BDD 測試專案 (Windows)
-│   ├── run-tests-and-report.ps1
-│   ├── generate_report.ps1
-│   └── Testcase_shopping_cart_FlaUI_BDD/
-├── Project_PytestBDD/              # Pytest BDD 測試專案 (跨平台) ⭐ 新增
-│   ├── features/                   # Gherkin 測試場景
-│   ├── step_definitions/           # 步驟定義
-│   ├── page_objects/               # Page Object Model
-│   └── README.md
 └── README.md                       # 本文件
 ```
 
@@ -47,7 +36,7 @@ SQA_AI_Automation/
 ## 🐍 Pytest BDD 專案（新增）⭐
 
 ### 專案位置
-[Project_PytestBDD/](Project_PytestBDD/)
+[demo1_shoppingcart_website/Automation_testcase/Project_PytestBDD/](demo1_shoppingcart_website/Automation_testcase/Project_PytestBDD/)
 
 ### 特色
 - ✅ **跨平台** - Linux/Windows/macOS 皆可執行
@@ -59,22 +48,20 @@ SQA_AI_Automation/
 
 ### 快速執行
 ```bash
-cd Project_PytestBDD
+cd demo1_shoppingcart_website/Automation_testcase/Project_PytestBDD
 pip install -r requirements.txt
 
 # 啟動測試網頁（另開終端）
-cd ../demo/shopping_cart
+cd ../../shopping_cart
 python serve.py
 
 # 執行測試
-cd ../../Project_PytestBDD
+cd ../Automation_testcase/Project_PytestBDD
 pytest --headless
 ```
 
 ### 詳細文件
-- [完整 README](Project_PytestBDD/README.md)
-- [快速啟動](Project_PytestBDD/QUICK_START.md)
-- [執行狀況](Project_PytestBDD/STATUS_REPORT.md)
+- [完整 README](demo1_shoppingcart_website/Automation_testcase/Project_PytestBDD/README.md)
 
 ---
 
@@ -267,7 +254,7 @@ python serve.py
 
 ### 📂 位置
 ```
-Project_FlaUIBDD/
+demo1_shoppingcart_website/Automation_testcase/Project_FlaUIBDD/
 └── Testcase_shopping_cart_FlaUI_BDD/   # 購物車 BDD 測試專案
 ```
 
@@ -287,18 +274,17 @@ Project_FlaUIBDD/
 - Python 3.x（測試網頁伺服器）
 
 ### 📖 相關文件
-- [完整專案說明](Project_FlaUIBDD/README.md)
-- [Windows 執行指南](Project_FlaUIBDD/HOW_TO_RUN_ON_WINDOWS.md)
-- [轉換提示指南](Project_Testcomplete/Testcomplete_testcase/Transfer_Prompt.md)
+- [完整專案說明](demo1_shoppingcart_website/Automation_testcase/Project_FlaUIBDD/README.md)
+- [轉換提示指南](demo1_shoppingcart_website/Automation_testcase/Project_Testcomplete/Testcomplete_testcase/Transfer_Prompt.md)
 
 ### 🚀 快速執行（Windows）
 ```powershell
 # 啟動測試網頁
-cd demo\shopping_cart
+cd demo1_shoppingcart_website\shopping_cart
 python serve.py
 
 # 執行 BDD 測試（另開視窗）
-cd Project_FlaUIBDD\Testcase_shopping_cart_FlaUI_BDD
+cd demo1_shoppingcart_website\Automation_testcase\Project_FlaUIBDD\Testcase_shopping_cart_FlaUI_BDD
 dotnet test
 ```
 
