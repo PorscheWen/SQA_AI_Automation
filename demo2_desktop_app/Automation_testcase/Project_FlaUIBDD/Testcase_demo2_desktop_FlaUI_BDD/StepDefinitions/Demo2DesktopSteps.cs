@@ -46,9 +46,9 @@ public class Demo2DesktopSteps
     [When(@"我點擊工具列「(.*)」")]
     public void When我點擊工具列(string buttonText)
     {
-        if (string.Equals(buttonText, "Import Excel", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(buttonText, "Import JSON", StringComparison.OrdinalIgnoreCase))
         {
-            Main.SendImportExcelShortcut();
+            Main.SendImportJsonShortcut();
             Thread.Sleep(800);
             return;
         }
@@ -68,10 +68,10 @@ public class Demo2DesktopSteps
         }
     }
 
-    [When(@"我在檔案對話框選擇樣本 X\.xlsx")]
-    public void When我在檔案對話框選擇樣本Xlsx()
+    [When(@"我在檔案對話框選擇樣本 TestType_Defect\.json")]
+    public void When我在檔案對話框選擇樣本Json()
     {
-        FileDialog.OpenFile(ConfigHelper.GetSampleXlsxPath());
+        FileDialog.OpenFile(ConfigHelper.GetSampleJsonPath());
         Workspace.WaitAfterDataTableAction();
     }
 
@@ -118,12 +118,12 @@ public class Demo2DesktopSteps
         }
     }
 
-    [Then(@"Test_data 應存在 X\.xlsx")]
-    public void ThenTest_data應存在Xlsx()
+    [Then(@"Test_data 應存在 TestType_Defect\.json")]
+    public void ThenTest_data應存在Json()
     {
         ClassicAssert.IsTrue(
-            File.Exists(ConfigHelper.GetSampleXlsxPath()),
-            "Test_data 應存在 X.xlsx");
+            File.Exists(ConfigHelper.GetSampleJsonPath()),
+            "Test_data 應存在 TestType_Defect.json");
     }
 
     [Then(@"主視窗標題應為「(.*)」")]
@@ -156,12 +156,12 @@ public class Demo2DesktopSteps
             "日誌區未包含預期文字: " + expected + "（檢查 txtToolLog / lblToolPlugin）");
     }
 
-    [Then(@"不應將無效檔複製為 TC01_import_copy\.xlsx")]
+    [Then(@"不應將無效檔複製為 TC01_import_copy\.json")]
     public void Then不應將無效檔複製為匯入檔()
     {
         ClassicAssert.IsFalse(
             TestDataHelper.ImportTargetExists(),
-            "無效檔不應被複製為 TC01_import_copy.xlsx");
+            "無效檔不應被複製為 TC01_import_copy.json");
     }
 
     [Then(@"主視窗仍應存在")]

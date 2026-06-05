@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Demo2Desktop.Excel;
+using Demo2Desktop.Json;
 using Demo2Desktop.Plugin;
 using Demo2Desktop.UI;
 
@@ -22,6 +23,7 @@ namespace Demo2Desktop
         readonly List<int> chartDefectValues = new List<int>();
         string workspaceRoot;
         string currentFilePath;
+        string currentExcelFilePath;
 
         public MainForm()
         {
@@ -34,9 +36,11 @@ namespace Demo2Desktop
             workspaceRoot = ResolveTestDataRoot();
             lblFileTree.Text = "File Tree (Test_data)";
             excelOpenFileDialog.InitialDirectory = workspaceRoot;
+            jsonImportFileDialog.InitialDirectory = workspaceRoot;
             RefreshFileTree();
             LoadPlugins();
             HideToolTabHeaders();
+            UpdateCloseExcelMenuState();
             AppendToolLog("File Tree 路徑: " + workspaceRoot);
         }
 
@@ -67,9 +71,9 @@ namespace Demo2Desktop
 
         void SetupToolbar0()
         {
-            Image importIcon = ToolbarIcons.CreateImportExcelIcon();
-            toolbarImageList.Images.Add("importexcel", importIcon);
-            btnToolbar0ImportExcel.Image = toolbarImageList.Images["importexcel"];
+            Image importIcon = ToolbarIcons.CreateImportJsonIcon();
+            toolbarImageList.Images.Add("importjson", importIcon);
+            btnToolbar0ImportExcel.Image = toolbarImageList.Images["importjson"];
             btnToolbar0ImportExcel.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
             Image aboutIcon = ToolbarIcons.CreateAboutIcon();
@@ -85,25 +89,25 @@ namespace Demo2Desktop
 
         void btnToolbar0ImportExcel_Click(object sender, EventArgs e)
         {
-            ImportExcelFile();
+            ImportJsonFile();
         }
 
-        void ImportExcelFile()
+        void ImportJsonFile()
         {
             if (!Directory.Exists(workspaceRoot))
                 Directory.CreateDirectory(workspaceRoot);
 
             if (Directory.Exists(workspaceRoot))
-                excelOpenFileDialog.InitialDirectory = workspaceRoot;
+                jsonImportFileDialog.InitialDirectory = workspaceRoot;
 
-            excelOpenFileDialog.Title = "Import Excel";
-            if (excelOpenFileDialog.ShowDialog(this) != DialogResult.OK)
+            jsonImportFileDialog.Title = "Import JSON";
+            if (jsonImportFileDialog.ShowDialog(this) != DialogResult.OK)
                 return;
 
-            string sourcePath = excelOpenFileDialog.FileName;
-            if (!IsExcelFile(sourcePath))
+            string sourcePath = jsonImportFileDialog.FileName;
+            if (!IsJsonFile(sourcePath))
             {
-                MessageBox.Show(this, "請選擇 .xls / .xlsx / .xlsm 檔案。", "Import Excel",
+                MessageBox.Show(this, "請選擇 .json 檔案。", "Import JSON",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -112,17 +116,24 @@ namespace Demo2Desktop
             {
                 string fileName = Path.GetFileName(sourcePath);
                 string destPath = Path.Combine(workspaceRoot, fileName);
-                File.Copy(sourcePath, destPath, true);
+                string fullSource = Path.GetFullPath(sourcePath);
+                string fullDest = Path.GetFullPath(destPath);
 
-                OpenExcelFile(destPath);
+                if (!string.Equals(fullSource, fullDest, StringComparison.OrdinalIgnoreCase))
+                    File.Copy(sourcePath, destPath, true);
+
+                OpenJsonFile(fullDest);
                 RefreshFileTree();
-                AppendToolLog("Import Excel: " + sourcePath + " -> " + destPath);
-                statusLabel.Text = "已匯入: " + destPath;
+                if (string.Equals(fullSource, fullDest, StringComparison.OrdinalIgnoreCase))
+                    AppendToolLog("Import JSON: 已載入 " + fullDest);
+                else
+                    AppendToolLog("Import JSON: " + sourcePath + " -> " + destPath);
+                statusLabel.Text = "已匯入: " + fullDest;
             }
             catch (Exception ex)
             {
-                AppendToolLog("Import Excel 失敗: " + ex.Message);
-                MessageBox.Show(this, ex.Message, "Import Excel",
+                AppendToolLog("Import JSON 失敗: " + ex.Message);
+                MessageBox.Show(this, ex.Message, "Import JSON",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -160,6 +171,7 @@ namespace Demo2Desktop
             dataGridExcel.AccessibleName = dataGridExcel.Name;
             txtToolLog.AccessibleName = txtToolLog.Name;
             treeFiles.AccessibleName = treeFiles.Name;
+            menuFileCloseExcel.AccessibleName = menuFileCloseExcel.Text;
         }
 
         void SetupTreeIcons()
@@ -267,10 +279,17 @@ namespace Demo2Desktop
                     e.Node.Expand();
                 return;
             }
-            if (IsExcelFile(path))
+            if (IsJsonFile(path))
+                OpenJsonFile(path);
+            else if (IsExcelFile(path))
                 OpenExcelFile(path);
             else
                 OpenFileInWorkspace(path);
+        }
+
+        static bool IsJsonFile(string path)
+        {
+            return string.Equals(Path.GetExtension(path), ".json", StringComparison.OrdinalIgnoreCase);
         }
 
         static bool IsExcelFile(string path)
@@ -304,12 +323,35 @@ namespace Demo2Desktop
                 OpenExcelFile(excelOpenFileDialog.FileName);
         }
 
+        void OpenJsonFile(string filePath)
+        {
+            try
+            {
+                JsonFileReader.JsonLoadResult result = JsonFileReader.Load(filePath);
+                ShowDataInToolWindow(result.FilePath, result.Table, "JSON");
+            }
+            catch (Exception ex)
+            {
+                AppendToolLog("JSON 開啟失敗: " + ex.Message);
+                MessageBox.Show(
+                    this,
+                    ex.Message,
+                    "開啟 JSON",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
         void OpenExcelFile(string filePath)
         {
             try
             {
                 ExcelFileReader.ExcelLoadResult result = ExcelFileReader.LoadFirstSheet(filePath);
-                ShowExcelInToolWindow(result);
+                ShowDataInToolWindow(
+                    result.FilePath,
+                    result.Table,
+                    "Excel",
+                    result.SheetName);
             }
             catch (Exception ex)
             {
@@ -324,16 +366,55 @@ namespace Demo2Desktop
             }
         }
 
-        void ShowExcelInToolWindow(ExcelFileReader.ExcelLoadResult result)
+        void ShowDataInToolWindow(string filePath, DataTable table, string sourceType, string detailName)
         {
             SwitchToToolTab(ToolTabDataTable);
-            dataGridExcel.DataSource = result.Table;
-            lblToolPlugin.Text = "Data Table - " + Path.GetFileName(result.FilePath)
-                + " [" + result.SheetName + "]";
-            AppendToolLog("已載入 Excel: " + result.FilePath);
-            AppendToolLog("工作表: " + result.SheetName + "，"
-                + result.Table.Rows.Count + " 列 x " + result.Table.Columns.Count + " 欄");
-            statusLabel.Text = "Excel: " + result.FilePath;
+            dataGridExcel.DataSource = table;
+            currentExcelFilePath = filePath;
+            lblToolPlugin.Text = "Data Table - " + Path.GetFileName(filePath)
+                + " [" + detailName + "]";
+            AppendToolLog("已載入 " + sourceType + ": " + filePath);
+            AppendToolLog(sourceType + " 資料: "
+                + table.Rows.Count + " 列 x " + table.Columns.Count + " 欄");
+            statusLabel.Text = sourceType + ": " + filePath;
+            UpdateCloseExcelMenuState();
+        }
+
+        void ShowDataInToolWindow(string filePath, DataTable table, string sourceType)
+        {
+            ShowDataInToolWindow(filePath, table, sourceType, sourceType);
+        }
+
+        void UpdateCloseExcelMenuState()
+        {
+            bool hasExcel = dataGridExcel.DataSource != null
+                || !string.IsNullOrEmpty(currentExcelFilePath);
+            menuFileCloseExcel.Enabled = hasExcel;
+        }
+
+        void CloseExcelFile()
+        {
+            if (!menuFileCloseExcel.Enabled)
+                return;
+
+            string closedPath = currentExcelFilePath;
+            if (string.IsNullOrEmpty(closedPath) && dataGridExcel.DataSource != null)
+                closedPath = "(in-memory data)";
+
+            dataGridExcel.DataSource = null;
+            currentExcelFilePath = null;
+            chartTestTypes.Clear();
+            chartDefectValues.Clear();
+            pictureBoxChart.Invalidate();
+            lblToolPlugin.Text = "Tool Plugin Workspace";
+            AppendToolLog("Close Excel File: " + closedPath);
+            statusLabel.Text = "Excel: 已關閉";
+            UpdateCloseExcelMenuState();
+        }
+
+        void menuFileCloseExcel_Click(object sender, EventArgs e)
+        {
+            CloseExcelFile();
         }
 
         void btnToolbar2DrawData_Click(object sender, EventArgs e)
@@ -544,7 +625,8 @@ namespace Demo2Desktop
             MessageBox.Show(
                 this,
                 "Demo2 Desktop App\r\n\r\nFile Tree: " + workspaceRoot
-                + "\r\n\r\nToolbar0: Import Excel | About"
+                + "\r\n\r\nFile: Close Excel File (Ctrl+W)"
+                + "\r\n\r\nToolbar0: Import JSON | About"
                 + "\r\nToolbar1: Data Table | Draw data",
                 "About",
                 MessageBoxButtons.OK,

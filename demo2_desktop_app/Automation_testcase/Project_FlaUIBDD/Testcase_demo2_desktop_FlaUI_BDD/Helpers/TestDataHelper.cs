@@ -10,10 +10,10 @@ public static class TestDataHelper
             Directory.CreateDirectory(dir);
         }
 
-        var sample = ConfigHelper.GetSampleXlsxPath();
+        var sample = ConfigHelper.GetSampleJsonPath();
         if (!File.Exists(sample))
         {
-            throw new FileNotFoundException("Missing sample xlsx: " + sample);
+            throw new FileNotFoundException("Missing sample json: " + sample);
         }
 
         var invalid = ConfigHelper.GetInvalidSamplePath();

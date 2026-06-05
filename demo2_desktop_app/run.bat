@@ -17,6 +17,7 @@ if exist "Demo2Desktop.SamplePlugin\bin\Debug\Demo2Desktop.SamplePlugin.dll" (
 if exist "Test_data" (
   if not exist "Demo2Desktop\bin\Debug\Test_data" mkdir "Demo2Desktop\bin\Debug\Test_data"
   xcopy /Y "Test_data\*.xlsx" "Demo2Desktop\bin\Debug\Test_data\" >nul 2>&1
+  xcopy /Y "Test_data\*.json" "Demo2Desktop\bin\Debug\Test_data\" >nul 2>&1
 )
 
 start "" "%CD%\%EXE%"

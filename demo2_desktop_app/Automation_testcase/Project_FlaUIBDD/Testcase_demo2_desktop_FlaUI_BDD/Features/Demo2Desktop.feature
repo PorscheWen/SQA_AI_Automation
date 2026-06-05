@@ -4,14 +4,14 @@ Feature: Demo2 桌面應用程式測試
   以確保 Test_data 工作流程正常
 
 @Functional @Import
-Scenario: TC01 - Import Excel 至 Test_data
+Scenario: TC01 - Import JSON 至 Test_data
   Given 測試資料已就緒
   And 應用程式已重新啟動
-  When 我點擊工具列「Import Excel」
-  And 我在檔案對話框選擇樣本 X.xlsx
-  Then Test_data 應存在 X.xlsx
+  When 我點擊工具列「Import JSON」
+  And 我在檔案對話框選擇樣本 TestType_Defect.json
+  Then Test_data 應存在 TestType_Defect.json
   And 資料表應可見
-  And 日誌區應包含「Import Excel」
+  And 日誌區應包含「Import JSON」
 
 @Functional @FileTree
 Scenario: TC02 - File Tree 顯示 Test_data
@@ -52,12 +52,12 @@ Scenario: TC06 - About 對話框
   And 我關閉訊息對話框
 
 @Negative
-Scenario: TC07 - 匯入非 Excel 檔
+Scenario: TC07 - 匯入非 JSON 檔
   Given 測試資料已就緒
   And 應用程式已啟動
-  When 我點擊工具列「Import Excel」
+  When 我點擊工具列「Import JSON」
   And 我在檔案對話框選擇無效檔 _invalid_sample.txt
-  Then 不應將無效檔複製為 TC01_import_copy.xlsx
+  Then 不應將無效檔複製為 TC01_import_copy.json
   And 我關閉訊息對話框
 
 @Negative @Chart

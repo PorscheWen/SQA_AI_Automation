@@ -132,7 +132,7 @@ public class FileDialogPage
                 }
 
                 var title = win.Title;
-                if (title.Contains("Import Excel", StringComparison.OrdinalIgnoreCase) ||
+                if (title.Contains("Import JSON", StringComparison.OrdinalIgnoreCase) ||
                     title.Contains("開啟", StringComparison.OrdinalIgnoreCase) ||
                     title.Contains("Open", StringComparison.OrdinalIgnoreCase))
                 {

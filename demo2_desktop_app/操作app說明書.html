@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo2 桌面應用程式 操作說明書</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.8;
+            color: #d0d0d0;
+            background: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(255, 140, 0, 0.25);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #90ee90 0%, #98fb98 100%);
+            color: #1a1a1a;
+            padding: 36px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.2em; margin-bottom: 8px; }
+        nav {
+            background: #2a2a2a;
+            padding: 16px;
+            border-bottom: 3px solid #ff8c00;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #ff8c00;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #1a1a1a;
+            font-weight: 600;
+        }
+        nav a:hover { background: #ff8c00; color: #fff; }
+        .content { padding: 32px; }
+        section { margin-bottom: 40px; scroll-margin-top: 70px; }
+        h2 {
+            color: #ff8c00;
+            font-size: 1.75em;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #ff8c00;
+        }
+        h3 { color: #87ceeb; font-size: 1.2em; margin: 16px 0 10px; }
+        p, li { margin-bottom: 10px; }
+        ul, ol { padding-left: 24px; }
+        code {
+            background: #2d2d2d;
+            color: #7ec8e3;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #ff8c00;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 0.92em;
+            line-height: 1.5;
+            color: #c9d1d9;
+            white-space: pre-wrap;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th { background: #2a2a2a; color: #ff8c00; }
+        tr:nth-child(even) { background: #222; }
+        .card {
+            border-left: 4px solid #ffd700;
+            background: #252525;
+            padding: 14px 18px;
+            margin: 14px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin: 16px 0;
+        }
+        .screenshot-card {
+            background: #252525;
+            border: 1px solid #444;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .screenshot-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #444;
+            background: #111;
+        }
+        .screenshot-card figcaption {
+            padding: 12px 16px;
+            color: #c9c9c9;
+            font-size: 0.95em;
+        }
+        .screenshot-card strong { color: #ff8c00; }
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #888;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Demo2 桌面應用程式 操作說明書</h1>
+        <p>檔案樹、JSON 匯入、資料表與曲線圖 — v1.2</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview">概述</a></li>
+            <li><a href="#screenshots">介面截圖</a></li>
+            <li><a href="#quickstart">快速開始</a></li>
+            <li><a href="#batch">批次檔</a></li>
+            <li><a href="#menu-file">File</a></li>
+            <li><a href="#menu-tools">Tools</a></li>
+            <li><a href="#toolbar">工具列</a></li>
+            <li><a href="#workspace">工作區</a></li>
+            <li><a href="#json-format">JSON</a></li>
+            <li><a href="#chart">曲線圖</a></li>
+            <li><a href="#testdata">測試資料</a></li>
+            <li><a href="#trouble">疑難排解</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section id="overview">
+            <h2>概述</h2>
+            <p>Demo2 Desktop App 為 WinForms 桌面程式，工作區根目錄預設為 <code>Test_data</code>。左側為檔案樹，右側為工具工作區（資料表 / 曲線圖）與日誌區。</p>
+            <p>主要流程：匯入 JSON → 檢視 Data Table → Draw data 繪製 Test Type / Defect 曲線圖。</p>
+        </section>
+
+        <section id="screenshots">
+            <h2>軟體操作介面截圖</h2>
+            <p>以下為 Demo2 Desktop App 實際執行畫面（截圖存放於 <code>manual_images/</code>）。</p>
+            <div class="screenshot-grid">
+                <figure class="screenshot-card">
+                    <img src="manual_images/ui_01_main.png" alt="Demo2 主畫面">
+                    <figcaption>
+                        <strong>圖 1｜主畫面總覽</strong> — 標題列、File / Tools 選單、Toolbar0（Import JSON、About）、Toolbar1（Data Table、Draw data）、左側 File Tree、右側 Tool Plugin Workspace 與日誌區、底部狀態列。
+                    </figcaption>
+                </figure>
+                <figure class="screenshot-card">
+                    <img src="manual_images/ui_02_import_json.png" alt="Import JSON 操作">
+                    <figcaption>
+                        <strong>圖 2｜Import JSON</strong> — 點選工具列 <code>Import JSON</code>（<code>Ctrl+I</code>）後，於檔案對話框選擇 <code>TestType_Defect.json</code>，資料會複製至 Test_data 並載入資料表。
+                    </figcaption>
+                </figure>
+                <figure class="screenshot-card">
+                    <img src="manual_images/ui_03_datatable.png" alt="Data Table 資料表">
+                    <figcaption>
+                        <strong>圖 3｜Data Table 資料表</strong> — 點選 <code>Data Table</code>（<code>Ctrl+E</code>）切換至資料表檢視；上方白區為 DataGrid，下方日誌顯示「Data Table: 切換至資料表檢視」。
+                    </figcaption>
+                </figure>
+                <figure class="screenshot-card">
+                    <img src="manual_images/ui_04_chart.png" alt="Draw data 曲線圖">
+                    <figcaption>
+                        <strong>圖 4｜Draw data 曲線圖</strong> — 點選 <code>Draw data</code>（<code>Ctrl+D</code>）切換至圖表檢視；需先載入含 Test Type / Defect Number 的 JSON 資料，才會顯示曲線圖。
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="card">
+                <h3>重新產生截圖</h3>
+                <p>若介面更新後需更新圖片，請在專案根目錄執行：</p>
+                <div class="code-block">powershell -ExecutionPolicy Bypass -File capture_manual_screenshots.ps1</div>
+            </div>
+        </section>
+
+        <section id="quickstart">
+            <h2>快速開始</h2>
+            <h3>步驟 1：建置</h3>
+            <div class="code-block">build.bat</div>
+            <p>產出 <code>Demo2Desktop\bin\Debug\Demo2Desktop.exe</code></p>
+            <h3>步驟 2：啟動</h3>
+            <div class="code-block">run.bat</div>
+            <p>若尚未建置會自動呼叫 build.bat，並複製 Test_data（含 .json / .xlsx）至執行目錄。</p>
+            <h3>步驟 3：匯入資料</h3>
+            <p>工具列 <strong>Import JSON</strong>（<code>Ctrl+I</code>），選擇 <code>Test_data\TestType_Defect.json</code>。</p>
+        </section>
+
+        <section id="batch">
+            <h2>批次檔一覽</h2>
+            <table>
+                <tr><th>檔案</th><th>用途</th></tr>
+                <tr><td><code>build.bat</code></td><td>建置 Demo2Desktop.sln（.NET 3.5）</td></tr>
+                <tr><td><code>run.bat</code></td><td>啟動 Demo2Desktop.exe</td></tr>
+                <tr><td><code>開啟操作app說明書.bat</code></td><td>以系統預設瀏覽器開啟本說明書（HTML）</td></tr>
+            </table>
+        </section>
+
+        <section id="menu-file">
+            <h2>File 選單</h2>
+            <table>
+                <tr><th>項目</th><th>快捷鍵</th><th>說明</th></tr>
+                <tr><td>New</td><td>Ctrl+N</td><td>清空文字緩衝</td></tr>
+                <tr><td>Open...</td><td>Ctrl+O</td><td>開啟文字檔至日誌區</td></tr>
+                <tr><td>Save...</td><td>Ctrl+S</td><td>儲存文字檔</td></tr>
+                <tr><td>Close Excel File</td><td>Ctrl+W</td><td>關閉目前載入的資料表與圖表快取</td></tr>
+                <tr><td>Refresh Tree</td><td></td><td>重新整理左側 Test_data 檔案樹</td></tr>
+                <tr><td>Exit</td><td></td><td>結束應用程式</td></tr>
+            </table>
+        </section>
+
+        <section id="menu-tools">
+            <h2>Tools 選單</h2>
+            <table>
+                <tr><th>項目</th><th>快捷鍵</th><th>說明</th></tr>
+                <tr><td>Import JSON</td><td>Ctrl+I</td><td>匯入 .json 至 Test_data 並載入資料表</td></tr>
+                <tr><td>Data Table</td><td>Ctrl+E</td><td>切換至資料表檢視</td></tr>
+                <tr><td>Chart</td><td>Ctrl+D</td><td>切換至曲線圖（Draw data）</td></tr>
+                <tr><td>Reload Plugins</td><td></td><td>重新載入 Plugins 外掛</td></tr>
+                <tr><td>About...</td><td></td><td>顯示版本與工具列說明</td></tr>
+            </table>
+        </section>
+
+        <section id="toolbar">
+            <h2>工具列</h2>
+            <h3>Toolbar 0</h3>
+            <table>
+                <tr><th>按鈕</th><th>AutomationId</th><th>快捷鍵</th><th>說明</th></tr>
+                <tr><td>Import JSON</td><td><code>btnToolbar0ImportExcel</code></td><td>Ctrl+I</td><td>匯入 JSON 至 Test_data</td></tr>
+                <tr><td>About</td><td><code>btnToolbar0About</code></td><td></td><td>關於 Demo2 Desktop</td></tr>
+            </table>
+            <h3>Toolbar 1</h3>
+            <table>
+                <tr><th>按鈕</th><th>AutomationId</th><th>快捷鍵</th><th>說明</th></tr>
+                <tr><td>Data Table</td><td><code>btnToolbar1OpenExcel</code></td><td>Ctrl+E</td><td>切換至資料表檢視</td></tr>
+                <tr><td>Draw data</td><td><code>btnToolbar2DrawData</code></td><td>Ctrl+D</td><td>曲線圖（X=Test Type, Y=Defect）</td></tr>
+            </table>
+        </section>
+
+        <section id="workspace">
+            <h2>工作區與檔案樹</h2>
+            <ul>
+                <li><code>treeFiles</code> — 左側檔案樹，雙擊 .json / .xlsx 可載入</li>
+                <li><code>dataGridExcel</code> — 資料表</li>
+                <li><code>pictureBoxChart</code> — 曲線圖</li>
+                <li><code>txtToolLog</code> — 日誌區</li>
+            </ul>
+            <p>預設 Test_data：<code>demo2_desktop_app\Test_data</code></p>
+        </section>
+
+        <section id="json-format">
+            <h2>JSON 格式</h2>
+            <div class="code-block">{
+  "source": "X.xlsx",
+  "Record": [
+    { "No": 1, "TestType": "Test1", "DefectNumber": 83811 },
+    { "No": 2, "TestType": "Test2", "DefectNumber": 14593 }
+  ]
+}</div>
+            <p>樣本：<code>Test_data\TestType_Defect.json</code>（Test1～Test20）</p>
+        </section>
+
+        <section id="chart">
+            <h2>Draw data 曲線圖</h2>
+            <p>需 Test Type 與 Defect Number 欄位。X 軸 = Test Type，Y 軸 = Defect Number。</p>
+            <p>建議先 Import JSON 或雙擊 JSON 檔載入資料。</p>
+        </section>
+
+        <section id="testdata">
+            <h2>測試資料目錄</h2>
+            <table>
+                <tr><th>檔案</th><th>說明</th></tr>
+                <tr><td><code>TestType_Defect.json</code></td><td>JSON 匯入樣本</td></tr>
+                <tr><td><code>TestType_Defect.xml</code></td><td>XML 對照檔</td></tr>
+                <tr><td><code>X.xlsx</code></td><td>Excel 備用樣本</td></tr>
+                <tr><td><code>操作app說明書.xml</code></td><td>結構化說明原始檔</td></tr>
+                <tr><td><code>操作app說明書.html</code></td><td>瀏覽器顯示用說明書</td></tr>
+            </table>
+        </section>
+
+        <section id="trouble">
+            <h2>疑難排解</h2>
+            <div class="card">
+                <h3>Import JSON 失敗</h3>
+                <ul>
+                    <li>確認副檔名為 .json，內容含 Record 陣列</li>
+                    <li>檔案已在 Test_data 內時會直接載入</li>
+                    <li>重新執行 build.bat 後再 run.bat</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>開啟操作app說明書.bat 無法顯示</h3>
+                <ul>
+                    <li>請確認同目錄存在 <code>操作app說明書.html</code></li>
+                    <li>本 bat 開啟 HTML（非 XML），避免瀏覽器 XSLT 限制</li>
+                    <li>可直接雙擊 <code>操作app說明書.html</code></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>建置失敗：exe 被占用</h3>
+                <ul><li>關閉 Demo2Desktop.exe 後再 build.bat</li></ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Demo2 Desktop App 操作說明書 v1.2</p>
+        <p>雙擊 <strong>開啟操作app說明書.bat</strong> 或 <strong>操作app說明書.html</strong> 可隨時開啟本頁</p>
+        <p>結構化原始檔：<code>操作app說明書.xml</code></p>
+    </footer>
+</div>
+</body>
+</html>

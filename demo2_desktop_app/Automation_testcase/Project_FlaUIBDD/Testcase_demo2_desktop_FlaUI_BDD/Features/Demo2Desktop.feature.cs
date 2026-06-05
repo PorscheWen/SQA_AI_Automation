@@ -74,16 +74,16 @@ namespace Testcase_demo2_desktop_FlaUI_BDD.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC01 - Import Excel 至 Test_data")]
+        [NUnit.Framework.DescriptionAttribute("TC01 - Import JSON 至 Test_data")]
         [NUnit.Framework.CategoryAttribute("Functional")]
         [NUnit.Framework.CategoryAttribute("Import")]
-        public void TC01_ImportExcel至Test_Data()
+        public void TC01_ImportJSON至Test_Data()
         {
             string[] tagsOfScenario = new string[] {
                     "Functional",
                     "Import"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC01 - Import Excel 至 Test_data", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC01 - Import JSON 至 Test_data", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -101,19 +101,19 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已重新啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 10
-  testRunner.When("我點擊工具列「Import Excel」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「Import JSON」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-  testRunner.And("我在檔案對話框選擇樣本 X.xlsx", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("我在檔案對話框選擇樣本 TestType_Defect.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
-  testRunner.Then("Test_data 應存在 X.xlsx", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("Test_data 應存在 TestType_Defect.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
   testRunner.And("資料表應可見", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
-  testRunner.And("日誌區應包含「Import Excel」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("日誌區應包含「Import JSON」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -314,14 +314,14 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC07 - 匯入非 Excel 檔")]
+        [NUnit.Framework.DescriptionAttribute("TC07 - 匯入非 JSON 檔")]
         [NUnit.Framework.CategoryAttribute("Negative")]
-        public void TC07_匯入非Excel檔()
+        public void TC07_匯入非JSON檔()
         {
             string[] tagsOfScenario = new string[] {
                     "Negative"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC07 - 匯入非 Excel 檔", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC07 - 匯入非 JSON 檔", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 55
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -339,13 +339,13 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 58
-  testRunner.When("我點擊工具列「Import Excel」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「Import JSON」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 59
   testRunner.And("我在檔案對話框選擇無效檔 _invalid_sample.txt", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 60
-  testRunner.Then("不應將無效檔複製為 TC01_import_copy.xlsx", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("不應將無效檔複製為 TC01_import_copy.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 61
   testRunner.And("我關閉訊息對話框", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

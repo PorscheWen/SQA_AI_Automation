@@ -8,6 +8,7 @@ namespace Demo2Desktop
         private System.Windows.Forms.ToolStripMenuItem menuFileNew;
         private System.Windows.Forms.ToolStripMenuItem menuFileOpen;
         private System.Windows.Forms.ToolStripMenuItem menuFileSave;
+        private System.Windows.Forms.ToolStripMenuItem menuFileCloseExcel;
         private System.Windows.Forms.ToolStripMenuItem menuFileRefreshTree;
         private System.Windows.Forms.ToolStripSeparator menuFileSep1;
         private System.Windows.Forms.ToolStripMenuItem menuFileExit;
@@ -46,6 +47,7 @@ namespace Demo2Desktop
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.OpenFileDialog excelOpenFileDialog;
+        private System.Windows.Forms.OpenFileDialog jsonImportFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ImageList treeImageList;
 
@@ -64,6 +66,7 @@ namespace Demo2Desktop
             this.menuFileNew = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFileCloseExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileRefreshTree = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuFileExit = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,6 +105,7 @@ namespace Demo2Desktop
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.excelOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.jsonImportFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.treeImageList = new System.Windows.Forms.ImageList(this.components);
             this.mainMenuStrip.SuspendLayout();
@@ -137,6 +141,7 @@ namespace Demo2Desktop
                 this.menuFileNew,
                 this.menuFileOpen,
                 this.menuFileSave,
+                this.menuFileCloseExcel,
                 this.menuFileRefreshTree,
                 this.menuFileSep1,
                 this.menuFileExit});
@@ -167,6 +172,14 @@ namespace Demo2Desktop
             this.menuFileSave.Size = new System.Drawing.Size(180, 22);
             this.menuFileSave.Text = "Save...";
             this.menuFileSave.Click += new System.EventHandler(this.menuFileSave_Click);
+            //
+            // menuFileCloseExcel
+            //
+            this.menuFileCloseExcel.Name = "menuFileCloseExcel";
+            this.menuFileCloseExcel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.menuFileCloseExcel.Size = new System.Drawing.Size(220, 22);
+            this.menuFileCloseExcel.Text = "Close Excel File";
+            this.menuFileCloseExcel.Click += new System.EventHandler(this.menuFileCloseExcel_Click);
             //
             // menuFileRefreshTree
             //
@@ -199,7 +212,7 @@ namespace Demo2Desktop
             this.menuToolsImportExcel.Name = "menuToolsImportExcel";
             this.menuToolsImportExcel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.menuToolsImportExcel.Size = new System.Drawing.Size(220, 22);
-            this.menuToolsImportExcel.Text = "Import Excel";
+            this.menuToolsImportExcel.Text = "Import JSON";
             this.menuToolsImportExcel.Click += new System.EventHandler(this.btnToolbar0ImportExcel_Click);
             //
             // menuToolsOpenExcel
@@ -250,8 +263,8 @@ namespace Demo2Desktop
             this.btnToolbar0ImportExcel.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnToolbar0ImportExcel.Name = "btnToolbar0ImportExcel";
             this.btnToolbar0ImportExcel.Size = new System.Drawing.Size(92, 22);
-            this.btnToolbar0ImportExcel.Text = "Import Excel";
-            this.btnToolbar0ImportExcel.ToolTipText = "匯入 Excel 至 Test_data 並載入資料表";
+            this.btnToolbar0ImportExcel.Text = "Import JSON";
+            this.btnToolbar0ImportExcel.ToolTipText = "匯入 JSON 至 Test_data 並載入資料表";
             this.btnToolbar0ImportExcel.Click += new System.EventHandler(this.btnToolbar0ImportExcel_Click);
             //
             // toolBarSeparator0
@@ -301,7 +314,7 @@ namespace Demo2Desktop
             this.btnToolbar2DrawData.Name = "btnToolbar2DrawData";
             this.btnToolbar2DrawData.Size = new System.Drawing.Size(78, 22);
             this.btnToolbar2DrawData.Text = "Draw data";
-            this.btnToolbar2DrawData.ToolTipText = "切換至曲線圖（X=Defect, Y=Test Type）";
+            this.btnToolbar2DrawData.ToolTipText = "切換至曲線圖（X=Test Type, Y=Defect）";
             this.btnToolbar2DrawData.Click += new System.EventHandler(this.btnToolbar2DrawData_Click);
             //
             // toolbarImageList
@@ -503,6 +516,8 @@ namespace Demo2Desktop
             this.openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             this.excelOpenFileDialog.Filter = "Excel files (*.xlsx;*.xls;*.xlsm)|*.xlsx;*.xls;*.xlsm|All files (*.*)|*.*";
             this.excelOpenFileDialog.Title = "開啟 Excel 檔案";
+            this.jsonImportFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+            this.jsonImportFileDialog.Title = "匯入 JSON 檔案";
             this.saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             //
             // MainForm

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Excel\ExcelFileReader.cs" />
+    <Compile Include="Json\JsonFileReader.cs" />
     <Compile Include="UI\DefectChartRenderer.cs" />
     <Compile Include="UI\ToolbarIcons.cs" />
     <Compile Include="MainForm.cs">

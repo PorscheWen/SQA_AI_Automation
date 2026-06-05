@@ -13,9 +13,9 @@
 
 ## Functional Test（6）
 
-### TC01 — Import Excel 至 Test_data
-- **目的**：驗證 Toolbar0 Import Excel 可匯入並顯示資料。
-- **步驟**：Import Excel → 選 .xlsx → 確認 Tab1 與檔案樹。
+### TC01 — Import JSON 至 Test_data
+- **目的**：驗證 Toolbar0 Import JSON 可匯入並顯示資料。
+- **步驟**：Import JSON → 選 .json → 確認 Tab1 與檔案樹。
 - **預期**：檔案在 `Test_data`；DataGrid 有資料。
 - **Defect#**：2001
 
@@ -34,7 +34,7 @@
 ### TC04 — Icon2 Draw data 曲線圖
 - **目的**：圖表 Tab 顯示 Test Type / Defect 曲線。
 - **步驟**：點 Draw data。
-- **預期**：Tab2 曲線圖（X=Defect, Y=Test Type）。
+- **預期**：Tab2 曲線圖（X=Test Type, Y=Defect）。
 - **Defect#**：2004
 
 ### TC05 — 檔案樹雙擊開啟 Excel
@@ -53,8 +53,8 @@
 
 ## Negative Test（3）
 
-### TC07 — 匯入非 Excel 檔
-- **步驟**：Import Excel → 選 .txt。
+### TC07 — 匯入非 JSON 檔
+- **步驟**：Import JSON → 選 .txt。
 - **預期**：警告，不匯入。
 - **Defect#**：2007
 

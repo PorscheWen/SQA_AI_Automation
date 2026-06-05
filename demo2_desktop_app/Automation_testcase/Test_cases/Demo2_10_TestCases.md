@@ -15,7 +15,7 @@
 
 | ID | Tags | 類型 | 優先級 | Defect | 狀態 |
 |----|------|------|--------|--------|------|
-| TC01 | `@Functional @Import` | Import Excel | High | 2001 | Ready |
+| TC01 | `@Functional @Import` | Import JSON | High | 2001 | Ready |
 | TC02 | `@Functional @FileTree` | File Tree | High | 2002 | Ready |
 | TC03 | `@Functional @DataTable` | Data Table | High | 2003 | Ready |
 | TC04 | `@Functional @Chart` | Chart | High | 2004 | Ready |
@@ -39,16 +39,16 @@ Feature: Demo2 桌面應用程式測試
 
   # TC01 | Defect 2001 | High
   @Functional @Import
-  Scenario: TC01 - Import Excel 至 Test_data
+  Scenario: TC01 - Import JSON 至 Test_data
     Given Demo2Desktop 已啟動
     And Test_data 資料夾可寫入
-    And 測試資料目錄存在樣本檔 "X.xlsx"
-    When 使用者點擊 Toolbar0「Import Excel」
-    And 使用者在檔案對話框選擇有效檔案 "X.xlsx"
-    Then 檔案應複製至 Test_data 且檔名為 "X.xlsx"
-    And 工作區 Tab1 資料表應顯示該 Excel 工作表內容
+    And 測試資料目錄存在樣本檔 "TestType_Defect.json"
+    When 使用者點擊 Toolbar0「Import JSON」
+    And 使用者在檔案對話框選擇有效檔案 "TestType_Defect.json"
+    Then 檔案應複製至 Test_data 且檔名為 "TestType_Defect.json"
+    And 工作區 Tab1 資料表應顯示該 JSON 內容
     And 左側 File Tree 應已更新
-    And 日誌區應包含 "Import Excel"
+    And 日誌區應包含 "Import JSON"
 
   # TC02 | Defect 2002 | High
   @Functional @FileTree
@@ -76,7 +76,7 @@ Feature: Demo2 桌面應用程式測試
     Given 已載入含 Test Type 與 Defect Number 欄位的 Excel
     When 使用者點擊 Toolbar1「Draw data」
     Then 工作區應切換至 Tab2 圖表
-    And 應顯示 X 軸為 Defect Number、Y 軸為 Test Type 的曲線圖
+    And 應顯示 X 軸為 Test Type、Y 軸為 Defect Number 的曲線圖
     And 圖表應包含資料點
     And 日誌區應包含 "Draw data"
 

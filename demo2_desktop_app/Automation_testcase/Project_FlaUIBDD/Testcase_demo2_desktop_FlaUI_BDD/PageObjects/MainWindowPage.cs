@@ -15,7 +15,7 @@ public class MainWindowPage : BasePage
     private static readonly Dictionary<string, (string AutomationId, VirtualKeyShort? Shortcut)> ToolbarMap =
         new(StringComparer.OrdinalIgnoreCase)
         {
-            ["Import Excel"] = ("btnToolbar0ImportExcel", VirtualKeyShort.KEY_I),
+            ["Import JSON"] = ("btnToolbar0ImportExcel", VirtualKeyShort.KEY_I),
             ["About"] = ("btnToolbar0About", null),
             ["Data Table"] = ("btnToolbar1OpenExcel", VirtualKeyShort.KEY_E),
             ["Draw data"] = ("btnToolbar2DrawData", VirtualKeyShort.KEY_D),
@@ -29,7 +29,7 @@ public class MainWindowPage : BasePage
 
         if (ToolbarMap.TryGetValue(buttonText, out var mapped))
         {
-            // 快捷鍵優先（避免 ToolStrip UIA 搜尋逾時，尤其 Import Excel）
+            // 快捷鍵優先（避免 ToolStrip UIA 搜尋逾時，尤其 Import JSON）
             if (mapped.Shortcut.HasValue && TryInvokeShortcut(mapped.Shortcut.Value))
             {
                 return;
@@ -65,7 +65,7 @@ public class MainWindowPage : BasePage
 
     public void SendDataTableShortcut() => SendShortcut(VirtualKeyShort.KEY_E, ctrl: true);
 
-    public void SendImportExcelShortcut() => SendShortcut(VirtualKeyShort.KEY_I, ctrl: true);
+    public void SendImportJsonShortcut() => SendShortcut(VirtualKeyShort.KEY_I, ctrl: true);
 
     public string GetWindowTitle() => Window.Title;
 

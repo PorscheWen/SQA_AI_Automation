@@ -7,10 +7,10 @@ namespace Demo2Desktop.UI
 {
     public static class DefectChartRenderer
     {
-        const int MarginLeft = 88;
+        const int MarginLeft = 56;
         const int MarginRight = 16;
         const int MarginTop = 36;
-        const int MarginBottom = 48;
+        const int MarginBottom = 64;
 
         public static void PaintChart(Graphics g, Rectangle bounds, IList<string> testTypes, IList<int> defectValues)
         {
@@ -36,8 +36,8 @@ namespace Demo2Desktop.UI
             using (Pen linePen = new Pen(Color.FromArgb(0, 102, 204), 2f))
             using (SolidBrush pointBrush = new SolidBrush(Color.FromArgb(220, 50, 50)))
             {
-                // 對調：X = Defect Number, Y = Test Type
-                g.DrawString("X: Defect Number  |  Y: Test Type", titleFont, textBrush,
+                // X = Test Type, Y = Defect Number
+                g.DrawString("X: Test Type  |  Y: Defect Number", titleFont, textBrush,
                     bounds.Left + MarginLeft, bounds.Top + 8);
 
                 int count = Math.Min(testTypes.Count, defectValues.Count);
@@ -60,41 +60,41 @@ namespace Demo2Desktop.UI
                 g.DrawLine(axisPen, plot.Left, plot.Top, plot.Left, plot.Bottom);
                 g.DrawLine(axisPen, plot.Left, plot.Bottom, plot.Right, plot.Bottom);
 
-                int gridLinesX = 5;
-                for (int i = 0; i <= gridLinesX; i++)
+                int gridLinesY = 5;
+                for (int i = 0; i <= gridLinesY; i++)
                 {
-                    int x = plot.Left + (plot.Width * i / gridLinesX);
-                    g.DrawLine(gridPen, x, plot.Top, x, plot.Bottom);
-                    int tick = minDefect + ((maxDefect - minDefect) * i / gridLinesX);
+                    int y = plot.Bottom - (plot.Height * i / gridLinesY);
+                    g.DrawLine(gridPen, plot.Left, y, plot.Right, y);
+                    int tick = minDefect + ((maxDefect - minDefect) * i / gridLinesY);
                     string tickText = tick.ToString();
                     SizeF tickSize = g.MeasureString(tickText, axisFont);
-                    g.DrawString(tickText, axisFont, textBrush, x - (tickSize.Width / 2f), plot.Bottom + 4f);
+                    g.DrawString(tickText, axisFont, textBrush, plot.Left - tickSize.Width - 4f, y - (tickSize.Height / 2f));
                 }
 
                 PointF[] points = new PointF[count];
-                float stepY = count > 1 ? (float)plot.Height / (count - 1) : 0f;
+                float stepX = count > 1 ? (float)plot.Width / (count - 1) : 0f;
                 for (int i = 0; i < count; i++)
                 {
-                    float y = plot.Bottom - (stepY * i);
+                    float x = plot.Left + (stepX * i);
                     float ratio = (float)(defectValues[i] - minDefect) / (maxDefect - minDefect);
-                    float x = plot.Left + (ratio * plot.Width);
+                    float y = plot.Bottom - (ratio * plot.Height);
                     points[i] = new PointF(x, y);
 
                     string typeLabel = Abbreviate(testTypes[i], 10);
                     SizeF typeSize = g.MeasureString(typeLabel, labelFont);
-                    g.DrawString(typeLabel, labelFont, textBrush, bounds.Left + 4, y - (typeSize.Height / 2f));
+                    g.DrawString(typeLabel, labelFont, textBrush, x - (typeSize.Width / 2f), plot.Bottom + 4f);
 
                     if (count > 1)
                     {
-                        int gridY = plot.Top + (plot.Height * i / (count - 1));
-                        g.DrawLine(gridPen, plot.Left, gridY, plot.Right, gridY);
+                        int gridX = plot.Left + (plot.Width * i / (count - 1));
+                        g.DrawLine(gridPen, gridX, plot.Top, gridX, plot.Bottom);
                     }
                 }
 
                 if (count > 1)
                     g.DrawCurve(linePen, points, 0.35f);
                 else
-                    g.DrawLine(linePen, plot.Left, points[0].Y, plot.Right, points[0].Y);
+                    g.DrawLine(linePen, points[0].X, plot.Top, points[0].X, plot.Bottom);
 
                 float pointRadius = 4f;
                 for (int i = 0; i < count; i++)
@@ -103,11 +103,11 @@ namespace Demo2Desktop.UI
                         pointRadius * 2, pointRadius * 2);
                 }
 
-                SizeF xLabelSize = g.MeasureString("Defect Number (X)", axisFont);
-                g.DrawString("Defect Number (X)", axisFont, textBrush,
-                    plot.Left + (plot.Width - xLabelSize.Width) / 2f, plot.Bottom + 18f);
+                SizeF xLabelSize = g.MeasureString("Test Type (X)", axisFont);
+                g.DrawString("Test Type (X)", axisFont, textBrush,
+                    plot.Left + (plot.Width - xLabelSize.Width) / 2f, plot.Bottom + 22f);
 
-                g.DrawString("Test Type (Y)", axisFont, textBrush, bounds.Left + 4, plot.Top - 2);
+                g.DrawString("Defect Number (Y)", axisFont, textBrush, bounds.Left + 4, plot.Top - 2);
             }
         }
 

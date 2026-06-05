@@ -21,8 +21,11 @@ public static class ConfigHelper
     public static string GetSampleXlsxPath() =>
         Path.Combine(GetTestDataDirectory(), GetConfigValue("SampleXlsx", "X.xlsx"));
 
+    public static string GetSampleJsonPath() =>
+        Path.Combine(GetTestDataDirectory(), GetConfigValue("SampleJson", "TestType_Defect.json"));
+
     public static string GetImportTargetPath() =>
-        Path.Combine(GetTestDataDirectory(), GetConfigValue("ImportTargetFile", "TC01_import_copy.xlsx"));
+        Path.Combine(GetTestDataDirectory(), GetConfigValue("ImportTargetFile", "TC01_import_copy.json"));
 
     public static string GetInvalidSamplePath() =>
         Path.Combine(GetTestDataDirectory(), GetConfigValue("InvalidSampleFile", "_invalid_sample.txt"));

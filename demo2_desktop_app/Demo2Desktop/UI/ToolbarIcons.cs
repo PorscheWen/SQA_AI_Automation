@@ -47,7 +47,7 @@ namespace Demo2Desktop.UI
             return bmp;
         }
 
-        public static Image CreateImportExcelIcon()
+        public static Image CreateImportJsonIcon()
         {
             Bitmap bmp = new Bitmap(16, 16);
             using (Graphics g = Graphics.FromImage(bmp))
@@ -55,12 +55,12 @@ namespace Demo2Desktop.UI
                 g.Clear(Color.Transparent);
                 g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                using (SolidBrush green = new SolidBrush(Color.FromArgb(33, 115, 70)))
-                    g.FillRectangle(green, 1, 1, 10, 10);
+                using (SolidBrush orange = new SolidBrush(Color.FromArgb(230, 126, 34)))
+                    g.FillRectangle(orange, 1, 1, 10, 10);
 
                 using (Font font = new Font("Arial", 6f, FontStyle.Bold))
                 using (SolidBrush white = new SolidBrush(Color.White))
-                    g.DrawString("X", font, white, 2f, 2f);
+                    g.DrawString("J", font, white, 3f, 2f);
 
                 using (Pen arrow = new Pen(Color.FromArgb(200, 80, 0), 2f))
                 {

@@ -9,10 +9,10 @@ REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
 CT_NS = "http://schemas.openxmlformats.org/package/2006/content-types"
 
 TEST_CASES = [
-    ("TC01", "Functional", "Import Excel", "Import Excel 至 Test_data",
+    ("TC01", "Functional", "Import JSON", "Import JSON 至 Test_data",
      "Demo2Desktop.exe 已啟動；Test_data 資料夾可寫入",
-     "1. 點 Toolbar0「Import Excel」\n2. 選擇有效 .xlsx\n3. 確認 Tab1 資料表",
-     "檔案複製到 Test_data；DataGrid 顯示工作表資料；檔案樹已更新", "High", 2001, "Ready"),
+     "1. 點 Toolbar0「Import JSON」\n2. 選擇有效 .json\n3. 確認 Tab1 資料表",
+     "檔案複製到 Test_data；DataGrid 顯示 JSON 資料；檔案樹已更新", "High", 2001, "Ready"),
     ("TC02", "Functional", "File Tree", "File Tree 顯示 Test_data",
      "應用程式已啟動",
      "1. 檢視左側 File Tree\n2. 展開 Test_data 根節點",
@@ -24,7 +24,7 @@ TEST_CASES = [
     ("TC04", "Functional", "Chart", "Icon2 繪製曲線圖",
      "已載入含 Test Type、Defect Number 的 Excel",
      "1. 點 Toolbar1「Draw data」\n2. 檢視圖表區",
-     "切換至 Tab2；顯示 X=Defect、Y=Test Type 曲線圖與資料點", "High", 2004, "Ready"),
+     "切換至 Tab2；顯示 X=Test Type、Y=Defect 曲線圖與資料點", "High", 2004, "Ready"),
     ("TC05", "Functional", "File Tree Open", "檔案樹雙擊開啟 Excel",
      "Test_data 有 Demo2_10_TestCases.xlsx 或 X.xlsx",
      "1. 在 File Tree 雙擊 .xlsx\n2. 檢視 Tab1",
@@ -35,7 +35,7 @@ TEST_CASES = [
      "顯示 About 訊息（含 File Tree 路徑與工具列說明）", "Low", 2006, "Ready"),
     ("TC07", "Negative", "Invalid Import", "匯入非 Excel 檔",
      "應用程式已啟動",
-     "1. 點 Import Excel\n2. 選擇 .txt 或非 xls/xlsx",
+     "1. 點 Import JSON\n2. 選擇 .txt 或非 json",
      "顯示警告「請選擇 .xls / .xlsx / .xlsm」；不寫入 Test_data", "High", 2007, "Ready"),
     ("TC08", "Negative", "Chart No Data", "無資料時繪圖",
      "尚未載入任何 Excel 至 DataGrid",
