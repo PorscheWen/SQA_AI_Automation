@@ -4,16 +4,16 @@ public static class TestDataHelper
 {
     public static void EnsureTestDataReady()
     {
-        var dir = ConfigHelper.GetTestDataDirectory();
+        var dir = ConfigHelper.GetRecipeDataDirectory();
         if (!Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);
         }
 
-        var sample = ConfigHelper.GetSampleJsonPath();
+        var sample = ConfigHelper.GetSampleRecipePath();
         if (!File.Exists(sample))
         {
-            throw new FileNotFoundException("Missing sample json: " + sample);
+            throw new FileNotFoundException("Missing sample recipe: " + sample);
         }
 
         var invalid = ConfigHelper.GetInvalidSamplePath();
@@ -34,6 +34,8 @@ public static class TestDataHelper
 
     public static bool ImportTargetExists() => File.Exists(ConfigHelper.GetImportTargetPath());
 
-    public static bool FileExistsInTestData(string fileName) =>
-        File.Exists(Path.Combine(ConfigHelper.GetTestDataDirectory(), fileName));
+    public static bool FileExistsInRecipeData(string fileName) =>
+        File.Exists(Path.Combine(ConfigHelper.GetRecipeDataDirectory(), fileName));
+
+    public static bool FileExistsInTestData(string fileName) => FileExistsInRecipeData(fileName);
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Demo2 Desktop FlaUI BDD 測試控制台：Feature 勾選、執行進度、結果檢視。"""
+"""Semi Inspection Desktop FlaUI BDD 測試控制台：Feature 勾選、執行進度、結果檢視。"""
 
 from __future__ import annotations
 
@@ -30,8 +30,8 @@ FEATURES_DIR = TEST_PROJECT / "Features"
 REPORTS_DIR = TEST_PROJECT / "reports"
 DATA_DIR = WEB_ROOT / "data"
 STATUS_FILE = DATA_DIR / "status.json"
-BUILD_BAT = DEMO2_APP_ROOT / "build.bat"
-DEFAULT_EXE = DEMO2_APP_ROOT / "Demo2Desktop" / "bin" / "Debug" / "Demo2Desktop.exe"
+BUILD_BAT = DEMO2_APP_ROOT / "build_semi.bat"
+DEFAULT_EXE = DEMO2_APP_ROOT / "SemiInspectionDesktop" / "bin" / "Debug" / "SemiInspectionDesktop.exe"
 
 _job_lock = threading.Lock()
 _current_job: dict | None = None
@@ -85,12 +85,12 @@ def ensure_desktop_app() -> Path:
         )
         if proc.returncode != 0:
             tail = (proc.stdout or "") + (proc.stderr or "")
-            raise RuntimeError(f"build.bat 失敗 (exit {proc.returncode}):\n{tail[-1200:]}")
+            raise RuntimeError(f"build_semi.bat 失敗 (exit {proc.returncode}):\n{tail[-1200:]}")
         if exe.is_file():
             return exe
 
     raise FileNotFoundError(
-        f"找不到 Demo2Desktop.exe：{exe}\n請先執行 {BUILD_BAT} 建置桌面應用程式。"
+        f"找不到 SemiInspectionDesktop.exe：{exe}\n請先執行 {BUILD_BAT} 建置桌面應用程式。"
     )
 
 
@@ -249,7 +249,7 @@ def parse_junit_results() -> dict | None:
         "cases": cases,
         "reports": {
             "junit": f"{rel}/reports/junit-results.xml",
-            "html": f"{rel}/reports/Demo2TestReport.html",
+            "html": f"{rel}/reports/SemiInspectionTestReport.html",
         },
     }
 
@@ -316,12 +316,12 @@ def run_tests_job(job_id: str, selected: list[dict], configuration: str) -> None
 
     try:
         exe = ensure_desktop_app()
-        status["logTail"] = (status.get("logTail", []) + [f"Demo2Desktop 已就緒: {exe}"])[-80:]
+        status["logTail"] = (status.get("logTail", []) + [f"SemiInspectionDesktop 已就緒: {exe}"])[-80:]
         write_status(status)
     except (FileNotFoundError, RuntimeError) as exc:
         status["status"] = "failed"
         status["finishedAt"] = utc_now()
-        status["logTail"] = [f"無法準備 Demo2 桌面應用程式: {exc}"]
+        status["logTail"] = [f"無法準備 Semi Inspection 桌面應用程式: {exc}"]
         write_status(status)
         with _job_lock:
             _current_job = None
@@ -574,7 +574,7 @@ def main() -> None:
 
     with ThreadingHTTPServer(("", PORT), DashboardHandler) as httpd:
         url = f"http://localhost:{PORT}/"
-        print("Demo2 Desktop FlaUI BDD 測試控制台")
+        print("Semi Inspection Desktop FlaUI BDD 測試控制台")
         print(f"  {url}")
         print("  勾選 Features | 執行進度 | 測試結果")
         print("按 Ctrl+C 停止。")

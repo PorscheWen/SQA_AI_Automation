@@ -21,11 +21,18 @@ public class WorkspacePage : BasePage
 
     public bool LogContains(string expected, int waitMs = 10000)
     {
-        var timedOut = Retry.WhileTrue(
-            () => !TryReadLogContains(expected),
-            TimeSpan.FromMilliseconds(waitMs)).Result;
+        var deadline = DateTime.UtcNow.AddMilliseconds(waitMs);
+        while (DateTime.UtcNow < deadline)
+        {
+            if (TryReadLogContains(expected))
+            {
+                return true;
+            }
 
-        return !timedOut;
+            Thread.Sleep(250);
+        }
+
+        return false;
     }
 
     public void DoubleClickTreeItem(string partialName)
@@ -103,7 +110,7 @@ public class WorkspacePage : BasePage
 
     private AutomationElement? FindDataGrid()
     {
-        var el = FindWinFormsControl("dataGridExcel");
+        var el = FindWinFormsControl("dataGridParameters");
         if (el != null)
         {
             return el;
@@ -116,35 +123,48 @@ public class WorkspacePage : BasePage
 
     private bool TryReadLogContains(string expected)
     {
-        var log = FindWinFormsControl("txtToolLog");
-        if (log != null)
+        foreach (var controlName in new[] { "txtToolLog", "lblToolPlugin", "statusLabel", "statusStrip" })
         {
-            var text = ReadText(log);
-            if (text.Contains(expected, StringComparison.OrdinalIgnoreCase))
+            var el = FindWinFormsControl(controlName);
+            if (el != null && TextContains(el, expected))
             {
                 return true;
             }
         }
 
-        var header = FindWinFormsControl("lblToolPlugin");
-        if (header != null)
+        foreach (var el in Window.FindAllDescendants())
         {
-            var text = ReadText(header);
-            if (text.Contains(expected, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        }
-
-        foreach (var edit in Window.FindAllDescendants(cf => cf.ByClassName("TextBox")))
-        {
-            var text = ReadText(edit);
-            if (text.Contains(expected, StringComparison.OrdinalIgnoreCase))
+            if (ElementTextContains(el, expected))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private static bool ElementTextContains(AutomationElement element, string expected)
+    {
+        var name = element.Name ?? string.Empty;
+        if (name.Contains(expected, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var native = ReadNativeWindowText(element);
+        if (native.Contains(expected, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var text = ReadText(element);
+        return text.Contains(expected, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool TextContains(AutomationElement element, string expected)
+    {
+        var text = ReadText(element);
+        return !string.IsNullOrEmpty(text)
+            && text.Contains(expected, StringComparison.OrdinalIgnoreCase);
     }
 }

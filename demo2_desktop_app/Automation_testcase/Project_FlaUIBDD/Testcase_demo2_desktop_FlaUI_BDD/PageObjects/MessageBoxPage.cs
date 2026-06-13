@@ -53,8 +53,13 @@ public class MessageBoxPage
                         continue;
                     }
 
-                    if (win.Title.Contains("Demo2", StringComparison.OrdinalIgnoreCase) ||
-                        win.ClassName == "#32770")
+                    if (win.ClassName == "#32770" ||
+                        win.Title.Contains("About", StringComparison.OrdinalIgnoreCase) ||
+                        win.Title.Contains("Import Recipe", StringComparison.OrdinalIgnoreCase) ||
+                        win.Title.Contains("Defect Chart", StringComparison.OrdinalIgnoreCase) ||
+                        win.Title.Contains("Run Inspection", StringComparison.OrdinalIgnoreCase) ||
+                        win.Title.Contains("開啟 Recipe", StringComparison.OrdinalIgnoreCase) ||
+                        win.Title.Contains("Semi Inspection", StringComparison.OrdinalIgnoreCase))
                     {
                         return win;
                     }

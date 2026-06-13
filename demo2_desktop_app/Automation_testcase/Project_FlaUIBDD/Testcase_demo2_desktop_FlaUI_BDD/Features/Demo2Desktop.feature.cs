@@ -20,8 +20,8 @@ namespace Testcase_demo2_desktop_FlaUI_BDD.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Demo2 桌面應用程式測試")]
-    public partial class Demo2桌面應用程式測試Feature
+    [NUnit.Framework.DescriptionAttribute("Semi Inspection Desktop 測試")]
+    public partial class SemiInspectionDesktop測試Feature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -35,7 +35,8 @@ namespace Testcase_demo2_desktop_FlaUI_BDD.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Demo2 桌面應用程式測試", "  作為測試人員\r\n  我想要驗證 Demo2 Desktop App 的檔案、資料表與圖表功能\r\n  以確保 Test_data 工作流程正常", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Semi Inspection Desktop 測試", "  作為測試人員\r\n  我想要驗證 Semi Inspection Desktop 的 Recipe、RawData 與圖表功能\r\n  以確保 Recipe_da" +
+                    "ta 工作流程正常", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,16 +75,16 @@ namespace Testcase_demo2_desktop_FlaUI_BDD.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC01 - Import JSON 至 Test_data")]
+        [NUnit.Framework.DescriptionAttribute("TC01 - Import Recipe 至 Recipe_data")]
         [NUnit.Framework.CategoryAttribute("Functional")]
         [NUnit.Framework.CategoryAttribute("Import")]
-        public void TC01_ImportJSON至Test_Data()
+        public void TC01_ImportRecipe至Recipe_Data()
         {
             string[] tagsOfScenario = new string[] {
                     "Functional",
                     "Import"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC01 - Import JSON 至 Test_data", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC01 - Import Recipe 至 Recipe_data", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -101,35 +102,35 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已重新啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 10
-  testRunner.When("我點擊工具列「Import JSON」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「Import Recipe」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-  testRunner.And("我在檔案對話框選擇樣本 TestType_Defect.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("我在檔案對話框選擇樣本 InspectionRecipe_Sample.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
-  testRunner.Then("Test_data 應存在 TestType_Defect.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("Recipe_data 應存在 InspectionRecipe_Sample.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
   testRunner.And("資料表應可見", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
-  testRunner.And("日誌區應包含「Import JSON」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("日誌區應包含「Import Recipe」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC02 - File Tree 顯示 Test_data")]
+        [NUnit.Framework.DescriptionAttribute("TC02 - File Tree 顯示 Recipe_data")]
         [NUnit.Framework.CategoryAttribute("Functional")]
         [NUnit.Framework.CategoryAttribute("FileTree")]
-        public void TC02_FileTree顯示Test_Data()
+        public void TC02_FileTree顯示Recipe_Data()
         {
             string[] tagsOfScenario = new string[] {
                     "Functional",
                     "FileTree"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC02 - File Tree 顯示 Test_data", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC02 - File Tree 顯示 Recipe_data", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 17
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -147,29 +148,29 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 20
-  testRunner.Then("主視窗標題應為「Demo2 Desktop App」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("主視窗標題應為「Semi Inspection Desktop」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 21
   testRunner.And("檔案樹應可見", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 22
-  testRunner.And("Test_data 應存在 X.xlsx", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("Recipe_data 應存在 InspectionRecipe_Sample.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC03 - Icon1 切換 Data Table")]
+        [NUnit.Framework.DescriptionAttribute("TC03 - RawData 參數表")]
         [NUnit.Framework.CategoryAttribute("Functional")]
-        [NUnit.Framework.CategoryAttribute("DataTable")]
-        public void TC03_Icon1切換DataTable()
+        [NUnit.Framework.CategoryAttribute("RawData")]
+        public void TC03_RawData參數表()
         {
             string[] tagsOfScenario = new string[] {
                     "Functional",
-                    "DataTable"};
+                    "RawData"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC03 - Icon1 切換 Data Table", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC03 - RawData 參數表", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 25
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -187,29 +188,29 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 28
-  testRunner.When("我點擊工具列「Data Table」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「RawData」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 29
   testRunner.Then("資料表應可見", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 30
-  testRunner.And("日誌區應包含「Data Table」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("日誌區應包含「RawData」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC04 - Icon2 繪製曲線圖")]
+        [NUnit.Framework.DescriptionAttribute("TC04 - Defect Chart 曲線圖")]
         [NUnit.Framework.CategoryAttribute("Functional")]
         [NUnit.Framework.CategoryAttribute("Chart")]
-        public void TC04_Icon2繪製曲線圖()
+        public void TC04_DefectChart曲線圖()
         {
             string[] tagsOfScenario = new string[] {
                     "Functional",
                     "Chart"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC04 - Icon2 繪製曲線圖", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC04 - Defect Chart 曲線圖", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 33
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -227,29 +228,29 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 36
-  testRunner.When("我點擊工具列「Data Table」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「RawData」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 37
-  testRunner.And("我點擊工具列「Draw data」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("我點擊工具列「Defect Chart」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 38
-  testRunner.Then("日誌區應包含「Draw data」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("日誌區應包含「Defect Chart」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC05 - 檔案樹雙擊開啟 Excel")]
+        [NUnit.Framework.DescriptionAttribute("TC05 - 檔案樹雙擊開啟 Recipe")]
         [NUnit.Framework.CategoryAttribute("Functional")]
         [NUnit.Framework.CategoryAttribute("FileTree")]
-        public void TC05_檔案樹雙擊開啟Excel()
+        public void TC05_檔案樹雙擊開啟Recipe()
         {
             string[] tagsOfScenario = new string[] {
                     "Functional",
                     "FileTree"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC05 - 檔案樹雙擊開啟 Excel", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC05 - 檔案樹雙擊開啟 Recipe", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 41
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -267,13 +268,13 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 44
-  testRunner.When("我在檔案樹雙擊 X.xlsx 或 Demo2_10 測試檔", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我在檔案樹雙擊 InspectionRecipe_Sample.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 45
   testRunner.Then("資料表應可見", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 46
-  testRunner.And("日誌區應包含「開啟」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("日誌區應包含「Recipe」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -339,7 +340,7 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 58
-  testRunner.When("我點擊工具列「Import JSON」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「Import Recipe」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 59
   testRunner.And("我在檔案對話框選擇無效檔 _invalid_sample.txt", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -355,16 +356,16 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC08 - 無資料時繪圖")]
+        [NUnit.Framework.DescriptionAttribute("TC08 - 無 Recipe 時繪圖")]
         [NUnit.Framework.CategoryAttribute("Negative")]
         [NUnit.Framework.CategoryAttribute("Chart")]
-        public void TC08_無資料時繪圖()
+        public void TC08_無Recipe時繪圖()
         {
             string[] tagsOfScenario = new string[] {
                     "Negative",
                     "Chart"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC08 - 無資料時繪圖", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC08 - 無 Recipe 時繪圖", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 64
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -379,7 +380,7 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.Given("應用程式已重新啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 66
-  testRunner.When("我點擊工具列「Draw data」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「Defect Chart」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 67
   testRunner.Then("主視窗仍應存在", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -389,14 +390,14 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC09 - 開啟不存在檔案")]
+        [NUnit.Framework.DescriptionAttribute("TC09 - 開啟不存在 Recipe")]
         [NUnit.Framework.CategoryAttribute("Negative")]
-        public void TC09_開啟不存在檔案()
+        public void TC09_開啟不存在Recipe()
         {
             string[] tagsOfScenario = new string[] {
                     "Negative"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC09 - 開啟不存在檔案", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC09 - 開啟不存在 Recipe", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 70
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -411,7 +412,7 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.Given("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 72
-  testRunner.When("我使用快捷鍵開啟 Data Table 並選擇不存在檔 not_exist_99999.xlsx", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我使用快捷鍵開啟 RawData 並選擇不存在檔 not_exist_99999.json", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 73
   testRunner.Then("主視窗仍應存在", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -421,14 +422,16 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("TC10 - xlsx 格式相容")]
-        [NUnit.Framework.CategoryAttribute("Compatibility")]
-        public void TC10_Xlsx格式相容()
+        [NUnit.Framework.DescriptionAttribute("TC10 - Run Inspection 模擬檢測")]
+        [NUnit.Framework.CategoryAttribute("Functional")]
+        [NUnit.Framework.CategoryAttribute("Inspection")]
+        public void TC10_RunInspection模擬檢測()
         {
             string[] tagsOfScenario = new string[] {
-                    "Compatibility"};
+                    "Functional",
+                    "Inspection"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC10 - xlsx 格式相容", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("TC10 - Run Inspection 模擬檢測", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 76
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -446,13 +449,13 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("應用程式已啟動", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 79
-  testRunner.When("我點擊工具列「Data Table」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("我點擊工具列「RawData」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 80
-  testRunner.Then("資料表應可見", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.And("我點擊工具列「Run Inspection」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 81
-  testRunner.And("日誌區應包含「Excel」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.Then("日誌區應包含「Run Inspection」", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

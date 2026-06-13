@@ -4,7 +4,7 @@ setlocal EnableExtensions
 cd /d "%~dp0"
 
 echo ========================================
-echo   Demo2 Desktop App - 操作說明書
+echo   Semi Inspection Desktop - 操作說明書
 echo ========================================
 echo.
 

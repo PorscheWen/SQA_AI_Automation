@@ -1,0 +1,70 @@
+{
+  "referenceApp": "SemiInspectionDesktop",
+  "targetApp": "SemiInspectionDesktop",
+  "layout": {
+    "menuStrip": ["File", "Tools"],
+    "toolbar0": ["Import Recipe", "Run Inspection", "About"],
+    "toolbar1": ["Parameters", "Defect Chart"],
+    "leftPanel": "File Tree (Recipe_data)",
+    "rightTabs": ["Parameters", "Defect Chart"],
+    "bottomLog": "txtToolLog",
+    "statusBar": "statusLabel"
+  },
+  "shortcuts": {
+    "ImportRecipe": "Ctrl+I",
+    "RunInspection": "Ctrl+R",
+    "Parameters": "Ctrl+E",
+    "DefectChart": "Ctrl+D",
+    "CloseRecipe": "Ctrl+W"
+  },
+  "toolbarFeatures": [
+    {
+      "name": "Import Recipe",
+      "automationId": "btnImportRecipe",
+      "shortcut": "Ctrl+I",
+      "icon": "wafer+recipe+arrow",
+      "inspectionData": ["Lot/Wafer", "OpticalMode", "DetectionPolicy", "ReportingPolicy", "InspectionPolicy", "DefectSummary"],
+      "description": "匯入 JSON Inspection Recipe 至 Recipe_data 並載入 Parameters"
+    },
+    {
+      "name": "Run Inspection",
+      "automationId": "btnRunInspection",
+      "shortcut": "Ctrl+R",
+      "icon": "scan-lines+play",
+      "inspectionData": ["ToolID", "Illumination", "Algorithm", "Threshold", "DefectSummary"],
+      "description": "依 Recipe 模擬 AOI 檢測，輸出參數與缺陷統計至日誌"
+    },
+    {
+      "name": "Parameters",
+      "automationId": "btnParameters",
+      "shortcut": "Ctrl+E",
+      "icon": "tri-color-policy-table",
+      "inspectionData": ["OpticalMode", "DetectionPolicy", "ReportingPolicy", "InspectionPolicy", "Lot/Wafer"],
+      "description": "Category / Parameter / Value / Unit 參數表"
+    },
+    {
+      "name": "Defect Chart",
+      "automationId": "btnDefectChart",
+      "shortcut": "Ctrl+D",
+      "icon": "wafer+trend+defect-dots",
+      "inspectionData": ["DefectSummary.DefectType", "DefectSummary.DefectCount"],
+      "description": "DefectType vs DefectCount 曲線圖"
+    },
+    {
+      "name": "About",
+      "automationId": "btnToolbar0About",
+      "shortcut": "",
+      "icon": "info-circle",
+      "inspectionData": [],
+      "description": "功能與 Inspection 資料區段完整說明"
+    }
+  ],
+  "colors": {
+    "accent": "#FF8C00",
+    "headerGradient": ["#90EE90", "#98FB98"],
+    "background": "#1A1A1A",
+    "opticalMode": "#4472C4",
+    "detectionPolicy": "#E67E22",
+    "inspectionPolicy": "#2E8B57"
+  }
+}

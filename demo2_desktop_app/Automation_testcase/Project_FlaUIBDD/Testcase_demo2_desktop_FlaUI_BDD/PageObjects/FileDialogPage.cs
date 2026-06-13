@@ -10,11 +10,15 @@ namespace Demo2DesktopTests.PageObjects;
 public class FileDialogPage
 {
     private readonly UIA3Automation _automation;
+    private Window? _ownerWindow;
 
-    public FileDialogPage(UIA3Automation automation)
+    public FileDialogPage(UIA3Automation automation, Window? ownerWindow = null)
     {
         _automation = automation;
+        _ownerWindow = ownerWindow;
     }
+
+    public void SetOwnerWindow(Window? ownerWindow) => _ownerWindow = ownerWindow;
 
     /// <summary>
     /// 以鍵盤操作開啟檔案（避免 TextBox.Enter 造成 UIA Timeout）。
@@ -29,7 +33,14 @@ public class FileDialogPage
         var dialog = WaitForOpenDialog(timeoutMs);
         if (dialog == null)
         {
-            throw new InvalidOperationException("File open dialog not found");
+            FocusOwnerWindow();
+            Thread.Sleep(300);
+            TypePathWithKeyboardOnly(fullPath);
+            Thread.Sleep(200);
+            Keyboard.Press(VirtualKeyShort.RETURN);
+            WaitForDialogClosed(10000);
+            Thread.Sleep(800);
+            return;
         }
 
         FocusDialogSafe(dialog);
@@ -53,6 +64,24 @@ public class FileDialogPage
         {
             dialog.SetForeground();
             dialog.Focus();
+        }
+        catch
+        {
+            // ignore
+        }
+    }
+
+    private void FocusOwnerWindow()
+    {
+        if (_ownerWindow == null || !_ownerWindow.IsAvailable)
+        {
+            return;
+        }
+
+        try
+        {
+            _ownerWindow.SetForeground();
+            _ownerWindow.Focus();
         }
         catch
         {
@@ -120,28 +149,38 @@ public class FileDialogPage
     {
         try
         {
-            var desktop = _automation.GetDesktop();
             Window? fallback = null;
 
-            foreach (var w in desktop.FindAllChildren(cf => cf.ByControlType(ControlType.Window)))
+            foreach (var root in GetSearchRoots())
             {
-                var win = w.AsWindow();
-                if (win == null || string.IsNullOrEmpty(win.Title))
+                var fileNameField = root.FindFirstDescendant(cf => cf.ByAutomationId("1148"));
+                if (fileNameField != null)
                 {
-                    continue;
+                    var fromField = WalkUpToWindow(fileNameField);
+                    if (fromField != null)
+                    {
+                        return fromField;
+                    }
                 }
 
-                var title = win.Title;
-                if (title.Contains("Import JSON", StringComparison.OrdinalIgnoreCase) ||
-                    title.Contains("開啟", StringComparison.OrdinalIgnoreCase) ||
-                    title.Contains("Open", StringComparison.OrdinalIgnoreCase))
+                foreach (var w in root.FindAllDescendants(cf => cf.ByControlType(ControlType.Window)))
                 {
-                    return win;
-                }
+                    var win = w.AsWindow();
+                    if (win == null || !win.IsAvailable)
+                    {
+                        continue;
+                    }
 
-                if (win.ClassName == "#32770" && fallback == null)
-                {
-                    fallback = win;
+                    var title = win.Title ?? string.Empty;
+                    if (IsLikelyOpenFileDialogTitle(title))
+                    {
+                        return win;
+                    }
+
+                    if (win.ClassName == "#32770" && fallback == null)
+                    {
+                        fallback = win;
+                    }
                 }
             }
 
@@ -151,5 +190,54 @@ public class FileDialogPage
         {
             return null;
         }
+    }
+
+    private IEnumerable<AutomationElement> GetSearchRoots()
+    {
+        if (_ownerWindow != null && _ownerWindow.IsAvailable)
+        {
+            yield return _ownerWindow;
+        }
+
+        yield return _automation.GetDesktop();
+    }
+
+    private static bool IsLikelyOpenFileDialogTitle(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            return false;
+        }
+
+        return title.Contains("Import Recipe", StringComparison.OrdinalIgnoreCase) ||
+               title.Contains("Import JSON", StringComparison.OrdinalIgnoreCase) ||
+               title.Contains("開啟", StringComparison.OrdinalIgnoreCase) ||
+               title.Contains("打开", StringComparison.OrdinalIgnoreCase) ||
+               title.Contains("Open", StringComparison.OrdinalIgnoreCase) ||
+               title.Contains("Browse", StringComparison.OrdinalIgnoreCase) ||
+               title.Contains("浏览", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static Window? WalkUpToWindow(AutomationElement element)
+    {
+        var current = element;
+        for (var depth = 0; depth < 12 && current != null; depth++)
+        {
+            if (current.ControlType == ControlType.Window)
+            {
+                return current.AsWindow();
+            }
+
+            try
+            {
+                current = current.Parent;
+            }
+            catch
+            {
+                break;
+            }
+        }
+
+        return null;
     }
 }

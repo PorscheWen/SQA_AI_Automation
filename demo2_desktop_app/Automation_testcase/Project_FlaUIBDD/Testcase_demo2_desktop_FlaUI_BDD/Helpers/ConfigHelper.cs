@@ -7,28 +7,30 @@ namespace Demo2DesktopTests.Helpers;
 public static class ConfigHelper
 {
     public static string GetApplicationPath() =>
-        GetConfigValue("ApplicationPath", @"C:\Path\To\Demo2Desktop.exe");
+        GetConfigValue("ApplicationPath", @"C:\Path\To\SemiInspectionDesktop.exe");
 
     public static string GetApplicationTitle() =>
-        GetConfigValue("ApplicationTitle", "Demo2 Desktop App");
+        GetConfigValue("ApplicationTitle", "Semi Inspection Desktop");
 
     public static string GetProcessName() =>
-        GetConfigValue("ProcessName", "Demo2Desktop");
+        GetConfigValue("ProcessName", "SemiInspectionDesktop");
 
-    public static string GetTestDataDirectory() =>
-        GetConfigValue("TestDataDirectory", @"C:\Test_data");
+    public static string GetRecipeDataDirectory() =>
+        GetConfigValue("RecipeDataDirectory",
+            GetConfigValue("TestDataDirectory", @"C:\Recipe_data"));
 
-    public static string GetSampleXlsxPath() =>
-        Path.Combine(GetTestDataDirectory(), GetConfigValue("SampleXlsx", "X.xlsx"));
+    public static string GetTestDataDirectory() => GetRecipeDataDirectory();
 
-    public static string GetSampleJsonPath() =>
-        Path.Combine(GetTestDataDirectory(), GetConfigValue("SampleJson", "TestType_Defect.json"));
+    public static string GetSampleRecipePath() =>
+        Path.Combine(GetRecipeDataDirectory(), GetConfigValue("SampleRecipe", "InspectionRecipe_Sample.json"));
+
+    public static string GetSampleJsonPath() => GetSampleRecipePath();
 
     public static string GetImportTargetPath() =>
-        Path.Combine(GetTestDataDirectory(), GetConfigValue("ImportTargetFile", "TC01_import_copy.json"));
+        Path.Combine(GetRecipeDataDirectory(), GetConfigValue("ImportTargetFile", "TC01_import_copy.json"));
 
     public static string GetInvalidSamplePath() =>
-        Path.Combine(GetTestDataDirectory(), GetConfigValue("InvalidSampleFile", "_invalid_sample.txt"));
+        Path.Combine(GetRecipeDataDirectory(), GetConfigValue("InvalidSampleFile", "_invalid_sample.txt"));
 
     public static int GetDefaultTimeout()
     {

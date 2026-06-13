@@ -15,10 +15,11 @@ public class MainWindowPage : BasePage
     private static readonly Dictionary<string, (string AutomationId, VirtualKeyShort? Shortcut)> ToolbarMap =
         new(StringComparer.OrdinalIgnoreCase)
         {
-            ["Import JSON"] = ("btnToolbar0ImportExcel", VirtualKeyShort.KEY_I),
+            ["Import Recipe"] = ("btnImportRecipe", VirtualKeyShort.KEY_I),
             ["About"] = ("btnToolbar0About", null),
-            ["Data Table"] = ("btnToolbar1OpenExcel", VirtualKeyShort.KEY_E),
-            ["Draw data"] = ("btnToolbar2DrawData", VirtualKeyShort.KEY_D),
+            ["RawData"] = ("btnParameters", VirtualKeyShort.KEY_E),
+            ["Defect Chart"] = ("btnDefectChart", VirtualKeyShort.KEY_D),
+            ["Run Inspection"] = ("btnRunInspection", VirtualKeyShort.KEY_R),
         };
 
     public MainWindowPage(Window window, UIA3Automation automation) : base(window, automation) { }
@@ -27,9 +28,21 @@ public class MainWindowPage : BasePage
     {
         FocusMainWindow();
 
+        if (string.Equals(buttonText, "About", StringComparison.OrdinalIgnoreCase))
+        {
+            OpenAboutViaKeyboard();
+            return;
+        }
+
+        if (string.Equals(buttonText, "Import Recipe", StringComparison.OrdinalIgnoreCase))
+        {
+            SendImportRecipeShortcut();
+            Thread.Sleep(1000);
+            return;
+        }
+
         if (ToolbarMap.TryGetValue(buttonText, out var mapped))
         {
-            // 快捷鍵優先（避免 ToolStrip UIA 搜尋逾時，尤其 Import JSON）
             if (mapped.Shortcut.HasValue && TryInvokeShortcut(mapped.Shortcut.Value))
             {
                 return;
@@ -48,6 +61,25 @@ public class MainWindowPage : BasePage
         throw new ElementNotAvailableException($"找不到工具列按鈕: {buttonText}");
     }
 
+    public void OpenAboutViaKeyboard()
+    {
+        FocusMainWindow();
+        Keyboard.Press(VirtualKeyShort.F10);
+        Thread.Sleep(300);
+        Keyboard.Press(VirtualKeyShort.RIGHT);
+        Thread.Sleep(200);
+        Keyboard.Press(VirtualKeyShort.DOWN);
+        Thread.Sleep(200);
+        for (var i = 0; i < 4; i++)
+        {
+            Keyboard.Press(VirtualKeyShort.DOWN);
+            Thread.Sleep(80);
+        }
+
+        Keyboard.Press(VirtualKeyShort.RETURN);
+        Thread.Sleep(500);
+    }
+
     public void SendShortcut(VirtualKeyShort key, bool ctrl = false)
     {
         FocusMainWindow();
@@ -63,9 +95,9 @@ public class MainWindowPage : BasePage
         Thread.Sleep(500);
     }
 
-    public void SendDataTableShortcut() => SendShortcut(VirtualKeyShort.KEY_E, ctrl: true);
+    public void SendParametersShortcut() => SendShortcut(VirtualKeyShort.KEY_E, ctrl: true);
 
-    public void SendImportJsonShortcut() => SendShortcut(VirtualKeyShort.KEY_I, ctrl: true);
+    public void SendImportRecipeShortcut() => SendShortcut(VirtualKeyShort.KEY_I, ctrl: true);
 
     public string GetWindowTitle() => Window.Title;
 
@@ -80,7 +112,6 @@ public class MainWindowPage : BasePage
         }
         catch
         {
-            // 部分環境無法強制置前
         }
 
         Thread.Sleep(300);
@@ -117,26 +148,33 @@ public class MainWindowPage : BasePage
 
     private AutomationElement? FindToolbarButtonByText(string text, int timeoutMs)
     {
-        var el = FindWinFormsControl("btnToolbar0ImportExcel");
+        var el = FindWinFormsControl("btnImportRecipe");
         if (el != null && text.Contains("Import", StringComparison.OrdinalIgnoreCase))
         {
             return el;
         }
 
-        el = FindWinFormsControl("btnToolbar1OpenExcel");
-        if (el != null && text.Contains("Data", StringComparison.OrdinalIgnoreCase))
+        el = FindWinFormsControl("btnParameters");
+        if (el != null && (text.Contains("Raw", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("Parameter", StringComparison.OrdinalIgnoreCase)))
         {
             return el;
         }
 
-        el = FindWinFormsControl("btnToolbar2DrawData");
-        if (el != null && text.Contains("Draw", StringComparison.OrdinalIgnoreCase))
+        el = FindWinFormsControl("btnDefectChart");
+        if (el != null && text.Contains("Defect", StringComparison.OrdinalIgnoreCase))
         {
             return el;
         }
 
         el = FindWinFormsControl("btnToolbar0About");
         if (el != null && text.Contains("About", StringComparison.OrdinalIgnoreCase))
+        {
+            return el;
+        }
+
+        el = FindWinFormsControl("btnRunInspection");
+        if (el != null && text.Contains("Run", StringComparison.OrdinalIgnoreCase))
         {
             return el;
         }

@@ -1,134 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 瀏覽器顯示請用 操作app說明書.html；本 XML 為結構化原始檔 -->
-<AppManual app="Demo2 Desktop App" version="1.2" lang="zh-TW" updated="2026-06-05">
-  <Title>Demo2 桌面應用程式 操作說明書</Title>
-  <Subtitle>檔案樹、JSON 匯入、資料表與曲線圖</Subtitle>
-
-  <Section id="screenshots" title="軟體操作介面截圖">
-    <Screenshot file="manual_images/ui_01_main.png" caption="圖1 主畫面總覽：選單、工具列、File Tree、工作區、日誌區" />
-    <Screenshot file="manual_images/ui_02_import_json.png" caption="圖2 Import JSON：Ctrl+I 匯入 TestType_Defect.json" />
-    <Screenshot file="manual_images/ui_03_datatable.png" caption="圖3 Data Table：Ctrl+E 資料表檢視" />
-    <Screenshot file="manual_images/ui_04_chart.png" caption="圖4 Draw data：Ctrl+D 曲線圖檢視" />
-    <Paragraph>重新產生截圖：powershell -ExecutionPolicy Bypass -File capture_manual_screenshots.ps1</Paragraph>
-  </Section>
+<AppManual app="Semi Inspection Desktop" version="2.1" lang="zh-TW" updated="2026-06-05">
+  <Title>Semi Inspection Desktop 操作說明書</Title>
+  <Subtitle>半導體 AOI Recipe、RawData 與 Defect Chart</Subtitle>
 
   <Section id="overview" title="概述">
-    <Paragraph>Demo2 Desktop App 為 WinForms 桌面程式，工作區根目錄預設為 <Path>Test_data</Path>。左側為檔案樹，右側為工具工作區（資料表 / 曲線圖）與日誌區。</Paragraph>
-    <Paragraph>主要流程：匯入 JSON → 檢視 Data Table → Draw data 繪製 Test Type / Defect 曲線圖。</Paragraph>
+    <Paragraph>工作區根目錄：<Path>Recipe_data</Path></Paragraph>
+    <Paragraph>流程：Import Recipe → RawData → Defect Chart → Run Inspection</Paragraph>
   </Section>
 
   <Section id="quickstart" title="快速開始">
-    <Step order="1">
-      <Name>建置</Name>
-      <Command>build.bat</Command>
-      <Detail>產出 Demo2Desktop\bin\Debug\Demo2Desktop.exe</Detail>
-    </Step>
-    <Step order="2">
-      <Name>啟動</Name>
-      <Command>run.bat</Command>
-      <Detail>若尚未建置會自動呼叫 build.bat，並複製 Test_data 至執行目錄</Detail>
-    </Step>
-    <Step order="3">
-      <Name>匯入資料</Name>
-      <Command>工具列 Import JSON（Ctrl+I）</Command>
-      <Detail>選擇 .json 檔（建議 Test_data\TestType_Defect.json）</Detail>
-    </Step>
-  </Section>
-
-  <Section id="batch" title="批次檔一覽">
-    <BatchFile name="build.bat" purpose="建置 Demo2Desktop.sln（.NET 3.5）" />
-    <BatchFile name="run.bat" purpose="啟動 Demo2Desktop.exe" />
-    <BatchFile name="開啟操作app說明書.bat" purpose="以系統預設瀏覽器開啟操作app說明書.html" />
-    <BatchFile name="操作app說明書.html" purpose="操作說明書（瀏覽器顯示用）" />
-  </Section>
-
-  <Section id="menu-file" title="File 選單">
-    <MenuItem name="New" shortcut="Ctrl+N" detail="清空文字緩衝（隱藏編輯區）" />
-    <MenuItem name="Open..." shortcut="Ctrl+O" detail="開啟文字檔至日誌區" />
-    <MenuItem name="Save..." shortcut="Ctrl+S" detail="儲存文字檔" />
-    <MenuItem name="Close Excel File" shortcut="Ctrl+W" detail="關閉目前載入的資料表與圖表快取" />
-    <MenuItem name="Refresh Tree" shortcut="" detail="重新整理左側 Test_data 檔案樹" />
-    <MenuItem name="Exit" shortcut="" detail="結束應用程式" />
+    <Step order="1"><Name>建置</Name><Command>build_semi.bat</Command></Step>
+    <Step order="2"><Name>啟動</Name><Command>run_semi.bat</Command></Step>
+    <Step order="3"><Name>載入 Recipe</Name><Command>Import Recipe（Ctrl+I）</Command></Step>
+    <Step order="4"><Name>分析</Name><Command>RawData → Defect Chart → Run Inspection</Command></Step>
   </Section>
 
   <Section id="menu-tools" title="Tools 選單">
-    <MenuItem name="Import JSON" shortcut="Ctrl+I" detail="匯入 .json 至 Test_data 並載入資料表" />
-    <MenuItem name="Data Table" shortcut="Ctrl+E" detail="切換至資料表檢視；若無資料可選 Excel 或預設 X.xlsx" />
-    <MenuItem name="Chart" shortcut="Ctrl+D" detail="切換至曲線圖（Draw data）" />
-    <MenuItem name="Reload Plugins" shortcut="" detail="重新載入 Plugins 資料夾外掛" />
-    <MenuItem name="About..." shortcut="" detail="顯示版本與工具列說明" />
+    <MenuItem name="Import Recipe" shortcut="Ctrl+I" detail="匯入 JSON Recipe" />
+    <MenuItem name="RawData" shortcut="Ctrl+E" detail="Inspection Raw Data 參數表" />
+    <MenuItem name="Defect Chart" shortcut="Ctrl+D" detail="DefectSummary 曲線圖" />
+    <MenuItem name="Run Inspection" shortcut="Ctrl+R" detail="模擬 AOI 檢測 log" />
+    <MenuItem name="About..." shortcut="" detail="功能說明" />
   </Section>
 
   <Section id="toolbar" title="工具列">
-    <Toolbar id="0" title="Toolbar 0">
-      <Button name="Import JSON" automationId="btnToolbar0ImportExcel" shortcut="Ctrl+I" tooltip="匯入 JSON 至 Test_data 並載入資料表" />
-      <Button name="About" automationId="btnToolbar0About" shortcut="" tooltip="關於 Demo2 Desktop" />
+    <Toolbar name="Toolbar0">
+      <Button name="Import Recipe" automationId="btnImportRecipe" shortcut="Ctrl+I" icon="wafer+recipe" />
+      <Button name="Run Inspection" automationId="btnRunInspection" shortcut="Ctrl+R" icon="scan+play" />
+      <Button name="About" automationId="btnToolbar0About" icon="info" />
     </Toolbar>
-    <Toolbar id="1" title="Toolbar 1">
-      <Button name="Data Table" automationId="btnToolbar1OpenExcel" shortcut="Ctrl+E" tooltip="切換至資料表檢視" />
-      <Button name="Draw data" automationId="btnToolbar2DrawData" shortcut="Ctrl+D" tooltip="切換至曲線圖（X=Test Type, Y=Defect）" />
+    <Toolbar name="Toolbar1">
+      <Button name="RawData" automationId="btnParameters" shortcut="Ctrl+E" icon="raw-table" />
+      <Button name="Defect Chart" automationId="btnDefectChart" shortcut="Ctrl+D" icon="wafer+chart" />
     </Toolbar>
   </Section>
 
-  <Section id="workspace" title="工作區與檔案樹">
-    <Paragraph>左側 <Control>treeFiles</Control> 顯示 Test_data 目錄結構。雙擊 .json 或 .xlsx 可直接載入資料表。</Paragraph>
-    <Paragraph>右側 Tab1 為 <Control>dataGridExcel</Control> 資料表；Tab2 為曲線圖 <Control>pictureBoxChart</Control>。下方 <Control>txtToolLog</Control> 顯示操作日誌。</Paragraph>
-    <Paragraph>預設 Test_data 路徑：<Path>C:\Users\BaoGo\Documents\ClaudeCode_Project\SQA_AI_Automation\demo2_desktop_app\Test_data</Path>（若不存在則改為 exe 旁 Test_data）。</Paragraph>
+  <Section id="workspace" title="工作區">
+    <Control name="treeFiles" detail="File Tree" />
+    <Control name="dataGridParameters" detail="RawData 參數表" />
+    <Control name="pictureBoxChart" detail="Defect Chart" />
+    <Control name="txtToolLog" detail="日誌區" />
   </Section>
 
-  <Section id="json-format" title="JSON 格式">
-    <Paragraph>支援根物件含 Record 陣列，或根陣列。欄位名稱不區分大小寫。</Paragraph>
-    <Code><![CDATA[
-{
-  "source": "X.xlsx",
-  "Record": [
-    { "No": 1, "TestType": "Test1", "DefectNumber": 83811 },
-    { "No": 2, "TestType": "Test2", "DefectNumber": 14593 }
-  ]
-}
-    ]]></Code>
-    <Paragraph>樣本檔：<Path>Test_data\TestType_Defect.json</Path>（Test1～Test20，共 20 筆）。</Paragraph>
-    <Paragraph>亦支援 <Path>Test_data\TestType_Defect.xml</Path> 僅供參考；匯入功能請使用 .json。</Paragraph>
+  <Section id="recipe-data" title="Recipe_data">
+    <File name="InspectionRecipe_Sample.json" purpose="AOI Recipe 樣本（5 類 DefectSummary）" />
+    <File name="_invalid_sample.txt" purpose="TC07 負向測試" />
   </Section>
 
-  <Section id="chart" title="Draw data 曲線圖">
-    <Paragraph>需資料表含 Test Type 與 Defect Number 欄位。X 軸為 Test Type，Y 軸為 Defect Number。</Paragraph>
-    <Paragraph>若 DataGrid 無資料，會嘗試讀取 Test_data\X.xlsx；建議先 Import JSON 或雙擊 JSON 檔載入。</Paragraph>
+  <Section id="test-cases" title="測試案例">
+    <Path>Automation_testcase\Test_cases\TEST_PLAN.md</Path>
+    <Path>Automation_testcase\Test_cases\SemiInspection_10_TestCases.md</Path>
   </Section>
-
-  <Section id="testdata" title="測試資料目錄">
-    <DataFile name="TestType_Defect.json" detail="JSON 匯入樣本（Test1～Test20）" />
-    <DataFile name="TestType_Defect.xml" detail="XML 對照檔（由 X.xlsx 轉換）" />
-    <DataFile name="X.xlsx" detail="Excel 樣本（Data Table / Draw data 備用）" />
-    <DataFile name="_invalid_sample.txt" detail="負向測試用無效檔" />
-    <DataFile name="generate_test_excel.py" detail="重新產生 Excel 測試檔" />
-    <DataFile name="convert_x_to_testtype_defect_xml.py" detail="X.xlsx 轉 TestType_Defect.xml" />
-  </Section>
-
-  <Section id="trouble" title="疑難排解">
-    <Issue title="Import JSON 失敗">
-      <Solution>確認副檔名為 .json，內容為有效 JSON（含 Record 陣列或物件陣列）。</Solution>
-      <Solution>若檔案已在 Test_data 內，程式會直接載入，不需複製。</Solution>
-      <Solution>重新執行 build.bat 後再啟動 run.bat。</Solution>
-    </Issue>
-    <Issue title="建置失敗：exe 被占用">
-      <Solution>關閉執行中的 Demo2Desktop.exe 後再執行 build.bat。</Solution>
-    </Issue>
-    <Issue title="Draw data 無圖表">
-      <Solution>先載入含 Test Type、Defect Number 的資料（JSON 或 X.xlsx）。</Solution>
-    </Issue>
-    <Issue title="讀取 .xlsx 失敗">
-      <Solution>需安裝 Microsoft Access Database Engine（ACE OLEDB 12.0）。</Solution>
-    </Issue>
-  </Section>
-
-  <Section id="automation" title="自動化測試（參考）">
-    <Paragraph>FlaUI BDD 測試位於 Automation_testcase\Project_FlaUIBDD\，操作說明見該目錄 操作說明.html 與 開啟操作說明.bat。</Paragraph>
-    <Paragraph>TC01 已改為 Import JSON；樣本檔 TestType_Defect.json。</Paragraph>
-  </Section>
-
-  <Footer>
-    <Line>Demo2 Desktop App 操作說明書 v1.1</Line>
-    <Line>雙擊 開啟操作app說明書.bat 可隨時開啟本頁</Line>
-  </Footer>
 </AppManual>

@@ -4,13 +4,13 @@ from TestComplete import *
 
 
 # ===== Demo2 Desktop App 路徑設定 =====
-APP_PROCESS = "Demo2Desktop"
-APP_TITLE = "Demo2 Desktop App"
-EXE_PATH = r"C:\Users\BaoGo\Documents\ClaudeCode_Project\SQA_AI_Automation\demo2_desktop_app\Demo2Desktop\bin\Debug\Demo2Desktop.exe"
-TEST_DATA_DIR = r"C:\Users\BaoGo\Documents\ClaudeCode_Project\SQA_AI_Automation\demo2_desktop_app\Test_data"
-SAMPLE_XLSX = os.path.join(TEST_DATA_DIR, "X.xlsx")
+APP_PROCESS = "SemiInspectionDesktop"
+APP_TITLE = "Semi Inspection Desktop"
+EXE_PATH = r"C:\Users\BaoGo\Documents\ClaudeCode_Project\SQA_AI_Automation\demo2_desktop_app\SemiInspectionDesktop\bin\Debug\SemiInspectionDesktop.exe"
+TEST_DATA_DIR = r"C:\Users\BaoGo\Documents\ClaudeCode_Project\SQA_AI_Automation\demo2_desktop_app\Recipe_data"
+SAMPLE_RECIPE = os.path.join(TEST_DATA_DIR, "InspectionRecipe_Sample.json")
 SAMPLE_TXT = os.path.join(TEST_DATA_DIR, "_invalid_sample.txt")
-IMPORT_TARGET = os.path.join(TEST_DATA_DIR, "TC01_import_copy.xlsx")
+IMPORT_TARGET = os.path.join(TEST_DATA_DIR, "TC01_import_copy.json")
 TIMEOUT_MS = 30000
 
 
@@ -274,7 +274,7 @@ def control_reset_app_state():
     return control_app("start")
 
 
-##### --- 測試案例（對應 Demo2_10_TestCases.md）--- #####
+##### --- 測試案例（對應 SemiInspection_10_TestCases.md）--- #####
 
 
 def testcase_tc01_import_excel():

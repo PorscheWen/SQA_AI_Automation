@@ -1,7 +1,10 @@
+using System.Runtime.InteropServices;
+using System.Text;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Definitions;
 using FlaUI.Core.Exceptions;
+using FlaUI.Core.Input;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
 
@@ -74,15 +77,82 @@ public abstract class BasePage : IDisposable
         return Window.FindFirstDescendant(cf => cf.ByName(controlName));
     }
 
+    private const int WmGetText = 0x000D;
+    private const int WmGetTextLength = 0x000E;
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, StringBuilder? lParam);
+
     protected static string ReadText(AutomationElement element)
     {
-        var textBox = element.AsTextBox();
-        if (textBox != null)
+        var nativeText = ReadNativeWindowText(element);
+        if (!string.IsNullOrEmpty(nativeText))
         {
-            var text = textBox.Text;
-            if (!string.IsNullOrEmpty(text))
+            return nativeText;
+        }
+
+        try
+        {
+            var textBox = element.AsTextBox();
+            if (textBox != null)
             {
-                return text;
+                var text = textBox.Text;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    return text;
+                }
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+
+        if (element.Patterns.Value.IsSupported)
+        {
+            try
+            {
+                var value = element.Patterns.Value.Pattern.Value.Value;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return value;
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        if (element.Patterns.Text.IsSupported)
+        {
+            try
+            {
+                var text = element.Patterns.Text.Pattern.DocumentRange.GetText(-1);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    return text;
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        if (element.Patterns.LegacyIAccessible.IsSupported)
+        {
+            try
+            {
+                var value = element.Patterns.LegacyIAccessible.Pattern.Value.Value;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return value;
+                }
+            }
+            catch
+            {
+                // ignore
             }
         }
 
@@ -91,31 +161,72 @@ public abstract class BasePage : IDisposable
             return element.Name;
         }
 
-        if (element.Patterns.Value.IsSupported)
-        {
-            return element.Patterns.Value.Pattern.Value.Value ?? string.Empty;
-        }
-
-        if (element.Patterns.LegacyIAccessible.IsSupported)
-        {
-            return element.Patterns.LegacyIAccessible.Pattern.Value.Value ?? string.Empty;
-        }
-
         return string.Empty;
+    }
+
+    protected static string ReadNativeWindowText(AutomationElement element)
+    {
+        try
+        {
+            var handle = element.Properties.NativeWindowHandle.ValueOrDefault;
+            if (handle == IntPtr.Zero)
+            {
+                return string.Empty;
+            }
+
+            var length = SendMessage(handle, WmGetTextLength, IntPtr.Zero, null).ToInt32();
+            if (length <= 0)
+            {
+                return string.Empty;
+            }
+
+            var buffer = new StringBuilder(length + 1);
+            SendMessage(handle, WmGetText, (IntPtr)(length + 1), buffer);
+            return buffer.ToString();
+        }
+        catch
+        {
+            return string.Empty;
+        }
     }
 
     protected void Click(AutomationElement element)
     {
-        if (element.Patterns.Invoke.IsSupported)
+        try
         {
-            element.Patterns.Invoke.Pattern.Invoke();
+            if (element.Patterns.Invoke.IsSupported)
+            {
+                element.Patterns.Invoke.Pattern.Invoke();
+                Thread.Sleep(500);
+                return;
+            }
         }
-        else
+        catch
+        {
+            // fall through
+        }
+
+        try
         {
             element.Click();
         }
+        catch (NoClickablePointException)
+        {
+            ClickByBounds(element);
+        }
 
         Thread.Sleep(500);
+    }
+
+    private static void ClickByBounds(AutomationElement element)
+    {
+        var rect = element.BoundingRectangle;
+        if (rect.IsEmpty)
+        {
+            throw new ElementNotAvailableException("Element has no clickable bounds.");
+        }
+
+        Mouse.Click(new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2));
     }
 
     protected void RequireElement(AutomationElement? element, string label)

@@ -1,6 +1,7 @@
 using Demo2DesktopTests.Helpers;
 using Demo2DesktopTests.Hooks;
 using Demo2DesktopTests.PageObjects;
+using FlaUI.Core.WindowsAPI;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using TechTalk.SpecFlow;
@@ -46,19 +47,19 @@ public class Demo2DesktopSteps
     [When(@"我點擊工具列「(.*)」")]
     public void When我點擊工具列(string buttonText)
     {
-        if (string.Equals(buttonText, "Import JSON", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(buttonText, "Run Inspection", StringComparison.OrdinalIgnoreCase))
         {
-            Main.SendImportJsonShortcut();
+            Main.SendShortcut(VirtualKeyShort.KEY_R, ctrl: true);
             Thread.Sleep(800);
             return;
         }
 
         Main.ClickToolbar(buttonText);
-        if (string.Equals(buttonText, "Data Table", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(buttonText, "RawData", StringComparison.OrdinalIgnoreCase))
         {
             Workspace.WaitAfterDataTableAction();
         }
-        else if (string.Equals(buttonText, "Draw data", StringComparison.OrdinalIgnoreCase))
+        else if (string.Equals(buttonText, "Defect Chart", StringComparison.OrdinalIgnoreCase))
         {
             Thread.Sleep(1500);
         }
@@ -68,10 +69,10 @@ public class Demo2DesktopSteps
         }
     }
 
-    [When(@"我在檔案對話框選擇樣本 TestType_Defect\.json")]
-    public void When我在檔案對話框選擇樣本Json()
+    [When(@"我在檔案對話框選擇樣本 InspectionRecipe_Sample\.json")]
+    public void When我在檔案對話框選擇樣本Recipe()
     {
-        FileDialog.OpenFile(ConfigHelper.GetSampleJsonPath());
+        FileDialog.OpenFile(ConfigHelper.GetSampleRecipePath());
         Workspace.WaitAfterDataTableAction();
     }
 
@@ -81,32 +82,29 @@ public class Demo2DesktopSteps
         FileDialog.OpenFile(ConfigHelper.GetInvalidSamplePath());
     }
 
-    [When(@"我在檔案樹雙擊 X\.xlsx 或 Demo2_10 測試檔")]
-    public void When我在檔案樹雙擊測試檔()
+    [When(@"我在檔案樹雙擊 InspectionRecipe_Sample\.json")]
+    public void When我在檔案樹雙擊Recipe()
     {
-        Workspace.DoubleClickTreeItem("X.xlsx");
+        Workspace.DoubleClickTreeItem("InspectionRecipe_Sample.json");
         if (!Workspace.IsGridVisible())
         {
-            Workspace.DoubleClickTreeItem("Demo2_10");
-        }
-        if (!Workspace.IsGridVisible())
-        {
-            Main.ClickToolbar("Data Table");
+            Main.ClickToolbar("RawData");
         }
     }
 
     [When(@"我關閉訊息對話框")]
+    [Then(@"我關閉訊息對話框")]
     public void When我關閉訊息對話框()
     {
         MessageBox.ClickOk();
     }
 
-    [When(@"我使用快捷鍵開啟 Data Table 並選擇不存在檔 not_exist_99999\.xlsx")]
+    [When(@"我使用快捷鍵開啟 RawData 並選擇不存在檔 not_exist_99999\.json")]
     public void When我使用快捷鍵開啟不存在檔()
     {
-        Main.SendDataTableShortcut();
+        Main.SendParametersShortcut();
         Thread.Sleep(500);
-        var missing = Path.Combine(ConfigHelper.GetTestDataDirectory(), "not_exist_99999.xlsx");
+        var missing = Path.Combine(ConfigHelper.GetRecipeDataDirectory(), "not_exist_99999.json");
         try
         {
             FileDialog.OpenFile(missing);
@@ -114,16 +112,15 @@ public class Demo2DesktopSteps
         }
         catch
         {
-            // 對話框可能未出現，與 TestComplete 腳本一致仍視為通過前置
         }
     }
 
-    [Then(@"Test_data 應存在 TestType_Defect\.json")]
-    public void ThenTest_data應存在Json()
+    [Then(@"Recipe_data 應存在 InspectionRecipe_Sample\.json")]
+    public void ThenRecipe_data應存在Sample()
     {
         ClassicAssert.IsTrue(
-            File.Exists(ConfigHelper.GetSampleJsonPath()),
-            "Test_data 應存在 TestType_Defect.json");
+            File.Exists(ConfigHelper.GetSampleRecipePath()),
+            "Recipe_data 應存在 InspectionRecipe_Sample.json");
     }
 
     [Then(@"主視窗標題應為「(.*)」")]
@@ -145,7 +142,7 @@ public class Demo2DesktopSteps
     {
         ClassicAssert.IsTrue(
             Workspace.IsGridVisible(),
-            "找不到 DataGridView（請確認 dataGridExcel 已載入且 Tab 在資料表）");
+            "找不到 DataGridView（請確認 dataGridParameters 已載入且 Tab 在 RawData）");
     }
 
     [Then(@"日誌區應包含「(.*)」")]
@@ -169,5 +166,4 @@ public class Demo2DesktopSteps
     {
         ClassicAssert.IsTrue(Main.IsMainWindowVisible());
     }
-
 }

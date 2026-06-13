@@ -136,10 +136,10 @@
     <div class="content">
         <section id="overview">
             <h2>概述</h2>
-            <p>本專案為 <strong>Demo2 桌面應用程式</strong> 的自動化測試，以 Gherkin（<code>Features/Demo2Desktop.feature</code>）描述 TC01～TC10，並以 FlaUI 操作 WinForms UI。</p>
+            <p>本專案為 <strong>Semi Inspection Desktop</strong> 的自動化測試，以 Gherkin（<code>Features/SemiInspectionDesktop.feature</code>）描述 TC01～TC10，並以 FlaUI 操作 WinForms UI。</p>
             <div class="code-block">Testcase_demo2_desktop_FlaUI_BDD/
-├── Features/           Demo2Desktop.feature（Gherkin）
-├── StepDefinitions/    Demo2DesktopSteps.cs
+├── Features/           SemiInspectionDesktop.feature（Gherkin）
+├── StepDefinitions/    SemiInspectionDesktopSteps.cs
 ├── PageObjects/        MainWindowPage, WorkspacePage, FileDialogPage…
 ├── Helpers/            Config, Dialog, Screenshot, HtmlReport…
 ├── Hooks/              TestHooks.cs
@@ -147,7 +147,7 @@
 ├── reports/            junit-results.xml、HTML 報告
 ├── 開啟Inspector.bat
 ├── 開啟操作說明.bat    ← 本說明
-└── App.config          被測程式與 Test_data 路徑</div>
+└── App.config          被測程式與 Recipe_data 路徑</div>
             <p>上層還有 <code>Project_FlaUIBDD/web_dashboard/</code> Web 控制台（port <strong>6690</strong>）。</p>
         </section>
 
@@ -156,8 +156,8 @@
             <ul>
                 <li><strong>.NET 8 SDK</strong>（專案目標 <code>net8.0-windows</code>）</li>
                 <li><strong>Python 3</strong>（僅 Web 控制台需要）</li>
-                <li>已建置被測程式：<code>demo2_desktop_app\build.bat</code></li>
-                <li>測試資料目錄：<code>demo2_desktop_app\Test_data\</code>（含 <code>X.xlsx</code>）</li>
+                <li>已建置被測程式：<code>demo2_desktop_app\build_semi.bat</code></li>
+                <li>測試資料目錄：<code>demo2_desktop_app\Recipe_data\</code>（含 <code>X.xlsx</code>）</li>
             </ul>
             <div class="card warn">
                 <strong>App.config</strong> 內 <code>ApplicationPath</code>、<code>TestDataDirectory</code> 請改為本機實際路徑，否則測試找不到 exe 或檔案。
@@ -168,8 +168,8 @@
             <h2>快速開始</h2>
             <h3>1. 建置 Demo2 桌面程式</h3>
             <div class="code-block">cd demo2_desktop_app
-build.bat</div>
-            <p>產出：<code>Demo2Desktop\bin\Debug\Demo2Desktop.exe</code></p>
+build_semi.bat</div>
+            <p>產出：<code>SemiInspectionDesktop\bin\Debug\SemiInspectionDesktop.exe</code></p>
 
             <h3>2. 建置並執行測試（命令列）</h3>
             <div class="code-block">cd Automation_testcase\Project_FlaUIBDD\Testcase_demo2_desktop_FlaUI_BDD
@@ -199,23 +199,23 @@ dotnet test -c Release --no-build</div>
 
         <section id="tests">
             <h2>測試案例（TC01～TC10）</h2>
-            <p>規格對照：<code>Automation_testcase\Test_cases\Demo2_10_TestCases.md</code></p>
+            <p>規格對照：<code>Automation_testcase\Test_cases\SemiInspection_10_TestCases.md</code></p>
             <table>
                 <tr><th>編號</th><th>摘要</th></tr>
-                <tr><td>TC01</td><td>Import Excel → Test_data（Ctrl+I、檔案對話框）</td></tr>
-                <tr><td>TC02</td><td>File Tree 顯示 Test_data</td></tr>
-                <tr><td>TC03</td><td>工具列 Data Table</td></tr>
-                <tr><td>TC04</td><td>Draw data 曲線圖</td></tr>
-                <tr><td>TC05</td><td>檔案樹雙擊開啟 Excel</td></tr>
+                <tr><td>TC01</td><td>Import Recipe → Recipe_data（Ctrl+I）</td></tr>
+                <tr><td>TC02</td><td>File Tree 顯示 Recipe_data</td></tr>
+                <tr><td>TC03</td><td>RawData 參數表</td></tr>
+                <tr><td>TC04</td><td>Defect Chart 曲線圖</td></tr>
+                <tr><td>TC05</td><td>檔案樹雙擊開啟 Recipe JSON</td></tr>
                 <tr><td>TC06</td><td>About 對話框</td></tr>
                 <tr><td>TC07～TC10</td><td>其餘功能（見 feature 檔）</td></tr>
             </table>
             <h3>重要控制項名稱（Inspector / FlaUI）</h3>
             <ul>
                 <li><code>treeFiles</code> — 檔案樹</li>
-                <li><code>dataGridExcel</code> — 資料表</li>
+                <li><code>dataGridParameters</code> — RawData 參數表</li>
                 <li><code>txtToolLog</code> — 日誌區</li>
-                <li>工具列：<code>btnToolbar0ImportExcel</code> 等（Import / Data Table / Draw data）</li>
+                <li>工具列：<code>btnImportRecipe</code>、<code>btnParameters</code>、<code>btnDefectChart</code> 等</li>
             </ul>
         </section>
 
@@ -224,7 +224,7 @@ dotnet test -c Release --no-build</div>
             <ol>
                 <li>確認 <code>tools\FlaUIInspector\FlaUIInspector.exe</code> 存在；若無，執行 <code>tools\install-flauinspect.ps1</code>。</li>
                 <li>雙擊 <code>開啟Inspector.bat</code>。</li>
-                <li>在 Inspector 選擇行程 <strong>Demo2Desktop</strong>，檢查上述控制項的 Name / AutomationId。</li>
+                <li>在 Inspector 選擇行程 <strong>SemiInspectionDesktop</strong>，檢查上述控制項的 Name / AutomationId。</li>
             </ol>
             <p>官方下載：<a href="https://github.com/FlaUI/FlaUInspect/releases" target="_blank">FlaUI/FlaUInspect</a>（v3 主程式為 <code>FlaUInspect.exe</code>，本專案已提供 <code>FlaUIInspector.exe</code> 別名）。</p>
         </section>
@@ -233,8 +233,8 @@ dotnet test -c Release --no-build</div>
             <h2>App.config 主要鍵值</h2>
             <table>
                 <tr><th>鍵</th><th>說明</th></tr>
-                <tr><td>ApplicationPath</td><td>Demo2Desktop.exe 完整路徑</td></tr>
-                <tr><td>TestDataDirectory</td><td>Test_data 資料夾</td></tr>
+                <tr><td>ApplicationPath</td><td>SemiInspectionDesktop.exe 完整路徑</td></tr>
+                <tr><td>TestDataDirectory</td><td>Recipe_data 資料夾</td></tr>
                 <tr><td>SampleXlsx</td><td>預設樣本檔（X.xlsx）</td></tr>
                 <tr><td>DefaultTimeout / ElementTimeout</td><td>等待逾時（毫秒）</td></tr>
                 <tr><td>TakeScreenshotOnFailure</td><td>失敗時截圖至 Screenshots/</td></tr>
@@ -243,8 +243,8 @@ dotnet test -c Release --no-build</div>
 
         <section id="trouble">
             <h2>疑難排解</h2>
-            <h4>找不到 Demo2Desktop.exe</h4>
-            <p>執行 <code>demo2_desktop_app\build.bat</code>，並確認 App.config 路徑正確。</p>
+            <h4>找不到 SemiInspectionDesktop.exe</h4>
+            <p>執行 <code>demo2_desktop_app\build_semi.bat</code>，並確認 App.config 路徑正確。</p>
             <h4>UIA Timeout / 找不到控制項</h4>
             <p>用 Inspector 確認控制項 <code>Name</code> 與程式一致；必要時延長 <code>ElementTimeout</code>。</p>
             <h4>TC01 檔案對話框失敗</h4>
@@ -254,7 +254,7 @@ dotnet test -c Release --no-build</div>
             <div class="card">
                 完整 TestComplete → FlaUI 轉換流程見
                 <a href="../../Project_Testcomplete/skill.md">Project_Testcomplete/skill.md</a>、
-                <a href="../../Test_cases/Demo2_10_TestCases.md">Demo2_10_TestCases.md</a>。
+                <a href="../../Test_cases/SemiInspection_10_TestCases.md">SemiInspection_10_TestCases.md</a>。
             </div>
         </section>
     </div>

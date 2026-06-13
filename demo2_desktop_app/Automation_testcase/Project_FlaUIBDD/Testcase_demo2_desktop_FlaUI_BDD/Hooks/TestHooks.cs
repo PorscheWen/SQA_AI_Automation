@@ -29,7 +29,7 @@ public class TestHooks
     {
         _automation = new UIA3Automation();
         var reportsDir = Path.Combine(TestContext.CurrentContext.WorkDirectory, "reports");
-        HtmlReportHelper.InitializeReport(reportsDir, "Demo2TestReport.html");
+        HtmlReportHelper.InitializeReport(reportsDir, "SemiInspectionTestReport.html");
     }
 
     [BeforeFeature]
@@ -54,7 +54,7 @@ public class TestHooks
         _mainWindow = WaitForMainWindow();
         if (_mainWindow == null)
         {
-            throw new InvalidOperationException("無法取得 Demo2 主視窗");
+            throw new InvalidOperationException("無法取得 Semi Inspection 主視窗");
         }
 
         _mainWindow.Focus();
@@ -62,7 +62,8 @@ public class TestHooks
         _scenarioContext.Set(_mainWindow, "MainWindow");
         _scenarioContext.Set(new MainWindowPage(_mainWindow, _automation!), "MainWindowPage");
         _scenarioContext.Set(new WorkspacePage(_mainWindow, _automation!), "WorkspacePage");
-        _scenarioContext.Set(new FileDialogPage(_automation!), "FileDialogPage");
+        var fileDialog = new FileDialogPage(_automation!, _mainWindow);
+        _scenarioContext.Set(fileDialog, "FileDialogPage");
         _scenarioContext.Set(new MessageBoxPage(_automation!), "MessageBoxPage");
     }
 
@@ -145,7 +146,7 @@ public class TestHooks
         var exe = ConfigHelper.GetApplicationPath();
         if (!File.Exists(exe))
         {
-            throw new FileNotFoundException("Demo2Desktop.exe not found: " + exe);
+            throw new FileNotFoundException("SemiInspectionDesktop.exe not found: " + exe);
         }
 
         var processName = ConfigHelper.GetProcessName();
@@ -225,7 +226,7 @@ public class TestHooks
         scenarioContext.Set(_mainWindow, "MainWindow");
         scenarioContext.Set(new MainWindowPage(_mainWindow, _automation), "MainWindowPage");
         scenarioContext.Set(new WorkspacePage(_mainWindow, _automation), "WorkspacePage");
-        scenarioContext.Set(new FileDialogPage(_automation), "FileDialogPage");
+        scenarioContext.Set(new FileDialogPage(_automation, _mainWindow), "FileDialogPage");
         scenarioContext.Set(new MessageBoxPage(_automation), "MessageBoxPage");
     }
 

@@ -13,7 +13,7 @@ description: >-
 | 項目 | 路徑 |
 |------|------|
 | 來源腳本 | `Testcomplete_testcase/Testcase_demo2_desktop.md` |
-| 規格 | `../Test_cases/Demo2_10_TestCases.md` |
+| 規格 | `../Test_cases/SemiInspection_10_TestCases.md` |
 | 詳細範例 | [Transfer_Prompt_Readme.md](Transfer_Prompt_Readme.md) |
 | 測試報告 | [report_prompt.md](report_prompt.md) |
 
@@ -27,7 +27,7 @@ description: >-
 ## 執行流程（Agent 依序完成）
 
 1. **讀取** `Testcase_demo2_desktop.md` 全部 `testcase_*` 與 `control_*`。
-2. **對照** `Demo2_10_TestCases.md` 確認 TC01–TC10 標題與預期行為一致。
+2. **對照** `SemiInspection_10_TestCases.md` 確認 TC01–TC10 標題與預期行為一致。
 3. **產出** FlaUI BDD 專案（建議目錄：`Automation_testcase/Project_FlaUIBDD/`），含下列檔案。
 4. **驗證**：每個 Scenario 對應一個 `testcase_tc**`；每個 `control_*` 有對應 Step 或 Page 方法。
 5. **摘要**：列出尚未對應的 TestComplete API 或需手動 Name Mapping 的 UI。
@@ -77,7 +77,10 @@ Project_FlaUIBDD/
 | `control_desktop` | TreeView、DataGridView、圖表、分頁 | `WorkspacePage` |
 | `control_prepare_testdata` / `control_reset_app_state` | 前置 | `TestHooks` 或 `Given` 步驟 |
 
-## Demo2 桌面定位（非 Web data-testid）
+## 與 FlaUI 撰寫標準 skill 的關係
+
+- **TestComplete → FlaUI 轉換（本檔）：** 從 Python 腳本產出 BDD 骨架
+- **FlaUI 維護與新增 TC：** 用 `SQA_AI_Automation/.cursor/skills/flaui-desktop-bdd/SKILL.md`（Page Object、WinForms UIA、LogContains、FileDialog 等實戰規範）
 
 TestComplete 腳本使用 **WinForms / Desktop**，轉 FlaUI 時優先：
 
@@ -100,7 +103,7 @@ TestComplete 腳本使用 **WinForms / Desktop**，轉 FlaUI 時優先：
 
 - 每個 `testcase_tc**` → 一個 `Scenario`。
 - Gherkin：`Given` 啟動 App 與測試資料、`When` 工具列/樹狀操作、`Then` Grid/圖表/MessageBox 驗證。
-- 語言：繁體中文（與 `Demo2_10_TestCases.md` 一致）。
+- 語言：繁體中文（與 `SemiInspection_10_TestCases.md` 一致）。
 - 加上 `@Functional` / `@Negative` / `@Compatibility`。
 
 ### 2. Step Definitions

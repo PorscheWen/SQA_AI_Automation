@@ -3,12 +3,12 @@ chcp 65001 >nul 2>&1
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
-set "DEMO2_ROOT=%~dp0..\..\..\"
-set "DEMO2_EXE=%DEMO2_ROOT%Demo2Desktop\bin\Debug\Demo2Desktop.exe"
+set "APP_ROOT=%~dp0..\..\..\"
+set "APP_EXE=%APP_ROOT%SemiInspectionDesktop\bin\Debug\SemiInspectionDesktop.exe"
 set "INSPECTOR_EXE="
 
 echo.
-echo FlaUI Inspector + Demo2 Desktop
+echo FlaUI Inspector + Semi Inspection Desktop
 echo.
 
 if defined FLAUI_INSPECTOR_PATH if exist "!FLAUI_INSPECTOR_PATH!" (
@@ -32,18 +32,6 @@ for %%P in (
 )
 
 echo [ERROR] FlaUIInspector.exe not found.
-echo.
-echo Install one of the following:
-echo   1. Extract FlaUIInspector to:
-echo      tools\FlaUIInspector\FlaUIInspector.exe
-echo   2. Set environment variable FLAUI_INSPECTOR_PATH
-echo.
-echo Download:
-echo   https://github.com/FlaUI/FlaUIInspector/releases
-echo.
-echo Opening download page in browser...
-start "" "https://github.com/FlaUI/FlaUIInspector/releases"
-echo.
 pause
 exit /b 1
 
@@ -51,24 +39,24 @@ exit /b 1
 echo Using: %INSPECTOR_EXE%
 echo.
 
-tasklist /FI "IMAGENAME eq Demo2Desktop.exe" 2>nul | find /I "Demo2Desktop.exe" >nul
+tasklist /FI "IMAGENAME eq SemiInspectionDesktop.exe" 2>nul | find /I "SemiInspectionDesktop.exe" >nul
 if errorlevel 1 (
-    if exist "%DEMO2_EXE%" (
-        echo Starting Demo2Desktop...
-        start "" "%DEMO2_EXE%"
+    if exist "%APP_EXE%" (
+        echo Starting SemiInspectionDesktop...
+        start "" "%APP_EXE%"
         timeout /t 2 /nobreak >nul
     ) else (
-        echo Warning: Demo2Desktop.exe not found.
-        echo Run demo2_desktop_app\build.bat first.
+        echo Warning: SemiInspectionDesktop.exe not found.
+        echo Run demo2_desktop_app\build_semi.bat first.
     )
 ) else (
-    echo Demo2Desktop is already running.
+    echo SemiInspectionDesktop is already running.
 )
 
 echo Starting FlaUI Inspector...
 start "" "%INSPECTOR_EXE%"
 echo.
-echo In Inspector, select process Demo2Desktop.
-echo Check controls: treeFiles, dataGridExcel, btnToolbar0ImportExcel
+echo In Inspector, select process SemiInspectionDesktop.
+echo Check controls: treeFiles, dataGridParameters, btnImportRecipe
 echo.
 exit /b 0

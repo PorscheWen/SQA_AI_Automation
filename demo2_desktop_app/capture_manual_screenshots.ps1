@@ -1,13 +1,13 @@
-# Capture Demo2 Desktop UI screenshots for operation manual (PrintWindow)
+# Capture Semi Inspection Desktop UI screenshots for operation manual (PrintWindow)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $imgDir = Join-Path $root 'manual_images'
-$exe = Join-Path $root 'Demo2Desktop\bin\Debug\Demo2Desktop.exe'
-$jsonSample = Join-Path $root 'Test_data\TestType_Defect.json'
+$exe = Join-Path $root 'SemiInspectionDesktop\bin\Debug\SemiInspectionDesktop.exe'
+$jsonSample = Join-Path $root 'Recipe_data\InspectionRecipe_Sample.json'
 
 if (-not (Test-Path $exe)) {
     Write-Host '[INFO] Building app...'
-    & (Join-Path $root 'build.bat') | Out-Host
+    & (Join-Path $root 'build_semi.bat') | Out-Host
 }
 
 New-Item -ItemType Directory -Force -Path $imgDir | Out-Null
@@ -99,20 +99,21 @@ function Send-AppKeys([string]$keys) {
     [System.Windows.Forms.SendKeys]::SendWait($keys)
 }
 
-$testDataSrc = Join-Path $root 'Test_data'
-$testDataDst = Join-Path (Split-Path $exe) 'Test_data'
-if (Test-Path $testDataSrc) {
-    New-Item -ItemType Directory -Force -Path $testDataDst | Out-Null
-    Copy-Item -Path (Join-Path $testDataSrc '*') -Destination $testDataDst -Recurse -Force -ErrorAction SilentlyContinue
+$recipeSrc = Join-Path $root 'Recipe_data'
+$recipeDst = Join-Path (Split-Path $exe) 'Recipe_data'
+if (Test-Path $recipeSrc) {
+    New-Item -ItemType Directory -Force -Path $recipeDst | Out-Null
+    Copy-Item -Path (Join-Path $recipeSrc '*') -Destination $recipeDst -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-Get-Process Demo2Desktop -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Process SemiInspectionDesktop -ErrorAction SilentlyContinue | Stop-Process -Force
 Start-Sleep -Seconds 1
 Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe)
 
-$hwnd = Wait-AppWindow 'Demo2 Desktop App'
+$title = 'Semi Inspection Desktop'
+$hwnd = Wait-AppWindow $title
 Start-Sleep -Seconds 2
-[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_01_main.png'), 'Demo2 Desktop App')
+[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_01_main.png'), $title)
 Write-Host 'Captured ui_01_main.png'
 
 if (-not (Test-Path $jsonSample)) { throw "Missing sample: $jsonSample" }
@@ -125,19 +126,19 @@ Send-AppKeys $dialogPath
 Start-Sleep -Milliseconds 300
 Send-AppKeys '{ENTER}'
 Start-Sleep -Seconds 2
-[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_02_import_json.png'), 'Demo2 Desktop App')
-Write-Host 'Captured ui_02_import_json.png'
+[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_02_import_recipe.png'), $title)
+Write-Host 'Captured ui_02_import_recipe.png'
 
 Focus-App $hwnd
 Send-AppKeys '^e'
 Start-Sleep -Seconds 1
-[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_03_datatable.png'), 'Demo2 Desktop App')
-Write-Host 'Captured ui_03_datatable.png'
+[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_03_parameters.png'), $title)
+Write-Host 'Captured ui_03_parameters.png'
 
 Focus-App $hwnd
 Send-AppKeys '^d'
 Start-Sleep -Seconds 2
-[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_04_chart.png'), 'Demo2 Desktop App')
+[WinCap]::Capture($hwnd, (Join-Path $imgDir 'ui_04_chart.png'), $title)
 Write-Host 'Captured ui_04_chart.png'
 
 Write-Host "Done. Images in: $imgDir"
